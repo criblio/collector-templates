@@ -1,0 +1,78 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {},
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "none",
+          "discoverMethod": "get"
+        },
+        "collectMethod": "get",
+        "pagination": {
+          "type": "response_body",
+          "maxPages": 50,
+          "attribute": [
+            "odata.nextLink"
+          ]
+        },
+        "authentication": "oauth",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": false,
+        "safeHeaders": [],
+        "loginUrl": "'https://login.microsoftonline.com/<MS_TENANT_ID>/oauth2/token'",
+        "tokenRespAttribute": "access_token",
+        "authHeaderKey": "Authorization",
+        "authHeaderExpr": "`Bearer ${token}`",
+        "clientSecretParamName": "client_secret",
+        "clientSecretParamValue": "<CLIENT_SECRET>",
+        "authRequestParams": [
+          {
+            "name": "client_id",
+            "value": "<CLIENT_ID>"
+          },
+          {
+            "name": "resource",
+            "value": "'https://outlook.office365.com'"
+          },
+          {
+            "name": "grant_type",
+            "value": "'client_credentials'"
+          }
+        ],
+        "collectUrl": "'https://reports.office365.com/ecp/reportingwebservice/reporting.svc/MessageTrace'",
+        "collectRequestHeaders": [
+          {
+            "name": "Accept",
+            "value": "'application/json'"
+          }
+        ],
+        "collectRequestParams": [
+          {
+            "name": "$filter",
+            "value": "`StartDate eq datetime'${C.Time.strftime((earliest ? earliest : Date.now()/1000 - 300),"%Y-%m-%dT%H:%M:%S.%fZ")}' and EndDate eq datetime'${C.Time.strftime(Date.now()/1000,"%Y-%m-%dT%H:%M:%S.%fZ")}'`"
+          }
+        ]
+      },
+      "destructive": false,
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "breakerRulesets": [
+        "Cribl - Do Not Break Ruleset"
+      ]
+    },
+    "id": "O365MsgTrace_Collector"
+  }

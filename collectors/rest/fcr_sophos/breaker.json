@@ -1,0 +1,27 @@
+{
+  "id": "SophosEB",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+
+    {
+      "condition": "_raw.startsWith('{\"has_more')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/created_at\":\"/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "FCR",
+      "jsonArrayField": "items"
+    }
+  ]
+}

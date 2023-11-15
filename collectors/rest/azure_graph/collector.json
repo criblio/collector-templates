@@ -1,0 +1,58 @@
+
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "safeHeaders": [],
+      "loginUrl": "'https://login.microsoftonline.com/<uri-key>/oauth2/v2.0/token'",
+      "loginBody": "`client_secret=${password}&scope=https://graph.microsoft.com/.default&client_id=${username}&grant_type=client_credentials`",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "collectUrl": "'https://graph.microsoft.com/v1.0/security/alerts'",
+      "collectRequestParams": [],
+      "collectRequestHeaders": [
+        {
+          "name": "content-type",
+          "value": "'application/x-www-form-urlencoded'"
+        }
+      ],
+      "username": "<username>",
+      "password": "<password>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "AzureGraph-API"
+    ]
+  },
+  "id": "Azure-Graph"
+}
+AzureGraph-API.json
+Displaying AzureGraph-API.json.

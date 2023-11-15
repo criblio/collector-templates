@@ -1,0 +1,26 @@
+{
+  "id": "Cybeready",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "/^\\[\\{\"employee\"/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/sending_date\":/",
+      "timestamp": {
+        "type": "auto",
+        "length": 20,
+        "format": "%L"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 100000,
+      "disabled": false,
+      "parserEnabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Cybeready"
+    }
+  ]
+}

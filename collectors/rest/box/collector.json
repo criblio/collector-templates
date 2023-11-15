@@ -1,0 +1,86 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "next_stream_position",
+          "chunk_size"
+        ],
+        "lastPageExpr": "chunk_size < 500"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "safeHeaders": [],
+      "loginUrl": "`https://api.box.com/oauth2/token`",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "clientSecretParamValue": "12345678",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'<client_id>'"
+        },
+        {
+          "name": "grant_type",
+          "value": "'client_credentials'"
+        },
+        {
+          "name": "box_subject_type",
+          "value": "'enterprise'"
+        },
+        {
+          "name": "box_subject_id",
+          "value": "'<subj_id>'"
+        }
+      ],
+      "collectUrl": "'https://api.box.com/2.0/events'",
+      "collectRequestParams": [
+        {
+          "name": "stream_position",
+          "value": "`${next_stream_position}`"
+        },
+        {
+          "name": "stream_type",
+          "value": "'admin_logs'"
+        },
+        {
+          "name": "limit",
+          "value": "500"
+        },
+        {
+          "name": "created_after",
+          "value": "`${new Date(Date.now() - 1000 * (60 * 5)).toISOString()}`"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0"
+  },
+  "id": "box-api"
+}

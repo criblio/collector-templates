@@ -1,0 +1,29 @@
+{
+  "id": "CS_Devices_Breaker",
+  "lib": "custom",
+  "rules": [
+    {
+      "condition": "_raw.includes(\"device_id\")",
+      "type": "json_array",
+      "timestampAnchorRegex": "/modified_timestamp/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 512000,
+      "disabled": false,
+      "jsonExtractAll": true,
+      "delimiterRegex": "/\\t/",
+      "fieldsLineRegex": "/^#[Ff]ields[:]?\\s+(.*)/",
+      "headerLineRegex": "/^#/",
+      "nullFieldVal": "-",
+      "cleanFields": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "CS_Devices_2",
+      "jsonTimeField": "modified_timestamp"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "id": "Proofpoint TAP REST API Breakers",
+  "minRawLength": 256,
+  "lib": "custom",
+  "rules": [
+    {
+      "condition": "_raw.includes('\"messagesDelivered\"')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"messageTime\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 132000000,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "messagesDelivered",
+      "name": "Messages Delivered",
+      "fields": [
+        {
+          "name": "action",
+          "value": "'messageDelivered'"
+        }
+      ]
+    },
+    {
+      "condition": "_raw.includes('\"messagesBlocked\"')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"messageTime\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 132000000,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Messages Blocked",
+      "jsonArrayField": "messagesBlocked",
+      "fields": [
+        {
+          "name": "action",
+          "value": "'messageBlocked'"
+        }
+      ]
+    },
+    {
+      "condition": "_raw.includes('\"clicksPermitted\"')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"clickTime\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 132000000,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Clicks Permitted",
+      "jsonArrayField": "clicksPermitted",
+      "fields": [
+        {
+          "name": "action",
+          "value": "'clickPermitted'"
+        }
+      ]
+    },
+    {
+      "condition": "_raw.includes('\"clicksBlocked\"')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"clickTime\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 132000000,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Clicks Blocked",
+      "jsonArrayField": "clicksBlocked",
+      "fields": [
+        {
+          "name": "action",
+          "value": "'clickBlocked'"
+        }
+      ]
+    }
+  ],
+  "description": "JSON event breakers for Proofpoint TAP - https://help.proofpoint.com/Threat_Insight_Dashboard/API_Documentation/SIEM_API",
+  "tags": "rest,json"
+}

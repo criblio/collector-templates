@@ -1,0 +1,97 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "earliest": "-6m@m",
+      "latest": "-1m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "cloud-detection/alerts",
+          "threats"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 50,
+        "attribute": [
+          "nextCursor"
+        ]
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "safeHeaders": [],
+      "loginUrl": "'https://usea1-tt01.sentinelone.net'\r\n",
+      "tokenRespAttribute": "token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "collectUrl": "\"https://usea1-tt01.sentinelone.net/web/api/v2.1/\" + id\r\n",
+      "clientSecretParamValue": "<secret>",
+      "collectRequestParams": [
+        {
+          "name": "createdAt__gte",
+          "value": "C.Time.strftime(earliest ? earliest : Date.now()/1000 - 360,\"%Y-%m-%dT%H:%M:%S.%fZ\") "
+        },
+        {
+          "name": "createdAt__lte",
+          "value": "C.Time.strftime(latest ? latest : Date.now()/1000 - 60,\"%Y-%m-%dT%H:%M:%S.%fZ\") "
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Authorization",
+          "value": "\"ApiToken <token>\""
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "s1"
+    ],
+    "metadata": [
+      {
+        "name": "ctype",
+        "value": "__collectible.id.split('/').pop()"
+      }
+    ]
+  },
+  "id": "SentinelOne-API"
+}

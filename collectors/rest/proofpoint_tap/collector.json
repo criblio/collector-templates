@@ -1,0 +1,84 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/10 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "earliest": "-11m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "clicks/permitted",
+          "clicks/blocked",
+          "messages/blocked",
+          "messages/delivered",
+          "issues"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "basic",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "safeHeaders": [],
+      "loginUrl": "`https:///api/v1/auth/login`",
+      "tokenRespAttribute": "token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "collectUrl": "'https://tap-api-v2.proofpoint.com/v2/siem/' + id",
+      "password": "<password>",
+      "username": "<userid>",
+      "collectRequestParams": [
+        {
+          "name": "interval",
+          "value": "`${C.Time.strftime(earliest ? earliest : Date.now()/1000 - 360,\"%Y-%m-%dT%H:%M:%S\")}Z/${C.Time.strftime(latest ? latest : Date.now()/1000 - 60,\"%Y-%m-%dT%H:%M:%S\")}Z`"
+        },
+        {
+          "name": "format",
+          "value": "'JSON'"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Proofpoint TAP REST API Breakers"
+    ]
+  },
+  "id": "Proofpoint-TAP-REST"
+}

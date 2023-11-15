@@ -1,0 +1,71 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5 */1 * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "safeHeaders": [],
+      "collectUrl": "'https://HOST/api/bit9platform/v1/computer'",
+      "collectRequestParams": [
+        {
+          "name": "fields",
+          "value": "'name,policyName,ipAddress,osShortName,osName,dateCreated,lastPollDate,agentVersion,daysOffline,policyStatus,policyStatusDetails,localApproval,users,enforcementLevel,tamperProtectionActive'"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "X-Auth-Token",
+          "value": "'YOUR_TOKEN_HERE'"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "cbp_assets"
+    ]
+  },
+  "id": "carbon_black_protection_computer",
+  "savedState": {}
+}

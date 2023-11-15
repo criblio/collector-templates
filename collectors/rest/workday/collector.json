@@ -1,0 +1,110 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "earliest": "-10m@m",
+      "latest": "-5m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "discoverMethod": "get",
+        "itemList": []
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": true,
+      "disableTimeFilter": true,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "'https://wd5-services1.myworkday.com/ccx/oauth2/__customer_directory__/token'",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "clientSecretParamValue": "___insert_clientsecret_here",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "`__insert_clientid_here`"
+        },
+        {
+          "name": "refresh_token",
+          "value": "`__insert_refresh_token_here`"
+        },
+        {
+          "name": "grant_type",
+          "value": "'refresh_token'"
+        }
+      ],
+      "collectUrl": "'https://wd5-services1.myworkday.com/ccx/service/customreport2/__customer_directory__/ISU_Cribl/System_Audit__User_Activity_Log_-_Unidentified'",
+      "collectRequestParams": [
+        {
+          "name": "From_Moment",
+          "value": "`${new Date((earliest * 1000 || Date.now()-(7*24*60*60*1000))).toISOString()}`"
+        },
+        {
+          "name": "To_Moment",
+          "value": "`${new Date((latest * 1000 || Date.now())).toISOString()}`"
+        },
+        {
+          "name": "format",
+          "value": "'json'"
+        }
+      ],
+      "authRequestHeaders": []
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "workday"
+    ]
+  },
+  "savedState": {},
+  "id": "Workday_UnidentifiedAcitivity_v1"
+}

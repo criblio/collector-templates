@@ -1,0 +1,75 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "safeHeaders": [],
+      "loginUrl": "`https://login.cribl.cloud/oauth/token`",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "<CLIENT_ID>"
+        },
+        {
+          "name": "audience",
+          "value": "'https://api.cribl.cloud'"
+        },
+        {
+          "name": "grant_type",
+          "value": "'client_credentials'"
+        }
+      ],
+      "collectUrl": "`https://main-<ORG_ID>.cribl.cloud/api/v1/system/metrics`",
+      "collectRequestParams": [
+        {
+          "name": "earliest",
+          "value": "`${earliest * 1000}`"
+        },
+        {
+          "name": "latest",
+          "value": "`${latest * 1000}`"
+        },
+        {
+          "name": "Content-Type",
+          "value": "'application/json'"
+        }
+      ],
+      "clientSecretParamValue": "<CLIENT_SECRET>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "criblApi"
+    ]
+  },
+  "id": "CriblMetrics_Collector"
+}

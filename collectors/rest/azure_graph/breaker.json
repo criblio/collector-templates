@@ -1,0 +1,25 @@
+{
+  "id": "AzureGraph-API",
+  "minRawLength": 256,
+  "lib": "custom",
+  "rules": [
+    {
+      "condition": "_raw.startsWith('{\"@odata')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/activityDateTime/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5120000,
+      "disabled": false,
+      "parserEnabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "AzureGraph-API"
+    }
+  ]
+}

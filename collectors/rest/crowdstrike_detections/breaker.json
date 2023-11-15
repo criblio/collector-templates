@@ -1,0 +1,26 @@
+{
+  "id": "Crowdstrike_API_Breaker",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes(\"legacy-detects\")",
+      "type": "json_array",
+      "timestampAnchorRegex": "/created_timestamp[^\\d]+/",
+      "timestamp": {
+        "type": "auto",
+        "length": 50
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "CS_Detections",
+      "jsonArrayField": "resources"
+    }
+  ]
+}

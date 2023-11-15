@@ -1,0 +1,25 @@
+{
+  "id": "SentinelOne-API",
+  "minRawLength": 256,
+  "lib": "custom",
+  "description": "SentinelOne-API",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 512000,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "SentinelOne-API"
+    }
+  ]
+}
