@@ -1,0 +1,60 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_header_link",
+        "nextRelationAttribute": "next",
+        "maxPages": 0,
+        "curRelationAttribute": "self"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "safeHeaders": [],
+      "collectUrl": "'https://<instance>.okta.com/api/v1/logs'",
+      "collectRequestParams": [
+        {
+          "name": "since",
+          "value": "`${new Date((earliest * 1000 || Date.now()-(7*24*60*60*1000))).toISOString()}`"
+        },
+        {
+          "name": "until",
+          "value": "`${new Date((latest * 1000 || Date.now())).toISOString()}`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Authorization",
+          "value": "`SSWS <key>`"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Okta-API"
+    ]
+  },
+  "id": "Okta-API"
+}

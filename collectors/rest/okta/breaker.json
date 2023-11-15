@@ -1,0 +1,26 @@
+{
+  "id": "Okta-API",
+  "lib": "custom",
+  "description": "Event breakers for Okta logs",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/published\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "System Logs",
+      "jsonTimeField": "published"
+    }
+  ]
+}
