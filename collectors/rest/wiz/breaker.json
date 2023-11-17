@@ -1,10 +1,86 @@
 {
-  "id": "RickAndMorty",
+  "id": "wiz-api",
   "lib": "custom",
   "minRawLength": 256,
   "rules": [
     {
-      "condition": "true",
+      "condition": "_raw.startsWith('{\"data\":{\"configurationFindings\":{\"nodes\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.configurationFindings.nodes",
+      "name": "configurationFindings",
+      "jsonTimeField": "createdAt"
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"issues\":{\"nodes\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.issues.nodes",
+      "jsonTimeField": "createdAt",
+      "name": "issues"
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"vulnerabilityFindings\":{\"nodes\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.vulnerabilityFindings.nodes",
+      "jsonTimeField": "createdAt",
+      "name": "vulnerabilities"
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"auditLogEntries\":{\"nodes\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.auditLogEntries.nodes",
+      "jsonTimeField": "timestamp",
+      "name": "auditLogEntries"
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"cloudEvents\":{\"nodes\":')",
       "type": "json_array",
       "timestampAnchorRegex": "/^/",
       "timestamp": {
@@ -18,10 +94,12 @@
       "disabled": false,
       "parserEnabled": false,
       "shouldUseDataRaw": false,
-      "jsonExtractAll": false,
+      "jsonExtractAll": true,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
-      "jsonArrayField": "results",
-      "name": "All"
+      "name": "cloudEvents",
+      "jsonArrayField": "data.cloudEvents.nodes",
+      "jsonTimeField": "timestamp"
     }
-  ]
+  ],
+  "description": "Collection of rules for the purpose of event breaking data retrieved from the Wiz API"
 }
