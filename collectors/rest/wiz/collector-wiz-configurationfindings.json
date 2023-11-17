@@ -1,0 +1,90 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "endCursor"
+        ],
+        "lastPageExpr": "hasNextPage === false"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "<insert_value_here>",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "<insert_value_here>",
+      "collectBody": "'{\"query\": \"query CloudConfigurationFindingsPage($filterBy: ConfigurationFindingFilters $first: Int $after: String $orderBy: ConfigurationFindingOrder ) { configurationFindings(filterBy: $filterBy first: $first after: $after orderBy: $orderBy) {nodes {id targetExternalId targetObjectProviderUniqueId firstSeenAt severity result status remediation resource {id providerId name nativeType type region subscription {id name externalId cloudProvider} projects {id name riskProfile {businessImpact}} tags {key value}} rule {id graphId name description remediationInstructions functionAsControl} securitySubCategories {id title category {id name framework {id name}}} ignoreRules {id name enabled expiredAt}} pageInfo {hasNextPage endCursor}}}\",\"variables\": {\"first\": 500, \"filterBy\": {\"id\": [], \"source\": [], \"rule\": {\"id\": [\"288042af-3f9b-4b55-b03b-2bc9b5513747\"], \"name\": [], \"description\": []}, \"result\": [\"PASS\",\"FAIL\",\"ERROR\",\"NOT_ASSESSED\"], \"severity\": [\"NONE\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"], \"status\": [\"OPEN\",\"IN_PROGRESS\",\"RESOLVED\",\"REJECTED\"], \"frameworkCategory\": [], \"firstSeenAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
+      "collectRequestHeaders": [
+        {
+          "name": "accept",
+          "value": "'application/json'"
+        },
+        {
+          "name": "content-type",
+          "value": "'application/json'"
+        }
+      ],
+      "clientSecretParamValue": "<insert_value_here>",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "<insert_value_here>"
+        },
+        {
+          "name": "audience",
+          "value": "wiz-api"
+        },
+        {
+          "name": "grant_type",
+          "value": "client_credentials"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "wiz-api"
+    ]
+  },
+  "savedState": {},
+  "id": "wiz-configurationFindings"
+}
