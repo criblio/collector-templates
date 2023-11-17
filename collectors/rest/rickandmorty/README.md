@@ -6,13 +6,13 @@ It was built as a no-cost example of how one might go about capturing user or de
 
 ## Configuring
 
-From within Stream, select Data->Sources.  Select the Collector/Rest tile.  Click Add Collector then click Manage as JSON.  Paste the contents of the `collector.json` file then click Save.
+From within Stream, select **Data->Sources**.  Select the **Collector/Rest** tile.  Click **Add Collector** then click **Manage as JSON**.  Paste the contents of the `collector.json` file then click **Save**.
 
-Since there is no authorization, you do not need to update anything in the config.
+Since there is no authorization, you do not need to update or change anything in the config.
 
 ### Event Breaker
 
 Import the provided event breaker and configure the REST Collector to use the `RickAndMorty` event breaker rule set if not already done.
 
 ## Author
-Brendan Dalpe - bdalpe@cribl.io
+Jim Apger - japger@cribl.io
