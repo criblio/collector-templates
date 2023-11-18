@@ -1,0 +1,90 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "endCursor"
+        ],
+        "lastPageExpr": "hasNextPage === false"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "<insert_value_here>",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "<insert_value_here>",
+      "collectBody": "'{\"query\": \"query VulnerabilityFindingsPage($filterBy: VulnerabilityFindingFilters, $first: Int, $after: String, $orderBy: VulnerabilityFindingOrder) { vulnerabilityFindings( filterBy: $filterBy first: $first after: $after orderBy: $orderBy ) { nodes { id portalUrl name CVEDescription CVSSSeverity score exploitabilityScore impactScore hasExploit hasCisaKevExploit status vendorSeverity firstDetectedAt lastDetectedAt resolvedAt description remediation detailedName version fixedVersion detectionMethod link locationPath resolutionReason vulnerableAsset { ... on VulnerableAssetBase { id type name region providerUniqueId cloudProviderURL cloudPlatform status subscriptionName subscriptionExternalId subscriptionId tags } ... on VulnerableAssetVirtualMachine { operatingSystem ipAddresses } ... on VulnerableAssetServerless { runtime } ... on VulnerableAssetContainerImage { imageId } ... on VulnerableAssetContainer { ImageExternalId VmExternalId ServerlessContainer PodNamespace PodName NodeName } } } pageInfo { hasNextPage endCursor }}}\",\"variables\": {\"first\": 500,\"filterBy\": {\"id\": [], \"status\": [], \"assetType\": [], \"vendorSeverity\": [], \"assetId\": [], \"vulnerabilityId\": [], \"detectionMethod\": [], \"assetStatus\": [], \"firstSeenAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
+      "collectRequestHeaders": [
+        {
+          "value": "'application/json'",
+          "name": "accept"
+        },
+        {
+          "value": "'application/json'",
+          "name": "content-type"
+        }
+      ],
+      "clientSecretParamValue": "<insert_value_here>",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "<insert_value_here>"
+        },
+        {
+          "name": "audience",
+          "value": "wiz-api"
+        },
+        {
+          "name": "grant_type",
+          "value": "client_credentials"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "wiz-api"
+    ]
+  },
+  "savedState": {},
+  "id": "wiz-vulnerabilities"
+}
