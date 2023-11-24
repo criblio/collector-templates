@@ -1,0 +1,68 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "'https://your-salesforce-instance.com/services/oauth2/token'",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "tokenRespAttribute": "token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "'https://your-salesforce-instance.com/services/data/v58.0/query?q=SELECT,SourceIp,Status,UserId+FROM+LoginHistory'",
+      "collectRequestParams": [
+        {
+          "name": "et",
+          "value": "`${new Date(earliest * 1000 || Date.now() -(10 * 60 * 1000)).getTime()/1000}`"
+        }
+      ],
+      "username": "<username_here>",
+      "password": "Password_here>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "breaker"
+    ]
+  },
+  "savedState": {},
+  "id": "Salesfore-REST-Collector"
+}
