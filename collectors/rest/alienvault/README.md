@@ -8,7 +8,7 @@ You must replace the following placeholder in the configuration:
 
 `<your-otx-api-key>` in the Collect Request Headers must be replaced with our Alienvault API Key
 
-The collector template is scheduled 5 minutes after the hour to collect updates for IoC you are subscribed to.
+The schedule (5 minutes after the hour) in this collector template, to collect updates for IoC you are subscribed to, is disabled.
 
 ### Event Breaker
 
