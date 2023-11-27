@@ -1,0 +1,85 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB"
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "collectUrl": "`https://threatfox-api.abuse.ch/api/v1/`",
+      "collectRequestParams": [
+        {}
+      ],
+      "collectBody": "`{ \"query\": \"get_iocs\", \"days\": 1 }`"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "abuse-ch"
+    ],
+    "metadata": [
+      {
+        "name": "threat_intel_source",
+        "value": "'abuse.ch'"
+      },
+      {
+        "name": "threat_intel_feed",
+        "value": "'threat-fox'"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "abuse-ch-threat-fox"
+}
