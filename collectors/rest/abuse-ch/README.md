@@ -5,7 +5,7 @@ This collector template allows you to collect IoC information from the Abuse.ch 
 ## Configuring
 
 The API doesn't require any authentication and therefore nothing needs to be replaced in the collector.
-The collector template is scheduled 5 minutes after the hour to collect IoC from the last day. The timeframe can be adjusted by altering the collectBody.
+The schedule (5 minutes after the hour) in this collector template to collect IoC from the last day is disabled. The timeframe can be adjusted by altering the collectBody.
 
 ### Event Breaker
 
