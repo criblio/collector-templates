@@ -19,7 +19,7 @@
       "minTaskSize": "1MB",
       "maxTaskSize": "10MB"
     },
-    "enabled": true
+    "enabled": false
   },
   "streamtags": [],
   "workerAffinity": false,
