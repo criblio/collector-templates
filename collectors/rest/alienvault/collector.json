@@ -1,0 +1,104 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "8 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "discoverMethod": "get",
+        "discoverUrl": "`https://otx.alienvault.com/taxii/discovery`"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 50,
+        "nextRelationAttribute": "next",
+        "pageField": "page",
+        "sizeField": "size",
+        "size": 50,
+        "zeroIndexed": false,
+        "attribute": [
+          "next"
+        ]
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "collectUrl": "`http://otx.alienvault.com/api/v1/pulses/subscribed`",
+      "collectRequestHeaders": [
+        {
+          "name": "X-OTX-API-KEY",
+          "value": "'<your-otx-api-key>'"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "page",
+          "value": "1"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "metadata": [
+      {
+        "name": "threat_intel_source",
+        "value": "'alienvault'"
+      },
+      {
+        "name": "threat_intel_feed",
+        "value": "'pulses-subscribed'"
+      }
+    ],
+    "breakerRulesets": [
+      "alienvault"
+    ]
+  },
+  "savedState": {},
+  "id": "alienvault-pulses-subscribed"
+}
