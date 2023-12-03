@@ -20,7 +20,7 @@
       "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
-      "name": "sf-breaker"
+      "name": "sfdc-rest-breaker"
     }
   ]
 }
