@@ -15,7 +15,7 @@
       "pagination": {
         "type": "none"
       },
-      "authentication": "login",
+      "authentication": "oauth",
       "timeout": 0,
       "useRoundRobinDns": false,
       "disableTimeFilter": false,
@@ -32,21 +32,39 @@
         ],
         "enableHeader": true
       },
-      "loginUrl": "'https://your-salesforce-instance.com/services/oauth2/token'",
-      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
-      "tokenRespAttribute": "token",
+      "loginUrl": "`<Your_login_URL>`",
+      "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "collectUrl": "'https://your-salesforce-instance.com/services/data/v58.0/query?q=SELECT,SourceIp,Status,UserId+FROM+LoginHistory'",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "collectUrl": "`<Your_Collect_URL>`",
       "collectRequestParams": [
         {
-          "name": "et",
-          "value": "`${new Date(earliest * 1000 || Date.now() -(10 * 60 * 1000)).getTime()/1000}`"
+          "name": "Accept",
+          "value": "`*/*`"
+        },
+        {
+          "name": "Accept-Encoding",
+          "value": "`gzip, deflate, br`"
+        },
+        {
+          "name": "Connection",
+          "value": "`keep-alive`"
         }
       ],
-      "username": "<username_here>",
-      "password": "Password_here>"
+      "password": "<Password_here>",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "`<Your_client_id_URL>`"
+        },
+        {
+          "name": "grant_type",
+          "value": "`client_credentials`"
+        }
+      ],
+      "clientSecretParamValue": "`<Your_client_secret_URL>`"
     },
     "destructive": false,
     "type": "rest"
@@ -64,5 +82,5 @@
     ]
   },
   "savedState": {},
-  "id": "Salesfore-REST-Collector"
+  "id": "sfdc-rest-collector"
 }
