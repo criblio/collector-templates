@@ -1,5 +1,5 @@
 {
-  "id": "breaker",
+  "id": "sfdc-rest-breaker",
   "lib": "custom",
   "minRawLength": 256,
   "rules": [
