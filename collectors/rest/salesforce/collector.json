@@ -1,0 +1,86 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "`<Your_login_URL>`",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "collectUrl": "`<Your_Collect_URL>`",
+      "collectRequestParams": [
+        {
+          "name": "Accept",
+          "value": "`*/*`"
+        },
+        {
+          "name": "Accept-Encoding",
+          "value": "`gzip, deflate, br`"
+        },
+        {
+          "name": "Connection",
+          "value": "`keep-alive`"
+        }
+      ],
+      "password": "<Password_here>",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "`<Your_client_id_URL>`"
+        },
+        {
+          "name": "grant_type",
+          "value": "`client_credentials`"
+        }
+      ],
+      "clientSecretParamValue": "`<Your_client_secret_URL>`"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "breaker"
+    ]
+  },
+  "savedState": {},
+  "id": "sfdc-rest-collector"
+}
