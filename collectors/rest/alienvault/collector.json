@@ -64,7 +64,7 @@
       "collectRequestHeaders": [
         {
           "name": "X-OTX-API-KEY",
-          "value": "'<your-otx-api-key>'"
+          "value": "'<OTX API Key|Your OTX Key (sign up for a key at [otx.alienvault.com](https://otx.alienvault.com/#signup))>'"
         }
       ],
       "collectRequestParams": [
