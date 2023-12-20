@@ -34,7 +34,22 @@ Each template directory must include a README file with a minimum set of details
 
 The collector template must be included in a file `collector.json`. The template must pass an import to a Cribl Stream instance as committed.
 
-Any relevant event breaker templates must be added to a file `breakers.json`. The event breakers.
+Any relevant event breaker templates must be added to a file `breakers.json`.
+
+### Placeholders
+
+Placeholders should use the the format `<Placeholder|Description>`. For example,
+```
+"collectRequestHeaders": [
+  {
+    "name": "X-FOO-API-KEY",
+    "value": "'<FOO API Key|The API key associated with your FOO account>'"
+  }
+],
+```
+
+When following this pattern, Cribl (v4.4.4 and later) can recognize placeholders and prompt the user to fill them in on config import.
+
 
 ## Sample Data
 

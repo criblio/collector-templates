@@ -25,10 +25,11 @@
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
+      "collectUrl": "`https://main-<Organization ID|Cribl Cloud organization ID>.cribl.cloud/api/v1/system/metrics`",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "<CLIENT_ID>"
+          "value": "'<Client ID|To generate a credential, see [Cribl Documentation](https://docs.cribl.io/stream/api-tutorials/#create-credential)>'"
         },
         {
           "name": "audience",
@@ -39,7 +40,6 @@
           "value": "'client_credentials'"
         }
       ],
-      "collectUrl": "`https://main-<ORG_ID>.cribl.cloud/api/v1/system/metrics`",
       "collectRequestParams": [
         {
           "name": "earliest",
@@ -54,7 +54,7 @@
           "value": "'application/json'"
         }
       ],
-      "clientSecretParamValue": "<CLIENT_SECRET>"
+      "clientSecretParamValue": "<Client Secret|To generate a credential, see [Cribl Documentation](https://docs.cribl.io/stream/api-tutorials/#create-credential)>"
     },
     "destructive": false,
     "type": "rest"
