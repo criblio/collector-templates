@@ -53,27 +53,27 @@
         ],
         "enableHeader": true
       },
-      "loginUrl": "'https://wd5-services1.myworkday.com/ccx/oauth2/__customer_directory__/token'",
+      "loginUrl": "'https://wd5-services1.myworkday.com/ccx/oauth2/<Customer Directory| Provided by WorkDay; location of your services.>/token'",
       "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "clientSecretParamValue": "___insert_clientsecret_here",
+      "clientSecretParamValue": "<Client Secret| >",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "`__insert_clientid_here`"
+          "value": "`<Customer ID| >`"
         },
         {
           "name": "refresh_token",
-          "value": "`__insert_refresh_token_here`"
+          "value": "`<Refresh Token| >`"
         },
         {
           "name": "grant_type",
           "value": "'refresh_token'"
         }
       ],
-      "collectUrl": "'https://wd5-services1.myworkday.com/ccx/service/customreport2/__customer_directory__/ISU_Cribl/System_Audit__User_Activity_Log_-_Unidentified'",
+      "collectUrl": "'https://wd5-services1.myworkday.com/ccx/service/customreport2/<Customer Directory| Provided by WorkDay. Location of your services.>/ISU_Cribl/System_Audit__User_Activity_Log_-_Unidentified'",
       "collectRequestParams": [
         {
           "name": "From_Moment",
