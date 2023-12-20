@@ -54,7 +54,7 @@
       "clientSecretParamName": "client_secret",
       "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
       "collectUrl": "\"https://usea1-tt01.sentinelone.net/web/api/v2.1/\" + id\r\n",
-      "clientSecretParamValue": "<secret>",
+      "clientSecretParamValue": "<Client Secret| >",
       "collectRequestParams": [
         {
           "name": "createdAt__gte",
@@ -68,7 +68,7 @@
       "collectRequestHeaders": [
         {
           "name": "Authorization",
-          "value": "\"ApiToken <token>\""
+          "value": "\"ApiToken <Auth token| >\""
         }
       ]
     },
