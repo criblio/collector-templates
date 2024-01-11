@@ -47,7 +47,7 @@
       "collectRequestHeaders": [
         {
           "name": "X-Auth-Token",
-          "value": "'YOUR_TOKEN_HERE'"
+          "value": "'<Auth Token|>'"
         }
       ]
     },

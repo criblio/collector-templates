@@ -52,8 +52,8 @@
       "clientSecretParamName": "client_secret",
       "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
       "collectUrl": "'https://tap-api-v2.proofpoint.com/v2/siem/' + id",
-      "password": "<password>",
-      "username": "<userid>",
+      "password": "<Password|>",
+      "username": "<Username|>",
       "collectRequestParams": [
         {
           "name": "interval",

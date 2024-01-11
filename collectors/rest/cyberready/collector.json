@@ -29,8 +29,7 @@
         },
         {
           "name": "X-Api-Key",
-          // replace with API Key
-          "value": "'abcde66dab7154481f78aasdadsfd'"
+          "value": "'<API Key|>'"
         }
       ],
       // will use earliest and latest, but if they don't exist defaults to 10 minutes back (earliest) and now (latest)

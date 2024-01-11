@@ -59,14 +59,12 @@
       "username": "",
       "collectRequestHeaders": [
         {
-          // update the apikey value below
           "name": "x-api-key",
-          "value": "\"<apikey>\""
+          "value": "\"<API Key|>\""
         },
         {
-          // update the authheader value below
-          "value": "\"Basic <authheader>\"",
-          "name": "Authorization"
+          "name": "Authorization",
+          "value": "\"Basic <Auth Header|>\""
         }
       ],
       "collectRequestParams": [],
