@@ -32,13 +32,13 @@
         ],
         "enableHeader": true
       },
-      "loginUrl": "`<Your_login_URL>`",
+      "loginUrl": "`<Login URL| >`",
       "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
       "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
-      "collectUrl": "`<Your_Collect_URL>`",
+      "collectUrl": "`<Collection URL| >`",
       "collectRequestParams": [
         {
           "name": "Accept",
@@ -53,18 +53,18 @@
           "value": "`keep-alive`"
         }
       ],
-      "password": "<Password_here>",
+      "password": "<Password| >",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "`<Your_client_id_URL>`"
+          "value": "`<Client ID URL| >`"
         },
         {
           "name": "grant_type",
           "value": "`client_credentials`"
         }
       ],
-      "clientSecretParamValue": "`<Your_client_secret_URL>`"
+      "clientSecretParamValue": "`<Client Secret URL| >`"
     },
     "destructive": false,
     "type": "rest"
