@@ -21,7 +21,7 @@
       "useRoundRobinDns": false,
       "disableTimeFilter": false,
       "safeHeaders": [],
-      "loginUrl": "'https://login.microsoftonline.com/<uri-key>/oauth2/v2.0/token'",
+      "loginUrl": "'https://login.microsoftonline.com/<Tenant ID| This is your Azure Cloud [Tenant ID](https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-microsoft-entra-tenant)>/oauth2/v2.0/token'",
       "loginBody": "`client_secret=${password}&scope=https://graph.microsoft.com/.default&client_id=${username}&grant_type=client_credentials`",
       "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
@@ -34,8 +34,8 @@
           "value": "'application/x-www-form-urlencoded'"
         }
       ],
-      "username": "<username>",
-      "password": "<password>"
+      "username": "<Username|>",
+      "password": "<Password|>"
     },
     "destructive": false,
     "type": "rest"

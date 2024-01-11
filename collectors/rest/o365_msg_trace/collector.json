@@ -25,16 +25,16 @@
         "useRoundRobinDns": false,
         "disableTimeFilter": false,
         "safeHeaders": [],
-        "loginUrl": "'https://login.microsoftonline.com/<MS_TENANT_ID>/oauth2/token'",
+        "loginUrl": "'https://login.microsoftonline.com/<Tenant ID| This is your Microsoft [Tenant ID] (https://learn.microsoft.com/en-us/sharepoint/find-your-office-365-tenant-id)>/oauth2/token'",
         "tokenRespAttribute": "access_token",
         "authHeaderKey": "Authorization",
         "authHeaderExpr": "`Bearer ${token}`",
         "clientSecretParamName": "client_secret",
-        "clientSecretParamValue": "<CLIENT_SECRET>",
+        "clientSecretParamValue": "<Client Secret|>",
         "authRequestParams": [
           {
             "name": "client_id",
-            "value": "<CLIENT_ID>"
+            "value": "<Client ID|>"
           },
           {
             "name": "resource",

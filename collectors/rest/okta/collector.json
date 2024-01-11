@@ -23,7 +23,7 @@
       "useRoundRobinDns": false,
       "disableTimeFilter": false,
       "safeHeaders": [],
-      "collectUrl": "'https://<instance>.okta.com/api/v1/logs'",
+      "collectUrl": "'https://<Domain| This is your Okta Domain, if you need help here is the [Okta Docs](https://developer.okta.com/docs/guides/find-your-domain/main/)>.okta.com/api/v1/logs'",
       "collectRequestParams": [
         {
           "name": "since",
@@ -37,7 +37,7 @@
       "collectRequestHeaders": [
         {
           "name": "Authorization",
-          "value": "`SSWS <key>`"
+          "value": "`SSWS <SSWS Key| This is the Okta API Key, more infor can be found in the [Okta Docs](https://developer.okta.com/docs/guides/create-an-api-token/main/)>`"
         }
       ]
     },

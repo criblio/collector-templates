@@ -31,15 +31,15 @@
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "clientSecretParamValue": "12345678",
+      "clientSecretParamValue": "<Client Secret|>",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "'<client_id>'"
+          "value": "'<Client ID|>'"
         },
         {
           "name": "grant_type",
-          "value": "'client_credentials'"
+          "value": "'<Client Credentials|>'"
         },
         {
           "name": "box_subject_type",
@@ -47,7 +47,7 @@
         },
         {
           "name": "box_subject_id",
-          "value": "'<subj_id>'"
+          "value": "'<Subject ID|>'"
         }
       ],
       "collectUrl": "'https://api.box.com/2.0/events'",
