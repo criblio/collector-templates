@@ -9,45 +9,43 @@ You will need the below values from your Wiz portal to complete the integration:
 | Item | Value |
 | ----------- | ----------- |
 | Client ID | 53-character string |
-| Client secret | 64-character string |
+| Client Secret | 64-character string |
 | Auth URL | https://auth.app.wiz.io/oauth/token or similar |
-| API endpoint | https://api.us17.app.wiz.io/graphql or similar |
+| API Endpoint | https://api.us17.app.wiz.io/graphql or similar |
+
+## Downloading Configuration Files
+
+Download the required event breaker and REST Collector JSON configuration files from [this Cribl repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).  You will import these in the below steps.  
 
 ## Configuring the Event Breaker
 
-Although you will create four REST Collectors, you only need to import single Event Breaker included in this repo, whose ruleset contains one rule per API. All four REST Collectors will use that Event Breaker. We'll configure each REST Collector to use the rule that corresponds with the appropriate API.
+Although you will create four REST Collectors, you only need to import a single Event Breaker included in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz), whose ruleset contains one rule per API. All four REST Collectors will use that Event Breaker. Each Wiz REST Collector configuration contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz) will already be configured to use the event breaker (breaker.json) also contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
 
-The Event Breaker strips headers from events, leaving only the records of interest; and, it captures timestamps in the proper way.
+The Event Breaker strips headers from events, leaving only the records of interest; and, it captures timestamps properly.  You will have a single event for each unique record.
 
-1. Navigate to Manage > Processing > Knowledge > Event Breaker Rules.
-2. Click Add Ruleset.
-3. Click Manage as JSON at lower left.
-4. Copy the Event Breaker from the Appendix below.
-5. Paste the Event Breaker into the editor (replacing the default object that the editor opens with).
-6. Click Save.
+1. Navigate to **Manage > Processing > Knowledge > Event Breaker Rules**.
+2. Click **Add Ruleset**.
+3. Click **Manage as JSON** at lower left.
+4. Click **Import** at top right.
+5. Select the breaker.json file you downloaded from [here](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
+6. Click **OK**.
 
-## Configuring the REST Collectors
->You'll need to complete the procedure in this section four times. Each time, you'll create one REST Collector to handle a particular Wiz API.
+## Importing and Configuring each REST Collector
+>You'll need to complete the procedure in this section for each of the 4 Wiz Collectors contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
 
->To learn more about REST Collectors, see our REST/API Endpoint and Scheduling and Running topics.
+>To learn more about REST Collectors, see our [Collector Scheduling and Running page](https://docs.cribl.io/stream/collectors-schedule-run/).
+
+>To learn more about using placeholders in the Collector Import process, see [this](https://docs.cribl.io/stream/collectors/#importing-json).
 
 From the top nav of a Cribl Stream instance or Group, select **Data > Sources**, then select **Collectors > REST** from the **Data Sources** page's tiles or the **Sources** left nav. Click **Add Collector** to open the **REST > New Collector** modal.
 
 1. Click **Manage as JSON** to open the configuration editor.
-
-2. Copy the config for the desired API from the desired collector included in this repo.
-
-3. Paste the config into the editor (replacing the default object that the editor opens with).
-
-4. Locate the `collector` element, and within that, the `conf` element.
-
-5. In the `conf` element, replace the values of the following keys with the values you noted earlier. To make this easier, the values to be replaced all have the same placeholder value of `<insert_value_here>`.
-
-    - Replace the value of `loginUrl` with the value of **Auth URL**. Enclose this value in single quotation marks within the double-quotes required by JSON, for example: `"'https://auth.app.wiz.io/oauth/token'"`.
-    - Replace the value of `clientSecretParamValue` with the value of **Client secret**.
-    - In the `authRequestParams` array, find the object where `name` has the value `client_id`, and replace the value of `value` with the value of **Client ID**.
-    - Replace the value of `collectUrl` with the value of **API endpoint**. Enclose this value in single quotation marks within the double-quotes required by JSON, for example: `"'https://api.us17.app.wiz.io/graphql'"`.
+2. Select **Import** from the top right and choose one of the 4 configuration files (named collector-wiz-*.json) you downloaded from the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
+3. Click **OK**
+4. You will be prompter with a window prompting you for the 4 values provided to you by Wiz which is specific to your Organization.  Populate the login_url (Wiz calls **Auth URL**), collect_url (Wiz calls **API Endpoint**), client_secret_value (Wiz calls **Client Secret**) , and client_id_value (Wiz calls **Client ID**) form fields.  You can add or modify these at a later time and tool tips are available for each form field.
+5. Click **Replace Values**.
 6. Click **OK**.
+7. Click **Save**.
 
 Once you've created all four REST Collectors, you'll be ready to start collecting from the Wiz APIs.
 
@@ -55,7 +53,7 @@ Once you've created all four REST Collectors, you'll be ready to start collectin
 You can perform the procedures in this section with any of the four REST Collectors you've created. To configure time ranges, you'll use **Earliest** and **Latest** values.
 
 - If you enter **Earliest** and **Latest values**, Cribl Stream will pass them into the API query.
-- If you leave these fields blank, Cribl Stream will query the API for the 24 hours before the job is scheduled to run.
+- If you leave these fields blank, Cribl Stream will query the API for 24 hours before the job is scheduled to run.
 
 We'll start with the Discovery run:
 
