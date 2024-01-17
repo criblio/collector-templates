@@ -37,12 +37,12 @@
         ],
         "enableHeader": true
       },
-      "loginUrl": "<insert_value_here>",
+      "loginUrl": "'<login_url|Specific to your Wiz account.  Something like: https://auth.app.wiz.io/oauth/token.  Wiz may refer to this as your Auth URL.>'",
       "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "collectUrl": "<insert_value_here>",
+      "collectUrl": "'<collect_url|Specific to your Wiz account.  Something like: https://api.us17.app.wiz.io/graphql.  Wiz may refer to this as your API Endpoint.>'",
       "collectBody": "'{\"query\": \"query AuditLogTable($first: Int $after: String $filterBy: AuditLogEntryFilters){auditLogEntries(first: $first after: $after filterBy: $filterBy) {nodes {id action requestId status timestamp actionParameters userAgent sourceIP serviceAccount {id name} user {id name}} pageInfo {hasNextPage endCursor}}}\",\"variables\": {\"first\": 50, \"filterBy\": {\"status\": [\"SUCCESS\", \"FAILED\",\"INVALID\",\"ACCESS_DENIED\"], \"timestamp\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}       }}}'",
       "collectRequestHeaders": [
         {
@@ -54,11 +54,11 @@
           "value": "'application/json'"
         }
       ],
-      "clientSecretParamValue": "<insert_value_here>",
+      "clientSecretParamValue":  "'<client_secret_value|Specific to your Wiz account.  Should be a 64 character string.  Wiz may refer to this as your Client Secret.>'",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "<insert_value_here>"
+          "value": "'<client_id_value|Specific to your Wiz account.  Should be a 53 character string.  Wiz may refer to this as your Client ID.>'"
         },
         {
           "name": "audience",
@@ -86,5 +86,5 @@
     ]
   },
   "savedState": {},
-  "id": "wiz-auditLogEntries"
+  "id": "collector-wiz-auditlogentries"
 }
