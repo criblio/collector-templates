@@ -42,7 +42,7 @@ From the top nav of a Cribl Stream instance or Group, select **Data > Sources**,
 1. Click **Manage as JSON** to open the configuration editor.
 2. Select **Import** from the top right and choose one of the 4 configuration files (named collector-wiz-*.json) you downloaded from the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
 3. Click **OK**
-4. You will be prompter with a window prompting you for the 4 values provided to you by Wiz which is specific to your Organization.  Populate the login_url (Wiz calls **Auth URL**), collect_url (Wiz calls **API Endpoint**), client_secret_value (Wiz calls **Client Secret**) , and client_id_value (Wiz calls **Client ID**) form fields.  You can add or modify these at a later time and tool tips are available for each form field.
+4. A modal will open and prompt you for the four values provided to you by Wiz (that are specific to your Organization). Populate the form fields for `login_url` (that Wiz calls **Auth URL**), `collect_url` (that Wiz calls **API Endpoint**), `client_secret_value` (that Wiz calls **Client Secret**), and `client_id_value` (that Wiz calls **Client ID**). Tooltips are available for each field, and you can add or modify them later if you prefer.
 5. Click **Replace Values**.
 6. Click **OK**.
 7. Click **Save**.
