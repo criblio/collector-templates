@@ -16,7 +16,8 @@
         "type": "response_body",
         "maxPages": 0,
         "attribute": [
-          "endCursor"
+          "endCursor",
+          "hasNextPage"
         ],
         "lastPageExpr": "hasNextPage === false"
       },
@@ -43,7 +44,7 @@
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
       "collectUrl": "'<collect_url|Specific to your Wiz account.  Something like: https://api.us17.app.wiz.io/graphql.  Wiz may refer to this as your API Endpoint.>'",
-      "collectBody": "'{\"query\": \"query IssuesTable($filterBy: IssueFilters $first: Int $after: String $orderBy: IssueOrder) { issues:issuesV2(filterBy: $filterBy first: $first after: $after orderBy: $orderBy) { nodes { id control { id name description resolutionRecommendation securitySubCategories {title category {name framework {name}}}} createdAt updatedAt sourceRule {id name} dueAt resolvedAt statusChangedAt project { id name slug businessUnit riskProfile { businessImpact } } status severity type entitySnapshot { id type nativeType name status cloudPlatform cloudProviderURL providerId region resourceGroupExternalId subscriptionExternalId subscriptionName subscriptionTags tags externalId } notes {createdAt updatedAt text user {name email} serviceAccount {name}} serviceTickets { externalId name url } } pageInfo { hasNextPage endCursor } } }\", \"variables\": {\"first\": 500' + `${endCursor ? ', \"after\": \"' + endCursor+'\",' : \",\"}` + '\"filterBy\": {\"sourceRule\": { \"id\": []}, \"relatedEntity\": {\"type\": []}, \"status\": [\"OPEN\", \"IN_PROGRESS\", \"RESOLVED\", \"REJECTED\"], \"severity\": [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"], \"type\": [\"TOXIC_COMBINATION\", \"THREAT_DETECTION\", \"CLOUD_CONFIGURATION\"], \"createdAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'\n",
+      "collectBody": "'{\"query\": \"query IssuesTable($filterBy: IssueFilters $first: Int $after: String $orderBy: IssueOrder) { issues:issuesV2(filterBy: $filterBy first: $first after: $after orderBy: $orderBy) { nodes { id control { id name description resolutionRecommendation securitySubCategories {title category {name framework {name}}}} createdAt updatedAt sourceRule {id name} dueAt resolvedAt statusChangedAt project { id name slug businessUnit riskProfile { businessImpact } } status severity type entitySnapshot { id type nativeType name status cloudPlatform cloudProviderURL providerId region resourceGroupExternalId subscriptionExternalId subscriptionName subscriptionTags tags externalId } notes {createdAt updatedAt text user {name email} serviceAccount {name}} serviceTickets { externalId name url } } pageInfo { hasNextPage endCursor } } }\", \"variables\": {\"first\": 100' + `${endCursor ? ', \"after\": \"' + endCursor+'\",' : \",\"}` + '\"filterBy\": {\"sourceRule\": { \"id\": []}, \"relatedEntity\": {\"type\": []}, \"status\": [\"OPEN\", \"IN_PROGRESS\", \"RESOLVED\", \"REJECTED\"], \"severity\": [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"], \"type\": [\"TOXIC_COMBINATION\", \"THREAT_DETECTION\", \"CLOUD_CONFIGURATION\"], \"createdAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'\n",
       "collectRequestHeaders": [
         {
           "name": "accept",
