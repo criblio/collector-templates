@@ -11,7 +11,7 @@
       "discovery": {
         "discoverType": "http",
         "discoverMethod": "get",
-        "discoverUrl": "'https://api.us-2.crowdstrike.com/alerts/queries/alerts/v1'",
+        "discoverUrl": "'https://api.us-2.crowdstrike.com/detects/queries/detects/v1'",
         "discoverRequestParams": [
           {
             "name": "limit",
@@ -19,7 +19,7 @@
           },
           {
             "name": "filter",
-            "value": "`updated_timestamp:>'${new Date(earliest*1000 || Date.now()-(60*60*1000*24*7)).toISOString()}'`"
+            "value": "`date_updated:>'${new Date(earliest*1000 || Date.now()-(60*60*1000*24*7)).toISOString()}'`"
           }
         ],
         "discoverRequestHeaders": [
@@ -58,7 +58,7 @@
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "collectUrl": "'https://api.us-2.crowdstrike.com/alerts/entities/alerts/v1'",
+      "collectUrl": "'https://api.us-2.crowdstrike.com/detects/entities/summaries/GET/v1'",
       "credentialsSecret": "CrowdstrikeAPI",
       "authRequestHeaders": [
         {
@@ -90,7 +90,7 @@
     "throttleRatePerSec": "0",
     "metadata": [],
     "breakerRulesets": [
-      "CS_Devices_Breaker"
+      "Crowdstrike_API_Breaker"
     ]
   },
   "savedState": {},
