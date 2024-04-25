@@ -1,0 +1,100 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/10 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "earliest": "-10m",
+      "latest": "now"
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "itemList": [],
+        "discoverMethod": "get"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "basic",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://api.boomi.com/api/rest/v1/<uriToken| This is your unique Boomi endpoint fragment>'",
+      "tokenRespAttribute": "token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "collectUrl": "'https://api.boomi.com/api/rest/v1/aristocratna-OWRQPH/AuditLog/query'",
+      "username": "<boomiToken| Your API \"username\" from Boomi>",
+      "password": "<boomiPassword| The corresponding key for the boomiToken above>",
+      "clientSecretParamValue": "<boomiPassword| The corresponding key for the boomiToken above>",
+      "collectRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "\"application/json\""
+        }
+      ],
+      "collectRequestParams": [],
+      "collectBody": "{\r\n  \"QueryFilter\" :\r\n    {\r\n      \"expression\" : \r\n            {\r\n              \"argument\" : [C.Time.strftime(earliest ? earliest : Date.now()/1000 -86400,\"%Y-%m-%dT%H:%M:%SZ\"),C.Time.strftime(latest ? latest : Date.now()/1000,\"%Y-%m-%dT%H:%M:%SZ\")],\r\n              \"operator\":\"BETWEEN\",\r\n              \"property\":\"date\"\r\n            }\r\n    }\r\n}"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": false,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "boomi"
+    ],
+    "output": "<criblDestination| The output to send the data to>",
+    "pipeline": "<criblPipeline| The pipeline to send results through>"
+  },
+  "savedState": {},
+  "id": "bommi_rc"
+}

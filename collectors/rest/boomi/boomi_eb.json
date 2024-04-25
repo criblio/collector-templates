@@ -1,0 +1,43 @@
+{
+  "id": "boomi",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "regex",
+      "timestampAnchorRegex": "/date=\"/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/(?=\\<bns:result)/",
+      "name": "boomi_xml"
+    },
+    {
+      "condition": "true",
+      "type": "regex",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5120000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/^\\b$/",
+      "name": "no break"
+    }
+  ]
+}
