@@ -1,0 +1,50 @@
+{
+  "lib": "custom",
+  "minRawLength": 256,
+  "id": "Atlassian REST APIs",
+  "rules": [
+    {
+      "condition": "RegExp('https:\\/\\/[^\\.]+\\.atlassian\\.net\\/rest\\/api\\/3\\/auditing\\/record').test(__collectStats.url)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"created\":\"/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Y-%m-%dT%H:%M:%S.%L%Z"
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5120000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Jira",
+      "jsonArrayField": "records"
+    },
+    {
+      "condition": "RegExp('https:\\/\\/[^\\.]+\\.atlassian\\.net\\/wiki\\/rest\\/api\\/audit').test(__collectStats.url)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"creationDate\":/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Q"
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5120000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Confluence",
+      "jsonArrayField": "results"
+    }
+  ],
+  "description": "Event breakers for Atlassian APIs"
+}

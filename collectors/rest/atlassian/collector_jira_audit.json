@@ -1,0 +1,107 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "earliest": "-10m@m",
+      "latest": "-5m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "request_offset",
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 100,
+        "maxPages": 1000,
+        "zeroIndexed": true,
+        "offset": 0,
+        "totalRecordField": "total"
+      },
+      "authentication": "basic",
+      "timeout": 60,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://<tenant>.atlassian.net`)>.atlassian.net/rest/api/3/auditing/record`",
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "'application/json'"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "from",
+          "value": "`${new Date((earliest * 1000 || Date.now()-(24*60*60*1000))).toISOString()}`"
+        },
+        {
+          "name": "to",
+          "value": "`${new Date((latest * 1000 || Date.now())).toISOString()}`"
+        }
+      ],
+      "username": "<User Name|The user name for accessing audit logs>",
+      "password": "<Password|The password of the user to access audit logs>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Atlassian"
+    ]
+  },
+  "savedState": {},
+  "id": "Jira_Audit_Logs"
+}
