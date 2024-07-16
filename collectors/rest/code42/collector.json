@@ -1,0 +1,107 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/15 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "discoverToRoutes": false,
+      "earliest": "",
+      "latest": ""
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 10,
+        "attribute": [
+          "nextPgToken"
+        ]
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://api.us2.code42.com/v1/oauth`",
+      "loginBody": "`client_id=${username}&client_secret=${password}`",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "tokenRespAttribute": "access_token",
+      "clientSecretParamName": "client_secret",
+      "authRequestParams": [
+        {
+          "name": "grant_type",
+          "value": "client_credentials"
+        }
+      ],
+      "authRequestHeaders": [],
+      "collectUrl": "`https://api.us2.code42.com/v2/file-events/`",
+      "collectBody": "`{\n    \"groupClause\": \"AND\",\n    \"groups\": [\n        {\n            \"filters\": [\n                {\n                    \"term\": \"event.inserted\",\n                    \"operator\": \"ON_OR_AFTER\",\n                    \"value\": \"${new Date((Date.now()-(15*60*1000))).toISOString()}\"\n                },\n                {\n                    \"term\": \"event.inserted\",\n                    \"operator\": \"ON_OR_BEFORE\",\n                    \"value\": \"${new Date(Date.now()).toISOString()}\"\n                }\n            ]\n        }\n    ],\n    \"pgSize\": 100,\n    \"pgToken\": \"\",\n    \"srtDir\": \"asc\",\n    \"srtKey\": \"@timestamp\"\n}`",
+      "username": "<Username|>",
+      "password": "<Password|>",
+      "credentialsSecret": "<Credentials Secret|>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Cribl - Do Not Break Ruleset"
+    ],
+    "metadata": [
+      {
+        "name": "source",
+        "value": "code42"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "code42_matchgroup"
+}
