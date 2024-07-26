@@ -1,0 +1,28 @@
+{
+    "id": "TeamViewer REST API",
+    "minRawLength": 256,
+    "tags": "teamviewer",
+    "rules": [
+      {
+        "condition": "_raw.includes('\"AuditEvents\":')",
+        "type": "json_array",
+        "timestampAnchorRegex": "/\"Timestamp\":\"/",
+        "timestamp": {
+          "type": "format",
+          "length": 150,
+          "format": "%Y-%m-%dT%H:%M:%SZ"
+        },
+        "timestampTimezone": "UTC",
+        "timestampEarliest": "-420weeks",
+        "timestampLatest": "+1week",
+        "maxEventBytes": 51200,
+        "disabled": false,
+        "parserEnabled": false,
+        "shouldUseDataRaw": false,
+        "jsonExtractAll": false,
+        "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+        "name": "TeamViewer-AuditEvents",
+        "jsonArrayField": "AuditEvents"
+      }
+    ]
+  }
