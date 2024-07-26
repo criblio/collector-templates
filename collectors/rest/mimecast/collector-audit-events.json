@@ -1,0 +1,92 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {},
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "none",
+          "itemList": []
+        },
+        "collectMethod": "post_with_body",
+        "pagination": {
+          "type": "response_body",
+          "maxPages": 50,
+          "attribute": [
+            "meta.pagination.next"
+          ],
+          "lastPageExpr": "meta.pagination.next === null"
+        },
+        "authentication": "oauth",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": false,
+        "decodeUrl": true,
+        "rejectUnauthorized": false,
+        "captureHeaders": false,
+        "safeHeaders": [],
+        "retryRules": {
+          "type": "backoff",
+          "interval": 1000,
+          "limit": 5,
+          "multiplier": 2,
+          "codes": [
+            429,
+            503
+          ],
+          "enableHeader": true
+        },
+        "__scheduling": {
+          "stateTracking": {}
+        },
+        "loginUrl": "`https://api.services.mimecast.com/oauth/token`",
+        "tokenRespAttribute": "access_token",
+        "authHeaderKey": "Authorization",
+        "authHeaderExpr": "`Bearer ${token}`",
+        "clientSecretParamName": "client_secret",
+        "collectRequestParams": [],
+        "collectUrl": "`https://api.services.mimecast.com/api/audit/get-audit-events`",
+        "collectRequestHeaders": [
+          {
+            "name": "Content-Type",
+            "value": "'application/json'"
+          }
+        ],
+        "clientSecretParamValue": "<Client Secret|Your Mimecast app client secret>",
+        "authRequestParams": [
+          {
+            "name": "client_id",
+            "value": "'<Client ID|Your Mimecast app client ID>'"
+          },
+          {
+            "name": "grant_type",
+            "value": "'client_credentials'"
+          }
+        ],
+        "collectBody": "`{ ${__e['meta.pagination.next'] ? `\"meta\":{\"pagination\":{\"pageToken\": \"${__e['meta.pagination.next']}\", \"pageSize\": 50}},` : \"\"} \"data\": [{\"endDateTime\": \"${C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ')}\", \"startDateTime\": \"${C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ')}\"}]}`"
+      },
+      "destructive": false,
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "breakerRulesets": [
+        "Mimecast REST API"
+      ],
+      "metadata": [],
+      "pipeline": "devnull",
+      "output": "devnull"
+    },
+    "savedState": {},
+    "id": "Mimecast_AuditEvents"
+  }

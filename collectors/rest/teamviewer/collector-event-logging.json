@@ -1,0 +1,92 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {},
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "none"
+        },
+        "collectMethod": "post",
+        "pagination": {
+          "type": "response_body",
+          "maxPages": 50,
+          "attribute": [
+            "ContinuationToken"
+          ],
+          "lastPageExpr": "ContinuationToken === null"
+        },
+        "authentication": "none",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": false,
+        "decodeUrl": true,
+        "rejectUnauthorized": false,
+        "captureHeaders": false,
+        "safeHeaders": [],
+        "retryRules": {
+          "type": "backoff",
+          "interval": 1000,
+          "limit": 5,
+          "multiplier": 2,
+          "maxIntervalMs": 20000,
+          "codes": [
+            429,
+            503
+          ],
+          "enableHeader": true,
+          "retryHeaderName": "retry-after"
+        },
+        "__scheduling": {
+          "stateTracking": {}
+        },
+        "collectRequestParams": [
+          {
+            "name": "ContinuationToken",
+            "value": "`${ContinuationToken}`"
+          },
+          {
+            "name": "startDate",
+            "value": "`${new Date((earliest * 1000)).toISOString()}`"
+          },
+          {
+            "name": "endDate",
+            "value": "`${new Date((latest * 1000)).toISOString()}`"
+          },
+          {
+            "name": "Events",
+            "value": "[\"EditTFAUsage\", \"UserCreated\", \"UserDeleted\", \"JoinCompany\", \"EditUserProperties\", \"EditOwnProfile\", \"EditUserPermissions\", \"StartedSession\", \"IncomingSession\", \"EndedSession\", \"JoinedSession\", \"LeftSession\", \"ParticipantJoinedSession\", \"ParticipantLeftSession\", \"ChangedDisabledRemoteInput\", \"ReceivedDisabledLocalInput\", \"ChangedShowBlackScreen\", \"ReceivedShowBlackScreen\", \"SwitchedSides\", \"StartedRecording\", \"EndedRecording\", \"PausedRecording\", \"ResumedRecording\", \"SentFile\", \"ReceivedFile\", \"CreateCustomHost\", \"UpdateCustomHost\", \"DeleteCustomHost\", \"PolicyAdded\", \"PolicyUpdated\", \"PolicyDeleted\", \"ScriptTokenAdded\", \"ScriptTokenDeleted\", \"ScriptTokenUpdated\", \"GroupAdded\", \"GroupUpdated\", \"GroupDeleted\", \"GroupShared\", \"EmailConfirmed\"]"
+          }
+        ],
+        "collectUrl": "`https://webapi.teamviewer.com/api/v1/EventLogging`",
+        "collectRequestHeaders": [
+          {
+            "name": "Authorization",
+            "value": "`Bearer <API Key|Your TeamViewer API key>`"
+          }
+        ]
+      },
+      "destructive": false,
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "breakerRulesets": [
+        "TeamViewer REST API"
+      ],
+      "metadata": [],
+      "pipeline": "TeamViewerPreProcessing"
+    },
+    "savedState": {},
+    "id": "TeamViewer_EventLog"
+  }
