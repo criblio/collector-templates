@@ -57,14 +57,14 @@
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "`<Client ID URL| >`"
+          "value": "`<Client ID| >`"
         },
         {
           "name": "grant_type",
           "value": "`client_credentials`"
         }
       ],
-      "clientSecretParamValue": "`<Client Secret URL| >`"
+      "clientSecretParamValue": "`<Client Secret| >`"
     },
     "destructive": false,
     "type": "rest"
