@@ -1,0 +1,114 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {}
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "uba",
+          "securityassessment",
+          "quarantine",
+          "remediation",
+          "policy",
+          "malware",
+          "malsite",
+          "compromisedcredential",
+          "ctep",
+          "dlp",
+          "watchlist"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503,
+          409
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://<Domain|The account's subdomain on `goskope.com`>.goskope.com/api/v2/events/dataexport/events/${id}`",
+      "collectRequestParams": [
+        {
+          "name": "operation",
+          "value": "`next`"
+        },
+        {
+          "name": "index",
+          "value": "`<dataexport index|The index checkpointer name to be sent as part of the collection query string parameters. This should be a unique value.>`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "'application/json'"
+        },
+        {
+          "name": "Netskope-Api-Token",
+          "value": "'<API Token|The Netskope-Api-Token for event collection. It must have permissions to the dataexport API endpoints.>'"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Netskope"
+    ]
+  },
+  "savedState": {},
+  "id": "Netskope_Alerts"
+}

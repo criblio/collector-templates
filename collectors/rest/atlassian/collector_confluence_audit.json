@@ -1,0 +1,110 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "earliest": "-10m@m",
+      "latest": "-5m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 1000,
+        "offsetField": "start",
+        "limitField": "limit",
+        "limit": 100,
+        "zeroIndexed": true,
+        "totalRecordField": "size",
+        "offset": 0,
+        "attribute": [
+          "_links.next"
+        ]
+      },
+      "authentication": "basic",
+      "timeout": 60,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://<tenant>.atlassian.net`)>.atlassian.net/wiki/rest/api/audit`",
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "'application/json'"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "startDate",
+          "value": "`${new Date((earliest * 1000 || new Date()-(24*60*60*1000))).getTime()}`"
+        },
+        {
+          "name": "endDate",
+          "value": "`${new Date((latest * 1000 || new Date())).getTime()}`"
+        }
+      ],
+      "username": "<User Name|The user name for accessing audit logs>",
+      "password": "<Password|The password of the user to access audit logs>"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Atlassian REST APIs"
+    ]
+  },
+  "savedState": {},
+  "id": "Confluence_Audit_Logs"
+}

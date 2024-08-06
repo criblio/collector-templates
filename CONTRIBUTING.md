@@ -38,7 +38,7 @@ Any relevant event breaker templates must be added to a file `breakers.json`.
 
 ### Placeholders
 
-Placeholders should use the the format `<Placeholder|Description>`. For example,
+Placeholders should use the format `<Placeholder|Description>`. For example,
 ```
 "collectRequestHeaders": [
   {
