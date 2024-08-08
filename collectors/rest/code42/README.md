@@ -16,7 +16,7 @@ The Collector defines a field named `source`, which you can use to identify even
 
 The Collectors are not scheduled by default. Once you've tested and confirmed they're working as expected, a 15 minute cycle is recommended.
 
-Some collectors will require a tenant ID. You need to retreieve this from the API after getting a bear token. HTTP conversations are below to help with this step.
+Some collectors will require a tenant ID. You need to retreieve this from the API after getting a bearer token. HTTP conversations are below to help with this step.
 
 Authentication step to get a token:
 
