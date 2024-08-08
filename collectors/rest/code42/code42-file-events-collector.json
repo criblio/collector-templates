@@ -25,7 +25,7 @@
       "earliest": "",
       "latest": ""
     },
-    "enabled": true
+    "enabled": false
   },
   "streamtags": [],
   "workerAffinity": false,
@@ -38,9 +38,7 @@
       "pagination": {
         "type": "response_body",
         "maxPages": 10,
-        "attribute": [
-          "nextPgToken"
-        ]
+        "attribute": ["nextPgToken"]
       },
       "authentication": "login",
       "timeout": 0,
@@ -53,10 +51,7 @@
         "interval": 1000,
         "limit": 5,
         "multiplier": 2,
-        "codes": [
-          429,
-          503
-        ],
+        "codes": [429, 503],
         "enableHeader": true
       },
       "__scheduling": {
@@ -92,13 +87,11 @@
       "disabled": true
     },
     "throttleRatePerSec": "0",
-    "breakerRulesets": [
-      "Cribl - Do Not Break Ruleset"
-    ],
+    "breakerRulesets": ["code42"],
     "metadata": [
       {
         "name": "source",
-        "value": "code42"
+        "value": "code42:fileevent"
       }
     ]
   },

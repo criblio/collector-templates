@@ -1,9 +1,51 @@
-# Code42 REST Collector
+# Code42 REST Collectors
 
-To create a new Collector for Code42, copy the code in collector.json, then go into Cribl, add a new REST Collector, and click Manage as JSON. Paste the code into the box, replacing all other contents. When you click okay, you will be prompted to fill in username, password and the access key (credentials).
+There are currently 3 collectors available, and 1 EB rule set.
 
-There is no special event breaker required for this collector.
+You can find details about file events, alerts query, and alerts details in the [Code42 API docs](https://developer.code42.com/api/)
 
-The Collector defines a field named `source` with value `code42` which you can use to identify events in routing tables, etc.
+First create the EB: Under Processing to Knowledge to Event Breakers, add new, manage as JSON and paste in the code42-eventbreaker.json content. There is one breaker for each collector here, but they are very similar.
 
-By default it is scheduled to run every 15 minutes. Change as required.
+Then create a new Collector for Code42: Copy the code in the *-collector.json file, then go into Cribl, add a new REST Collector, and click Manage as JSON. Paste the code into the box, replacing all other contents. When you click okay, you will be prompted to fill in variables.
+
+
+The Collector defines a field named `source`, which you can use to identify events in routing tables, etc.:
+* for file events: `code42:fileevent`
+* for alerts list: `code42:alert`
+* for alerts details: `code42:alert_detail`
+
+The Collectors are not scheduled by default. Once you've tested and confirmed they're working as expected, a 15 minute cycle is recommended.
+
+Some collectors will require a tenant ID. You need to retreieve this from the API after getting a bearer token. HTTP conversations are below to help with this step.
+
+Authentication step to get a token:
+
+```
+POST https://api.us.code42.com/v1/oauth
+Content-type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id=CLIENT_ID_HERE&client_secret=CLIENT_SECRET_HERE
+```
+
+In curl terms, that would be something like this:
+```
+curl https://api.us.code42.com/v1/oauth \
+   -H 'Content-type: application/x-www-form-urlencoded' \
+   -d 'grant_type=client_credentials&client_id=CLIENT_ID_HERE&client_secret=CLIENT_SECRET_HERE'
+```
+
+The bearer token will be in the returned JSON. Once you have the bearer token, you can make this request to get the tenant ID. As far as I can tell, this will be static.
+
+```
+GET https://api.us.code42.com/v1/customer
+Authorization: Bearer tokenhere
+```
+
+And the curl for that step would look like this:
+
+```
+curl https://api.us.code42.com/v1/customer \
+   -H 'Authorization: Bearer tokenhere'
+```
+
+The tenant ID will be in the returned JSON.

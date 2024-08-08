@@ -1,0 +1,97 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "post_with_body",
+        "enableDiscoverCode": true,
+        "discoverUrl": "`https://api.us.code42.com/v1/alerts/query-alerts`",
+        "discoverBody": "`{ \"tenantId\": \"<TenantId|You must retrieve this from an authenticated GET request at https://api.us.code42.com/v1/customer>\", \n  \"groups\": [ \n      { \"filters\": [ \n        {\n          \"term\": \"CreatedAt\", \n          \"operator\": \"ON_OR_AFTER\", \n          \"value\": \"${C.Time.strftime(earliest ? earliest : Date.now()/1000 - 86400,\"%Y-%m-%dT%H:%M:00.0000000Z\")}\" \n        } \n      ], \n      \"filterClause\": \"AND\" \n      } \n  ], \n  \"groupClause\": \"OR\", \n  \"pgSize\": \"499\", \n  \"pgNum\": \"0\", \n  \"srtKey\": \"CreatedAt\", \n  \"srtDirection\": \"DESC\" }`",
+        "discoverRequestHeaders": [
+          {
+            "name": "accept",
+            "value": "text/plain"
+          },
+          {
+            "name": "Content-type",
+            "value": "application/json"
+          }
+        ],
+        "formatResultCode": "const allIds = Array.isArray(__e.alerts) && __e.alerts.map(a => a.id);\nconst chunkSize = 100;\nconst chunked = [];\nfor(let i = 0; i < allIds.length; i += chunkSize) {\n    chunked.push(allIds.slice(i, i + chunkSize))\n}\n__e.chunked = chunked",
+        "discoverDataField": "chunked"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [429, 503],
+        "enableHeader": true,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://api.us.code42.com/v1/oauth`",
+      "loginBody": "`grant_type=client_credentials&client_id=${username}&client_secret=${password}`",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "username": "<Username|In Code42 this will show as Client Id or Client Key>",
+      "password": "<Password|In Code42 this will show as Secret>",
+      "tokenRespAttribute": "access_token",
+      "authRequestHeaders": [],
+      "collectUrl": "`https://api.us.code42.com/v1/alerts/query-details`",
+      "collectRequestHeaders": [
+        {
+          "name": "accept",
+          "value": "text/plain"
+        },
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "collectBody": "{ \"alertIds\": data }"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": ["code42"],
+    "metadata": [
+      {
+        "name": "source",
+        "value": "'code42:alert_detail'"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "code42-alerts-details"
+}
