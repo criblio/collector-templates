@@ -1,0 +1,14 @@
+{
+  "stringBuilders": [
+    "headers['x-duo-date']",
+    "method.toUpperCase()",
+    "urlObj.hostname",
+    "urlObj.pathname",
+    "urlObj.search.substring(1).replace(/\\+/g, '%20') || 'PARAMS_PLACEHOLDER' /* convert spaces that were endcoded as '+' to the url encoded space value */"
+  ],
+  "headerName": "authorization",
+  "headerExpression": "'Basic ' + C.Encode.base64(`${C.Secret('duo-admin-integration-key').value}:${C.Crypto.createHmac(signatureString.replace(/PARAMS_PLACEHOLDER$/, ''), C.Secret('duo-admin-secret-key').value, 'sha1', 'hex')}`)",
+  "stringDelim": "\"\\n\"",
+  "description": "An HMAC function for signing requests to the Duo API",
+  "id": "duo-hmac-CRIBL-27682-workaround"
+}
