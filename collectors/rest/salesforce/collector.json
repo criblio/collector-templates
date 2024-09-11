@@ -26,10 +26,7 @@
         "interval": 1000,
         "limit": 5,
         "multiplier": 2,
-        "codes": [
-          429,
-          503
-        ],
+        "codes": [429, 503],
         "enableHeader": true
       },
       "loginUrl": "`<Login URL| >`",
@@ -57,14 +54,14 @@
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "`<Client ID URL| >`"
+          "value": "`<Client ID| >`"
         },
         {
           "name": "grant_type",
           "value": "`client_credentials`"
         }
       ],
-      "clientSecretParamValue": "`<Client Secret URL| >`"
+      "clientSecretParamValue": "`<Client Secret| >`"
     },
     "destructive": false,
     "type": "rest"
@@ -77,9 +74,7 @@
       "disabled": true
     },
     "throttleRatePerSec": "0",
-    "breakerRulesets": [
-      "breaker"
-    ]
+    "breakerRulesets": ["breaker"]
   },
   "savedState": {},
   "id": "sfdc-rest-collector"
