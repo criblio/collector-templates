@@ -22,10 +22,6 @@
       "decodeUrl": false,
       "rejectUnauthorized": true,
       "captureHeaders": false,
-      "safeHeaders": [
-        "authorization",
-        "Authorization"
-      ],
       "retryRules": {
         "type": "backoff",
         "interval": 1000,
