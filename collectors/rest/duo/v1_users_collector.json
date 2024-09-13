@@ -40,7 +40,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "'https://<API hostname|This is your Duo API hostname (see [the docs](https://duo.com/docs/adminapi#first-steps) for more info>/admin/v1/users'",
+      "collectUrl": "'https://<API hostname|This is your Duo API hostname (see [the docs](https://duo.com/docs/adminapi#first-steps) for more info)>/admin/v1/users'",
       "collectRequestParams": [],
       "collectRequestHeaders": [
         {
@@ -63,6 +63,5 @@
     "throttleRatePerSec": "0"
   },
   "description": "Testing the Duo API with HMAC authentication",
-  "savedState": {},
-  "id": "test-duo"
+  "savedState": {}
 }

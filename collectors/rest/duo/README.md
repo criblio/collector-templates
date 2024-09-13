@@ -22,12 +22,15 @@ Set up the Admin API application within Duo using the [First Steps instructions]
 
 ### Configuring the REST Collector
 
+The same steps below apply to both the `v1_users_collector.json` and the `v2_logs_activity_collector.json` collector configs.
+
 1. From Data > Sources > Collectors > REST, click the `Add Collector` button.
 2. From the configuration modal, click the `Manage as JSON` button
-3. Paste in the contents `admin-collector.json`, then click `OK`
+3. Paste in the contents of the selected collector.json file, then click `OK`
 4. Fill in your Duo `API hostname` (should look something like `api-xxxxxxxx.duosecurity.com`), then click `Replace Values`
 5. Expand the `Authentication` section, and select the configured the HMAC function from the dropdown
 6. Save and Run the collector
+    - For the logs activity collector, make sure that you set a value for `earliest` in the run modal
 
 ### Notes
 
