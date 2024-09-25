@@ -67,7 +67,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://<tenant>.atlassian.net`)>.atlassian.net/rest/api/3/auditing/record`",
+      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://my-tenant.atlassian.net`)>.atlassian.net/rest/api/3/auditing/record`",
       "collectRequestHeaders": [
         {
           "name": "Accept",
