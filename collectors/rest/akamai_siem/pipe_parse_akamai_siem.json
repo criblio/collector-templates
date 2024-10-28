@@ -1,0 +1,130 @@
+{
+  "id": "parse_akamai_siem",
+  "conf": {
+    "output": "default",
+    "streamtags": [],
+    "groups": {
+      "oQucZ4": {
+        "name": "Parse Attack Data",
+        "description": "Handles decoding and reformatting attack data",
+        "index": 1,
+        "disabled": true
+      }
+    },
+    "asyncFuncTimeout": 1000,
+    "functions": [
+      {
+        "filter": "offset || __drop === true",
+        "conf": {},
+        "id": "drop",
+        "description": "Drop offset context events. This metadata is used for state tracking prior to this pipeline."
+      },
+      {
+        "filter": "true",
+        "conf": {
+          "maxNumOfIterations": 5000,
+          "activeLogSampleRate": 1,
+          "useUniqueLogChannel": true,
+          "code": "function decodeAkamaiConfigRule(attackData) {\n\n    let decodedAttackData = {};\n    \n    for (const [key, value] of Object.entries(attackData)) {\n        if (key.startsWith('rule')) {\n            decodedAttackData[key] = Array.from(C.Decode.uri(value).split(';'), (x) => C.Decode.base64(x))\n        }\n    }\n\n    return decodedAttackData\n}\n\nfunction mergeAkamaiConfigData(configData) {\n    let mergedData = [];\n\n    for (const [key, value] of Object.entries(configData)) {\n        for (let i = 0; i < value.length; i++) {\n\n            let formattedKey = key.replace(/^rule(\\w{2,})$/, '$1').replace(/s$/, '');\n            formattedKey = (formattedKey === 'rule' ? 'Rule' : formattedKey);\n\n            try {\n                mergedData[i][formattedKey] = value[i]\n            } catch (e) {\n                mergedData[i] = {[formattedKey]: value[i]}\n            }\n        }\n    }\n\n    return mergedData\n}\n\n__e['attackData']['data'] = mergeAkamaiConfigData(decodeAkamaiConfigRule(__e['attackData']));"
+        },
+        "id": "code",
+        "groupId": "oQucZ4",
+        "disabled": true
+      },
+      {
+        "filter": "true",
+        "conf": {
+          "remove": [
+            "attackData.rule*"
+          ],
+          "add": [
+            {
+              "disabled": false,
+              "name": "httpMessage.query",
+              "value": "C.Decode.uri(httpMessage.query)"
+            },
+            {
+              "disabled": false,
+              "name": "httpMessage.requestHeaders",
+              "value": "C.Decode.uri(httpMessage.requestHeaders).split('\\n').filter(String)"
+            },
+            {
+              "disabled": false,
+              "name": "httpMessage.responseHeaders",
+              "value": "C.Decode.uri(httpMessage.responseHeaders).split('\\n').filter(String)"
+            }
+          ],
+          "keep": []
+        },
+        "id": "eval",
+        "groupId": "oQucZ4",
+        "disabled": true
+      },
+      {
+        "filter": "true",
+        "conf": {
+          "add": [
+            {
+              "disabled": false,
+              "name": "attackData.rules",
+              "value": "attackData.data"
+            }
+          ],
+          "remove": [
+            "attackData.data"
+          ]
+        },
+        "id": "eval",
+        "groupId": "oQucZ4",
+        "disabled": true
+      },
+      {
+        "id": "numerify",
+        "filter": "true",
+        "disabled": true,
+        "conf": {
+          "depth": 5,
+          "format": "none",
+          "ignoreFields": [],
+          "filterExpr": "",
+          "digits": 0
+        },
+        "groupId": "oQucZ4"
+      },
+      {
+        "filter": "true",
+        "conf": {
+          "type": "json",
+          "dstField": "_raw",
+          "fields": [
+            "!_*",
+            "!__*",
+            "!cribl*",
+            "!host",
+            "!source",
+            "*"
+          ]
+        },
+        "id": "serialize",
+        "disabled": false
+      },
+      {
+        "filter": "true",
+        "conf": {
+          "keep": [
+            "_raw",
+            "cribl*",
+            "source",
+            "host",
+            "_time"
+          ],
+          "remove": [
+            "*"
+          ]
+        },
+        "id": "eval",
+        "description": "Removes additional fields and keeps _raw as string"
+      }
+    ]
+  }
+}

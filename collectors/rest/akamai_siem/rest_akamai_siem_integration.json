@@ -1,0 +1,112 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "* * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "offset ? {[__collectible.id]: {offset: offset}} : ''",
+        "stateMergeExpression": "newState !== '' ? Object.assign(prevState, newState) : (prevState || {})",
+        "enabled": true
+      }
+    },
+    "resumeMissed": false,
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "12345"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "hmac",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://<Akamai Subdomain| URL part before .luna.akamaiapis.net>.luna.akamaiapis.net/siem/v1/configs/${id}`",
+      "collectRequestParams": [
+        {
+          "value": "`${state[`${id}`].offset == null ? `${Math.round(Date.now() / 1000) - 5}` : undefined}`",
+          "name": "from"
+        },
+        {
+          "name": "limit",
+          "value": "'150000'"
+        },
+        {
+          "name": "offset",
+          "value": "`${state[`${id}`].offset == null ? undefined : state[`${id}`].offset}`\n"
+        }
+      ],
+      "hmacFunctionId": "akamai_edgegrid"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Akamai SIEM Integration"
+    ],
+    "pipeline": "parse_akamai_siem",
+    "output": "devnull"
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {}
+    }
+  },
+  "id": "akamai_siem_integration"
+}
