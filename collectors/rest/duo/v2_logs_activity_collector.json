@@ -1,0 +1,81 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "hmac",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [
+        "authorization",
+        "Authorization"
+      ],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "'https://<API hostname|This is your Duo API hostname (see [the docs](https://duo.com/docs/adminapi#first-steps) for more info)>/admin/v2/logs/activity'",
+      "collectRequestParams": [
+        {
+          "name": "mintime",
+          "value": "`${(state.latestTime || earliest || 0) * 1000}`"
+        },
+        {
+          "name": "maxtime",
+          "value": "`${Date.now()}`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "x-duo-date",
+          "value": "C.Time.strftime(Date.now()/1000, '%a, %d %b %Y %H:%M:%S -0000')"
+        }
+      ],
+      "hmacFunctionId": "duo-hmac-CRIBL-27682-workaround"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0"
+  },
+  "description": "Testing the Duo API with HMAC authentication",
+  "savedState": {}
+}

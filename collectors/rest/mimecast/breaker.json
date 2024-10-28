@@ -1,0 +1,31 @@
+{
+    "minRawLength": 256,
+    "id": "Mimecast REST API",
+    "description": "Event breaking rules for Mimecast REST API events",
+    "tags": "mimecast",
+    "rules": [
+      {
+        "condition": "true",
+        "type": "json_array",
+        "timestampAnchorRegex": "/\"eventTime\":\"/",
+        "timestamp": {
+          "type": "format",
+          "length": 150,
+          "format": "%Y-%m-%dT%H:%M:%S%Z"
+        },
+        "timestampTimezone": "UTC",
+        "timestampEarliest": "-420weeks",
+        "timestampLatest": "+1week",
+        "maxEventBytes": 1024000,
+        "disabled": false,
+        "parserEnabled": false,
+        "shouldUseDataRaw": false,
+        "jsonExtractAll": true,
+        "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+        "name": "Mimecast",
+        "fields": [],
+        "jsonArrayField": "data",
+        "jsonTimeField": "eventTime"
+      }
+    ]
+  }

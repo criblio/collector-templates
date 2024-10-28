@@ -1,0 +1,85 @@
+{
+  "id": "code42",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "/type\\$\":\"ALERT_QUERY_RESPONSE/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"createdAt\":/",
+      "timestamp": {
+        "type": "auto",
+        "length": 30
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "alerts",
+      "jsonArrayField": "alerts"
+    },
+    {
+      "condition": "/\"fileEvents\":/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"@timestamp\":/",
+      "timestamp": {
+        "type": "auto",
+        "length": 30
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "file-events"
+    },
+    {
+      "condition": "/type\\$\":\"ALERT_DETAILS_RESPONSE/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"createdAt\":/",
+      "timestamp": {
+        "type": "auto",
+        "length": 30
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "alerts",
+      "name": "alert-details"
+    },
+    {
+      "condition": "/^\\{/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/(?=\"createdAt\":)|(?=\"@timestamp\":)/",
+      "timestamp": {
+        "type": "auto",
+        "length": 30
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "generic-code42"
+    }
+  ],
+  "description": "We try to match event types first. Failing that, we will attempt a JSON array unroll if it looks like JSON. Else, fall through to default system breaker."
+}
