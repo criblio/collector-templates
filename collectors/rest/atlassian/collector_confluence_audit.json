@@ -70,7 +70,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://<tenant>.atlassian.net`)>.atlassian.net/wiki/rest/api/audit`",
+      "collectUrl": "`https://<Atlassian Tenant Subdomain|The subdomain for the Atlassian tenant (e.g. `https://my-tenant.atlassian.net`)>.atlassian.net/wiki/rest/api/audit`",
       "collectRequestHeaders": [
         {
           "name": "Accept",
