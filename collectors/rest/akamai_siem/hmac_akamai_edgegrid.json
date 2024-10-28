@@ -1,0 +1,9 @@
+{
+  "stringBuilders": [
+    "[\n    method,\n    'https',\n    urlObj.hostname,\n    `${urlObj.pathname}${urlObj.search}`,\n    '', // headers in [k.lower():value] format, but nested scopes not supported\n    '', // content hash, but no body needed\n    `EG1-HMAC-SHA256 client_token=${C.Secret('akamai_client_token').value};access_token=${C.Secret('akamai_access_token').value};timestamp=${C.Time.strftime(Date.now() / 1000, \"%Y%m%dT%H:%M:%S%Z\")};nonce=${C.Misc.uuidv4()};`\n].join('\\t')"
+  ],
+  "headerName": "Authorization",
+  "headerExpression": "`${signatureString.split('\\t')[6]}signature=${C.Crypto.createHmac(signatureString, C.Crypto.createHmac([...signatureString.matchAll(/timestamp=([^\\;]+)/g)][0][1], C.Secret('akamai_client_secret').value, \"sha256\", \"base64\"), \"sha256\", \"base64\")}`",
+  "stringDelim": "''",
+  "id": "akamai_edgegrid"
+}

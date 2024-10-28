@@ -1,0 +1,55 @@
+{
+  "id": "Akamai SIEM Integration",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes(\"https://problems.cloudsecurity.akamaiapis.net\")",
+      "type": "regex",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 1048576,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/^\\b$/",
+      "name": "Error",
+      "fields": [
+        {
+          "name": "__drop",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "condition": "true",
+      "type": "json",
+      "timestampAnchorRegex": "/start/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Security Events",
+      "fields": [
+        {
+          "name": "_raw",
+          "value": "JSON.parse(_raw) || _raw"
+        }
+      ]
+    }
+  ],
+  "description": "Event breaking rules to handle Akamai Multi-JSON responses"
+}
