@@ -22,21 +22,21 @@ Credentials must be generated in the Akamai Control Center [Documentation](https
 1. Obtain the event breaker. (*eb_akamai_siem_integration.json*)
 2. Navigate to **Processing** → **Knowledge** → **Event Breaker Rules**.
 3. Click **Add Ruleset** followed by **Manage as JSON**.
-4. Click **Import** and select the event breaker file (*eb_akamai_siem_integration*).
+4. Click **Import** and select the event breaker file (*eb_akamai_siem_integration.json*).
 5. Click **Ok** and then **Save** to close the modal.
 
 ## Install the HMAC Function
 1. Obtain the HMAC function. (*hmac_akamai_edgegrid.json*)
 2. Navigate to **Processing** → **Knowledge** → **HMAC Functions**
 3. Open the **Add HMAC Function** modal, and **Manage as JSON**
-4. Click **import** and import the HMAC function JSON (*hmac_akamai_edgegrid*)
+4. Click **import** and import the HMAC function JSON (*hmac_akamai_edgegrid.json*)
 5. Click **Ok** then **Save** to close to modal.
 
 ## Install the Pre-Processing pipeline
 1. Obtain the pre-processing pipeline, (*pipe_parse_akamai_siem.json*)
 2. Navigate to **Processing** → **Pipelines**
 3. Click **Add Pipeline** followed by **Import from File**
-4. Select the file downloaded from Github. (*parse_akamai_siem.json*)
+4. Select the file downloaded from Github. (*pipe_parse_akamai_siem.json*)
 5. Click **Save** to save the pipeline.
 6. (Optional) - update any parsing settings in the pipeline to fit your use-case.
 
