@@ -44,7 +44,7 @@ Credentials must be generated in the Akamai Control Center [Documentation](https
 1. Obtain the REST Collector.
 2. Navigate to **Data** → **Sources** → **REST Collectors**
 3. Click **Add Collector**, then **Manage as JSON**
-4. Click **Import** and select the file from GitHub. (*rest_akamai_siem_integration*)
+4. Click **Import** and select the file from GitHub. (*rest_akamai_siem_integration.json*)
 5. Click **Ok** to close the JSON view.
 6. Update the URL under **Collect URL** replacing the URL as obtained from the Akamai Control Center.
 7. Update the list in *Discover* with a list of configIds for this endpoint. More info on configIds can be found [here](https://techdocs.akamai.com/siem-integration/reference/get-configid).
