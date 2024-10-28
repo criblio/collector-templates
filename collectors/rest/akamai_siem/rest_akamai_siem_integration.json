@@ -68,7 +68,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://<SUBDOMAIN>.luna.akamaiapis.net/siem/v1/configs/${id}`",
+      "collectUrl": "`https://<Akamai Subdomain| URL part before .luna.akamaiapis.net>.luna.akamaiapis.net/siem/v1/configs/${id}`",
       "collectRequestParams": [
         {
           "value": "`${state[`${id}`].offset == null ? `${Math.round(Date.now() / 1000) - 5}` : undefined}`",
