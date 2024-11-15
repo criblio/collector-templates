@@ -16,7 +16,7 @@ Credentials must be generated in the Akamai Control Center [Documentation](https
 2. Navigate to **Group Settings** → **Security** → **Secrets**
 3. Create 2 Secrets. 
    1. The first will have type **API key and secret key**. This secret should be named `akamai_client_credentials`. Populate the client ID as the API Key and the client secret as the Secret Key.
-   2. The second will have type **Text**. This secret should be named `akamai_access_key`. Populate the Value field with the Akamai Access Key.
+   2. The second will have type **Text**. This secret should be named `akamai_access_token`. Populate the Value field with the Akamai Access Token.
 
 ## Install the Event Breaker
 1. Obtain the event breaker. (*eb_akamai_siem_integration.json*)
