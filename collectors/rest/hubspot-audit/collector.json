@@ -1,0 +1,134 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {
+        "cronSchedule": "2 * * * *",
+        "maxConcurrentRuns": 1,
+        "skippable": true,
+        "run": {
+            "rescheduleDroppedTasks": true,
+            "maxTaskReschedule": 1,
+            "logLevel": "info",
+            "jobTimeout": "60m",
+            "mode": "run",
+            "timeRangeType": "relative",
+            "timeWarning": {},
+            "expression": "true",
+            "minTaskSize": "1MB",
+            "maxTaskSize": "10MB",
+            "stateTracking": {
+                "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+                "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+                "enabled": true
+            }
+        },
+        "enabled": false
+    },
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+        "conf": {
+            "discovery": {
+                "discoverType": "none",
+                "discoverMethod": "get",
+                "pagination": {
+                    "type": "none"
+                },
+                "enableDiscoverCode": false,
+                "discoverUrl": "'https://api.hubapi.com/account-info/v3/activity/audit-logs'"
+            },
+            "collectMethod": "get",
+            "pagination": {
+                "type": "response_body",
+                "maxPages": 50,
+                "offsetField": "offset",
+                "limitField": "limit",
+                "limit": 50,
+                "zeroIndexed": false,
+                "pageField": "page",
+                "sizeField": "size",
+                "size": 50,
+                "nextRelationAttribute": "next",
+                "attribute": [
+                    "link",
+                    "after"
+                ]
+            },
+            "authentication": "none",
+            "timeout": 0,
+            "useRoundRobinDns": false,
+            "disableTimeFilter": false,
+            "decodeUrl": false,
+            "rejectUnauthorized": true,
+            "captureHeaders": false,
+            "safeHeaders": [],
+            "retryRules": {
+                "type": "backoff",
+                "interval": 1000,
+                "limit": 5,
+                "multiplier": 2,
+                "maxIntervalMs": 20000,
+                "codes": [
+                    429,
+                    503
+                ],
+                "enableHeader": true,
+                "retryConnectTimeout": false,
+                "retryConnectReset": false,
+                "retryHeaderName": "retry-after"
+            },
+            "__scheduling": {
+                "stateTracking": {}
+            },
+            "collectUrl": "'https://api.hubapi.com/account-info/v3/activity/audit-logs'",
+            "collectRequestParams": [
+                {
+                    "name": "limit",
+                    "value": "'200'"
+                },
+                {
+                    "name": "occurredAfter",
+                    "value": "`${new Date( state.latestTime * 1000 + 1 || Date.now()-(3600*1000*24*1) ).toISOString()}`"
+                },
+                {
+                    "name": "after",
+                    "value": "`${after}`"
+                }
+            ],
+            "collectRequestHeaders": [
+                {
+                    "name": "authorization",
+                    "value": "'Bearer <Your Private App Access Token|>'"
+                },
+                {
+                    "name": "accept",
+                    "value": "'application/json'"
+                }
+            ]
+        },
+        "destructive": false,
+        "encoding": "utf8",
+        "type": "rest"
+    },
+    "input": {
+        "type": "collection",
+        "staleChannelFlushMs": 10000,
+        "sendToRoutes": true,
+        "preprocess": {
+            "disabled": true
+        },
+        "throttleRatePerSec": "0",
+        "breakerRulesets": [
+            "Hubspot"
+        ],
+        "metadata": [
+            {
+                "name": "__logType",
+                "value": "'hubspot'"
+            }
+        ]
+    },
+    "id": "hubspot-audit-logs"
+}
