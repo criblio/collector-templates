@@ -26,6 +26,11 @@ Latest: `-5m@m`
 
 Import the provided event breaker (Mimecast).
 
+   - Processing -> Knowledge -> Event Breakers
+   - Add new ruleset -> Manage as JSON
+   - Paste the contents of breaker.json into the window
+   - Save, and ignore the warning about using a filter with `true`
+
 # Filtering the events
 ## Query parameter
 With some Mimecast event sources, you can specify an optional `query` parameter to use for filtering the logs you want to be ingested into Cribl.
