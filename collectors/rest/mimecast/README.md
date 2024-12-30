@@ -13,6 +13,9 @@ You will need to create an API application, in order to retrieve a client ID and
 Mimecast have an article [here](https://community.mimecast.com/s/article/api-integrations-managing-api-2-0-for-cloud-gateway) that guides you through the steps of creating an API application
 
 ## Configuring
+
+Create a new REST Collector, then click the Edit as JSON option. Paste the JSON into the screen.
+
 You must replace the following placeholders in the configuration:
 * `Client ID` - The client ID of your Mimecast application
 * `Client Secret` - The client secret of your Mimecast application
