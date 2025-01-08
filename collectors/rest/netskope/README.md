@@ -16,7 +16,13 @@ More information about the dataexport endpoints can be found on Netskope's docum
 * Import the provided event breaker.
 
 ### Event Breaker
-* Import the included event breaker to configure the JSON Array event breaking.
+Import the included event breaker to configure the JSON Array event breaking.
+
+1) Copy the contents of breaker.json
+2) Navigate to Event Breaker Rules under Processing -> Knowledge
+3) Create a new breaker ruleset
+4) Edit as JSON and paste the previously copied JSON into place; save
+5) Commit and Deploy
 
 ## Author
 Brendan Dalpe <bdalpe@gmail.com>
