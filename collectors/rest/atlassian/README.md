@@ -4,8 +4,8 @@ This collector template allows you to collect the audit logs from Atlassian Clou
 
 # Installation
 
-* Copy the contents of breaker.json*
-*  Navigate to Event Breaker Rules under Processing -> Knowledge
+* Copy the contents of breaker.json
+* Navigate to Event Breaker Rules under Processing -> Knowledge
 * Create a new breaker ruleset
 * Edit as JSON and paste the previously copied JSON into place; save
 * For each collector JSON file, copy the contents
