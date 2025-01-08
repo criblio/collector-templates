@@ -12,10 +12,19 @@ You will need to create an API key, aka script token to authenticate to the API.
 
 TeamViewer have an article [here](https://www.teamviewer.com/en-au/global/support/knowledge-base/teamviewer-classic/for-developers/use-the-teamviewer-api/) that guides you through the steps of creating one.
 
-## Configuring
-### Placeholders
-You must replace the following placeholders in the configuration:
-* `API Key` - Your API Key aka Script token
+## Installation and initial config
+
+1) Copy the contents of breaker.json
+2) Navigate to Event Breaker Rules under Processing -> Knowledge
+3) Create a new breaker ruleset
+4) Edit as JSON and paste the previously copied JSON into place; save
+5) Copy the contents of collector.json
+6) Navigate to Data -> Sources -> REST Collectors
+7) Add Collector
+8) Configure as JSON tab (at the top of the window)
+9) Paste the JSON from collector into the screen and save
+10) If there are fields for you to fill out, you will be prompted here. When done, hit Replace variables.
+12) Commit and Deploy
 
 ### Body Params
 * `Events` List - Make sure you customize the Events parameter to your preferences, according to the scope of events you want to be ingesting. See "Filtering the Events" below for more details.
@@ -24,10 +33,6 @@ Ensure you schedule this job and provide a relevant time range. The recommendati
 
 Earliest: `-10m@m`
 Latest: `-5m@m`
-
-### Event Breaker
-
-Import the provided event breaker (TeamViewer-AuditEvents).
 
 # Filtering the events
 ## Event Logging
