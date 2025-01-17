@@ -1,0 +1,24 @@
+{
+    "id": "jamf",
+    "minRawLength": 256,
+    "rules": [
+      {
+        "condition": "true",
+        "type": "regex",
+        "timestampAnchorRegex": "/^/",
+        "timestamp": {
+          "type": "current",
+          "length": 150
+        },
+        "timestampTimezone": "local",
+        "timestampEarliest": "-420weeks",
+        "timestampLatest": "+1week",
+        "maxEventBytes": 15000000,
+        "disabled": false,
+        "parserEnabled": false,
+        "shouldUseDataRaw": false,
+        "eventBreakerRegex": "/^\\b$/",
+        "name": "nobreak"
+      }
+    ]
+  }
