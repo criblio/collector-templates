@@ -1,0 +1,85 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {},
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "none"
+        },
+        "collectMethod": "get",
+        "pagination": {
+          "type": "none",
+          "pageField": "page",
+          "sizeField": "size",
+          "size": 10000,
+          "maxPages": 10000,
+          "zeroIndexed": false,
+          "offsetField": "offset",
+          "limitField": "limit",
+          "limit": 50
+        },
+        "authentication": "basic",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": false,
+        "decodeUrl": false,
+        "rejectUnauthorized": false,
+        "captureHeaders": false,
+        "safeHeaders": [],
+        "retryRules": {
+          "type": "backoff",
+          "interval": 1000,
+          "limit": 5,
+          "multiplier": 2,
+          "maxIntervalMs": 20000,
+          "codes": [
+            429,
+            503
+          ],
+          "enableHeader": true,
+          "retryConnectTimeout": false,
+          "retryConnectReset": false,
+          "retryHeaderName": "retry-after"
+        },
+        "__scheduling": {
+          "stateTracking": {}
+        },
+        "collectUrl": "'https://<YourJamfServer:port|>/JSSResource/advancedcomputersearches/'",
+        "collectRequestParams": [],
+        "password": "<Password|>",
+        "username": "<Username|>",
+        "collectRequestHeaders": []
+      },
+      "destructive": false,
+      "encoding": "utf8",
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "metadata": [
+        {
+          "name": "logtype",
+          "value": "'jamf:computers'"
+        }
+      ],  
+      "breakerRulesets": [
+        "jamf"
+      ],
+      "pipeline": "main",
+      "output": "devnull"
+    },
+    "savedState": {},
+    "description": "",
+    "id": "jamf-Computers"
+  }

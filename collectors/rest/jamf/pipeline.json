@@ -1,0 +1,85 @@
+{
+    "id": "jamf-computers-xml-unroll",
+    "conf": {
+      "output": "default",
+      "streamtags": [],
+      "groups": {
+        "dzEpWD": {
+          "name": "XML Convert, Unroll JSON",
+          "disabled": true,
+          "index": 0
+        },
+        "t9F0PB": {
+          "name": "XML Unroll",
+          "disabled": false,
+          "index": 1
+        }
+      },
+      "asyncFuncTimeout": 1000,
+      "functions": [
+        {
+          "filter": "true",
+          "conf": {
+            "add": [
+              {
+                "disabled": false,
+                "name": "_raw",
+                "value": "C.Text.parseXml(_raw,true,true,[])"
+              }
+            ]
+          },
+          "id": "eval",
+          "disabled": true,
+          "groupId": "dzEpWD"
+        },
+        {
+          "filter": "true",
+          "conf": {
+            "srcExpr": "_raw.advanced_computer_search.computers.computer",
+            "dstField": "_raw.advanced_computer_search.computers.computer"
+          },
+          "id": "unroll",
+          "disabled": true,
+          "groupId": "dzEpWD"
+        },
+        {
+          "filter": "true",
+          "conf": {
+            "remove": [
+              "_raw.advanced_computer_search.display_fields"
+            ]
+          },
+          "id": "eval",
+          "disabled": true,
+          "groupId": "dzEpWD"
+        },
+        {
+          "filter": "true",
+          "conf": {
+            "unrollIdxField": "unroll_idx",
+            "pretty": true,
+            "unroll": "/^advanced_computer_search\\.computers\\.computer$/",
+            "inherit": "/^advanced_computer_search\\.(id|name|view_as|criteria|display_fields|site)$/"
+          },
+          "id": "xml_unroll",
+          "disabled": false,
+          "groupId": "t9F0PB"
+        },
+        {
+          "filter": "true",
+          "conf": {
+            "add": [
+              {
+                "disabled": false,
+                "name": "_raw",
+                "value": "C.Text.parseXml(_raw,true,true,[])"
+              }
+            ]
+          },
+          "id": "eval",
+          "disabled": false,
+          "groupId": "t9F0PB"
+        }
+      ]
+    }
+  }
