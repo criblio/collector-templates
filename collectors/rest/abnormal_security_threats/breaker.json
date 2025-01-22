@@ -1,0 +1,26 @@
+{
+    "id": "abnormal_threats",
+    "minRawLength": 256,
+    "rules": [
+      {
+        "condition": "_raw.startsWith('{\\\"threatId\\\"\\:')",
+        "type": "json_array",
+        "timestampAnchorRegex": "/receivedTime/",
+        "timestamp": {
+          "type": "auto",
+          "length": 150
+        },
+        "timestampTimezone": "local",
+        "timestampEarliest": "-420weeks",
+        "timestampLatest": "+1week",
+        "maxEventBytes": 204800,
+        "disabled": false,
+        "parserEnabled": false,
+        "shouldUseDataRaw": false,
+        "jsonExtractAll": false,
+        "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+        "name": "abnormal_threats"
+      }
+    ],
+    "description": "Use receivedTime as the time stamp for events and create one event per object in message array"
+  }
