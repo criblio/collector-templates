@@ -1,0 +1,164 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {
+      "cronSchedule": "*/5 * * * *",
+      "maxConcurrentRuns": 1,
+      "skippable": true,
+      "run": {
+        "rescheduleDroppedTasks": true,
+        "maxTaskReschedule": 1,
+        "logLevel": "info",
+        "jobTimeout": "0",
+        "mode": "run",
+        "timeRangeType": "relative",
+        "timeWarning": {},
+        "expression": "true",
+        "minTaskSize": "1MB",
+        "maxTaskSize": "10MB",
+        "stateTracking": {
+          "stateUpdateExpression": "__timestampExtracted !== false && {earliestTime: (state.receivedTime || 0) > _time ? state.receivedTime : _time}",
+          "stateMergeExpression": "(prevState.earliestTime || 0) > newState.earliestTime ? prevState : newState",
+          "enabled": true
+        },
+        "timestampTimezone": "UTC",
+        "earliest": "-5m"
+      },
+      "enabled": true
+    },
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "http",
+          "discoverMethod": "get",
+          "pagination": {
+            "type": "response_body",
+            "maxPages": 0,
+            "attribute": [
+              "nextPageNumber"
+            ],
+            "lastPageExpr": "!nextPageNumber"
+          },
+          "enableDiscoverCode": false,
+          "itemList": [],
+          "discoverUrl": "`https://api.abnormalplatform.com/v1/threats`",
+          "discoverRequestParams": [
+            {
+              "name": "filter",
+              "value": "`receivedTime gte ${C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ')}`"
+            }
+          ],
+          "discoverRequestHeaders": [
+            {
+              "name": "accept",
+              "value": "`application/json`"
+            },
+            {
+              "name": "Authorization",
+              "value": "`Bearer ${C.Secret('abnormal_token','text').value}`"
+            }
+          ],
+          "formatResultCode": "//__e['threats'] = __e['threats'].map(item => item['threatId']);",
+          "discoverDataField": "threats"
+        },
+        "collectMethod": "get",
+        "pagination": {
+          "type": "response_body",
+          "maxPages": 0,
+          "pageField": "pageNumber",
+          "sizeField": "pageSize",
+          "size": 100,
+          "zeroIndexed": false,
+          "page": 1,
+          "totalRecordField": "total",
+          "attribute": [
+            "nextPageNumber"
+          ],
+          "lastPageExpr": "!nextPageNumber"
+        },
+        "authentication": "none",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": true,
+        "decodeUrl": true,
+        "rejectUnauthorized": false,
+        "captureHeaders": false,
+        "safeHeaders": [],
+        "retryRules": {
+          "type": "backoff",
+          "interval": 1000,
+          "limit": 5,
+          "multiplier": 2,
+          "maxIntervalMs": 20000,
+          "codes": [
+            429,
+            503
+          ],
+          "enableHeader": true,
+          "retryConnectTimeout": false,
+          "retryConnectReset": false,
+          "retryHeaderName": "retry-after"
+        },
+        "__scheduling": {
+          "stateTracking": {}
+        },
+        "loginUrl": "`https://localhost:9000/api/v1/auth/login`",
+        "tokenRespAttribute": "token",
+        "authHeaderKey": "Authorization",
+        "authHeaderExpr": "`Bearer ${token}`",
+        "clientSecretParamName": "client_secret",
+        "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+        "textSecret": "abnormal_token",
+        "collectUrl": "`https://api.abnormalplatform.com/v1/threats/${threatId}`",
+        "collectRequestParams": [],
+        "collectRequestHeaders": [
+          {
+            "name": "accept",
+            "value": "`application/json`"
+          },
+          {
+            "name": "Authorization",
+            "value": "`Bearer ${C.Secret('abnormal_token','text').value}`"
+          }
+        ]
+      },
+      "destructive": false,
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "breakerRulesets": [
+        "abnormal_threats"
+      ],
+      "metadata": [
+        {
+          "name": "index",
+          "value": "'abnormal'"
+        },
+        {
+          "name": "sourcetype",
+          "value": "'threat_log'"
+        }
+      ],
+      "pipeline": "passthru",
+      "output": "devnull"
+    },
+    "savedState": {
+      "restCollectorState": {
+        "data": {
+          "earliestTime": 1737560956
+        }
+      }
+    },
+    "id": "abnormal_threats"
+  }
