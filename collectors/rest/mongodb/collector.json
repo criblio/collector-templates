@@ -25,7 +25,7 @@
           },
           {
             "name": "Accept",
-            "value": "\"application/vnd.atlas.{ATLAS_REVISION_DATE}+json\""
+            "value": "\"application/vnd.atlas.<Atlas Revision Date|Which API revision to use>+json\""
           }
         ]
       },
