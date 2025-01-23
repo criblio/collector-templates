@@ -1,0 +1,125 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": true,
+        "discoverUrl": "\"https://cloud.mongodb.com/api/atlas/v2/groups/<MongoDB Project ID|>/processes\"\r\n",
+        "discoverRequestParams": [],
+        "formatResultCode": "let theArray = __e.results;\r\n\r\nfor (let index = 0; index < theArray.length; ++index) {\r\n    let cur_obj = theArray[index];\r\n    if (cur_obj.typeName == \"REPLICA_PRIMARY\") {\r\n        __e['userAlias'] = cur_obj.userAlias;\r\n    }\r\n}",
+        "discoverRequestHeaders": [
+          {
+            "name": "Content-Type",
+            "value": "\"application/json\""
+          },
+          {
+            "name": "Accept",
+            "value": "\"application/vnd.atlas.{ATLAS_REVISION_DATE}+json\""
+          }
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "\"https://cloud.mongodb.com/api/oauth/token\"",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "grant_type",
+      "collectUrl": "\"https://cloud.mongodb.com/api/atlas/v2/groups/<MongoDB Project ID|>/clusters/\" + `${userAlias}` + \"/logs/mongodb.gz\"",
+      "collectRequestParams": [
+        {
+          "name": "startDate",
+          "value": "`${Number.parseInt(C.Time.strftime(1729542506.4, \"%s\"))}`"
+        },
+        {
+          "value": "`${Number.parseInt(Date.now().toString().substr(0,10))-1}`",
+          "name": "endDate"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "\"application/gzip\""
+        },
+        {
+          "value": "\"application/vnd.atlas.<Atlas Revision Date|Which API revision to use>+gzip\"",
+          "name": "Accept"
+        }
+      ],
+      "clientSecretParamValue": "\"client_credentials\"",
+      "tokenRespAttribute": "access_token",
+      "authRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "\"application/json\""
+        },
+        {
+          "name": "cache-control",
+          "value": "\"no-cache\""
+        },
+        {
+          "name": "Authorization",
+          "value": "\"Basic \" + C.Encode.base64(\"<Client ID|>:<Client Secret|>\")"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "metadata": [
+      {
+        "name": "source_tag",
+        "value": "\"MongoDB\""
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "MongoDB"
+}
