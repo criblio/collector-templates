@@ -72,7 +72,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://<Domain|The account's subdomain on `goskope.com`>.goskope.com/api/v2/events/dataexport/events/${id}`",
+      "collectUrl": "`https://<Domain|The account's subdomain on `goskope.com`>.goskope.com/api/v2/events/dataexport/alerts/${id}`",
       "collectRequestParams": [
         {
           "name": "operation",
