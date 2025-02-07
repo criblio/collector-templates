@@ -39,7 +39,7 @@
         },
         {
           "name": "grant_type",
-          "value": "'<Client Credentials|>'"
+          "value": "'client_credentials'"
         },
         {
           "name": "box_subject_type",
