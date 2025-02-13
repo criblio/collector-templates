@@ -1,0 +1,120 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 10,
+        "attribute": [
+          "after"
+        ],
+        "lastPageExpr": "after==\"\""
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": false,
+      "captureHeaders": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://api.us-2.crowdstrike.com/oauth2/token'",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "'https://api.us-2.crowdstrike.com/spotlight/combined/vulnerabilities/v1'",
+      "collectRequestParams": [
+        {
+          "name": "filter",
+          "value": "`updated_timestamp:>'${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M')}'+updated_timestamp:<'${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M')}'+status:'open'`"
+        },
+        {
+          "name": "limit",
+          "value": "500"
+        },
+        {
+          "name": "after",
+          "value": "`${after}`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "'application/json'"
+        },
+        {
+          "name": "accept",
+          "value": "'application/json'"
+        }
+      ],
+      "clientSecretParamValue": "'<clientSecretParamValue_value|Provide your Client Secret for authentication>'",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'<client_id_value|Specific to your Falcon account>'"
+        }
+      ],
+      "tokenRespAttribute": "access_token",
+      "authRequestHeaders": [
+        {
+          "value": "application/x-www-form-urlencoded",
+          "name": "Content-Type"
+        },
+        {
+          "name": "accept",
+          "value": "application/json"
+        },
+        {
+          "name": "user_agent",
+          "value": "cribl"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Crowdstrike-Vulnerabilities"
+    ]
+  },
+  "savedState": {},
+  "description": "Pulling Data from the Crowdstrike Vulnerability API.  You can query using updated_timestamp (default) or created_timestamp; your choice.  Vuln Mgmt docs:  https://falcon.us-2.crowdstrike.com/documentation/page/ab572b16/vulnerability-management-apis.",
+  "id": "Crowdstrike-Vulnerabilities"
+}
