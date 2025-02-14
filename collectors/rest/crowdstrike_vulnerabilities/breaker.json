@@ -1,0 +1,28 @@
+{
+  "id": "Crowdstrike-Vulnerabilities",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/updated_timestamp/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 134217728,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "resources",
+      "name": "vulns",
+      "jsonTimeField": "updated_timestamp"
+    }
+  ],
+  "description": "Event Breaker for the data retrieved from the Crowdstrike Vuln Mgmt API.  The timestamp is set to the updated_timestamp field but you can change this to the created_timestamp if desired."
+}
