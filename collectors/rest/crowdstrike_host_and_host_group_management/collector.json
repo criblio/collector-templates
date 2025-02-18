@@ -1,0 +1,140 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "response_body",
+          "maxPages": 500,
+          "attribute": [
+            "offset"
+          ],
+          "lastPageExpr": "offset==\"\""
+        },
+        "enableDiscoverCode": false,
+        "discoverUrl": "'https://api.us-2.crowdstrike.com/devices/queries/devices-scroll/v1'",
+        "discoverRequestParams": [
+          {
+            "name": "limit",
+            "value": "2"
+          },
+          {
+            "name": "offset",
+            "value": "`${offset}`"
+          }
+        ],
+        "discoverRequestHeaders": [
+          {
+            "name": "accept",
+            "value": "'application/json'"
+          }
+        ],
+        "discoverDataField": "resources"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 500,
+        "attribute": [
+          "offset"
+        ],
+        "lastPageExpr": "offset==\"\""
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": false,
+      "captureHeaders": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://api.us-2.crowdstrike.com/oauth2/token'",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "'https://api.us-2.crowdstrike.com/devices/entities/devices/v2'",
+      "collectRequestParams": [
+        {
+          "name": "limit",
+          "value": "100"
+        },
+        {
+          "name": "offset",
+          "value": "`${offset}`"
+        },
+        {
+          "name": "ids",
+          "value": "`${id}`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "accept",
+          "value": "'application/json'"
+        }
+      ],
+      "clientSecretParamValue": "'<clientSecretParamValue_value|Provide your Client Secret for authentication>'",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'<client_id_value|Specific to your Falcon account>'"
+        }
+      ],
+      "tokenRespAttribute": "access_token",
+      "authRequestHeaders": [
+        {
+          "value": "application/x-www-form-urlencoded",
+          "name": "Content-Type"
+        },
+        {
+          "name": "accept",
+          "value": "application/json"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Cribl - Do Not Break Ruleset"
+    ]
+  },
+  "savedState": {},
+  "description": "Pulling Data from the Crowdstrike Host and Host Group Management API.  Docs:  https://falcon.us-2.crowdstrike.com/documentation/page/c0b16f1b/host-and-host-group-management-apis.  Use the filter and sort parameters to get exactly what you need and pay attention to the limit and max page setting.  Since there is no time reference in this API query, earliest and latest values from the scheduler are not relevant.",
+  "id": "Crowdstrike-Host-And-Host-Group-Management"
+}
