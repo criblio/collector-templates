@@ -1,0 +1,27 @@
+{
+  "id": "Twilio_Calls",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes('auditEvents')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"created\":\\s*/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Audit Events - jsonArray",
+      "jsonArrayField": "auditEvents"
+    }
+  ],
+  "description": "Twilio Calls Audits "
+}

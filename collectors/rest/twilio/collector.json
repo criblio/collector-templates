@@ -1,0 +1,109 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "08 16 * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "<TIMEZONE>",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "earliest": "-1d@d",
+      "latest": "-0d@d"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "pageField": "page",
+        "sizeField": "page_size",
+        "size": 50,
+        "zeroIndexed": true,
+        "page": 0,
+        "attribute": [
+          "next_page_uri"
+        ],
+        "lastPageExpr": "!next_page_uri"
+      },
+      "authentication": "basic",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://api.twilio.com/2010-04-01/Accounts/<ACCOUNT>/Messages.json?DateSent=${C.Time.strftime(earliest,\"%Y-%m-%d\")}&PageSize=${page_size}`",
+      "username": "<username| Your Username>",
+      "password": "<password| Your Password>",
+      "collectRequestParams": [],
+      "collectRequestHeaders": [],
+      "collectBody": "`{\"timeFilter\": { \"startTime\": \"${C.Time.strftime(earliest || new Date().getTime()/1000-(24*60*60), '%Y-%m-%d')}\", \"endTime\": \"${C.Time.strftime(latest || new Date().getTime()/1000, '%Y-%m-%d')}\"},\"filters\": [] }`"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "output": "<Select Output| Output>",
+    "metadata": [
+      {
+        "name": "index",
+        "value": "'<index| Your Index>'"
+      },
+      {
+        "name": "sourcetype",
+        "value": "'twilio:messages'"
+      },
+      {
+        "name": "source",
+        "value": "'twilio_messages'"
+      }
+    ],
+    "breakerRulesets": [
+      "Twilio_Calls"
+    ]
+  },
+  "savedState": {},
+  "id": "Twilio_Messages"
+}
