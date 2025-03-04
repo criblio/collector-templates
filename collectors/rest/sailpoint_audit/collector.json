@@ -1,0 +1,147 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "earliest": "-5m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "request_page",
+        "pageField": "startIndex",
+        "sizeField": "count",
+        "size": 1000,
+        "maxPages": 12,
+        "zeroIndexed": false,
+        "offsetField": "startIndex",
+        "limitField": "count",
+        "limit": 50,
+        "offset": 1,
+        "page": 1,
+        "totalRecordField": "totalResults"
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://idam.ad.CUSTOMERID.net/identityiq/oauth2/token'",
+      "loginBody": "'grant_type=client_credentials'",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "tokenRespAttribute": "access_token",
+      "clientSecretParamName": "client_secret",
+      "username": "<username>",
+      "password": "<password>",
+      "authRequestHeaders": [
+        {
+          "name": "Host",
+          "value": "<host_header|example 'host.domain.com'>"
+        },
+        {
+          "name": "Content-Type",
+          "value": "'application/x-www-form-urlencoded'"
+        },
+        {
+          "name": "Authorization",
+          "value": "'Basic ' + C.Encode.base64(`${username}:${password}`)\r\n"
+        }
+      ],
+      "collectUrl": "'https://idam.ad.CUSTOMERID.net/identityiq/plugin/rest/SIEMPlugin/audit-events'",
+      "collectRequestHeaders": [
+        {
+          "name": "Host",
+          "value": "<host_header|example 'host.domain.com'>"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "startTime",
+          "value": "`${earliest}`*1000"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": false,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "mss_10952_sailpoint_iiq"
+    ],
+    "metadata": [
+      {
+        "name": "sourcetype",
+        "value": "'sailpoint:iiq:audit'"
+      }
+    ],
+    "pipeline": "PIPELINE",
+    "output": "OUTPUTID"
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "latestTime": 1741102801.689
+      }
+    }
+  },
+  "id": "sailpoint_audit_events"
+}
