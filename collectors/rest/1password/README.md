@@ -1,4 +1,4 @@
-# Trellix REST Collector
+# OnePassword REST Collector
 
 This collector template allows you to collect threat details from the Abnormal Security Threats API.
 
@@ -18,13 +18,13 @@ This collector template allows you to collect threat details from the Abnormal S
 
 ## Configuring
 
-The collector is scheduled to run every minute and to retrieve either the past minute or else the  'state.latestTime' value retrieved from state tracking.
+The collector is scheduled to run 15 minutes and to retrieve The Previous 15 Minutes, Currently there is a cursor functionality available via One Password but this has not been implemented here, This may be updated as additional testing occurs.
 
 ### Event Breaker
 
-Import the provided event breaker and configure the REST Collector to use the `trellix` event breaker rule set.
+Import the provided event breaker and configure the REST Collector to use the `onepassword` event breaker rule set.
 
 ## Authors
-Brian Rampley - brampley@cribl.io
+Matt Robinson -- mrobinson@cribl.io
 Michael Buehler -- mbuehler@cribl.io
 
