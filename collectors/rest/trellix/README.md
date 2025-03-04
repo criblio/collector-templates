@@ -1,6 +1,6 @@
 # Trellix REST Collector
 
-This collector template allows you to collect threat details from the Abnormal Security Threats API.
+This collector template allows you to collect threat details from the Trellix API.
 
 # Installation
 
@@ -13,8 +13,7 @@ This collector template allows you to collect threat details from the Abnormal S
 7) Add Collector
 8) Configure as JSON tab (at the top of the window)
 9) Paste the JSON from collector into the screen and save
-10) The collector uses a bearer token auth header. Retrieve your auth token via the Abnormal portal and save it as a secret. It's named 'abnormal_token' in this configuration.
-12) Commit and Deploy
+10) Commit and Deploy
 
 ## Configuring
 

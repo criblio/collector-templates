@@ -1,0 +1,25 @@
+{
+  "id": "forgerock",
+  "minRawLength": 256,
+  "description": "EB for forgerock REST collector",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "regex",
+      "timestampAnchorRegex": "/\"timestamp\":\"/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/(?={\"payload\":)/",
+      "name": "forgerock_events"
+    }
+  ]
+}

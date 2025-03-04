@@ -1,6 +1,6 @@
-# OnePassword REST Collector
+# ForgeRock REST Collector
 
-This collector template allows you to collect threat details from the One Password API.
+This collector template allows you to collect threat details from the ForgeRock API.
 
 # Installation
 
@@ -17,11 +17,11 @@ This collector template allows you to collect threat details from the One Passwo
 
 ## Configuring
 
-The collector is scheduled to run 15 minutes and to retrieve The Previous 15 Minutes, Currently there is a cursor functionality available via One Password but this has not been implemented here, This may be updated as additional testing occurs.
+The collector is scheduled to run 15 minutes and to retrieve The Previous 15 Minutes.
 
 ### Event Breaker
 
-Import the provided event breaker and configure the REST Collector to use the `onepassword` event breaker rule set.
+Import the provided event breaker and configure the REST Collector to use the `forgerock` event breaker rule set.
 
 ## Authors
 Matt Robinson -- mrobinson@cribl.io
