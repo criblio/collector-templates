@@ -1,0 +1,67 @@
+{
+  "id": "mss_10952_sailpoint_iiq",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes('auditEvents')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"created\":\\s*/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Audit Events - jsonArray",
+      "jsonArrayField": "auditEvents"
+    },
+    {
+      "condition": "_raw.includes('syslogEvents')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"created\":\\s*/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Syslog Events - JSON Array",
+      "jsonArrayField": "syslogEvents"
+    },
+    {
+      "condition": "_raw.includes('Resources')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"version\":\\s*\"/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "UTC",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Users - JSON Array",
+      "jsonArrayField": "Resources"
+    }
+  ],
+  "description": "SailPoint Identity IQ API Events"
+}
