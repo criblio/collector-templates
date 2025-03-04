@@ -1,0 +1,29 @@
+{
+  "id": "ZeroNetworksAPI",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "/^\\s*{\\s*\"items\"\\s*:\\s*\\[/.test(_raw)",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"timestamp\"\\s*:\\s*/",
+      "timestamp": {
+        "type": "format",
+        "length": 150,
+        "format": "%Q"
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "items array with epoch millisecond timestamp",
+      "jsonArrayField": "items"
+    }
+  ],
+  "description": "Event breaker for Zero Network API responses"
+}

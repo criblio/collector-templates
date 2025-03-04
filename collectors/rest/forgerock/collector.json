@@ -1,0 +1,113 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": false
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "`https://customer_org.forgerock.io/monitoring/logs/tail/`",
+      "collectRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "REDACTED"
+        },
+        {
+          "name": "x-api-key",
+          "value": "<x-api-key| Your API Key>"
+        },
+        {
+          "name": "x-api-secret",
+          "value": "<x-api-secret| Your API Secret>"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "source",
+          "value": "`am-access`"
+        },
+        {
+          "name": "source",
+          "value": "`am-authentication`"
+        },
+        {
+          "name": "source",
+          "value": "`am-core`"
+        },
+        {
+          "name": "source",
+          "value": "`idm-access`"
+        },
+        {
+          "name": "source",
+          "value": "`idm-activity`"
+        },
+        {
+          "name": "source",
+          "value": "`idm-core`"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "forgerock"
+    ]
+  },
+  "savedState": {},
+  "id": "forgerock_dev"
+}

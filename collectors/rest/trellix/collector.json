@@ -1,0 +1,175 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "* * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "debug",
+      "jobTimeout": "60s",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "prevState.latestTime > newState.latestTime ? prevState : newState",
+        "enabled": true
+      }
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "itemList": [
+          "incidents",
+          "threats"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none",
+        "nextRelationAttribute": "\"next\"",
+        "maxPages": 5,
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 50,
+        "zeroIndexed": false,
+        "attribute": [
+          "Link"
+        ]
+      },
+      "authentication": "oauthSecret",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://iam.cloud.trellix.com/iam/v1.0/token`",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "password",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\", \"client_id\": \"<client_id| Your Client ID>\", \"tenant_id\": \"<tenant_id|Your Tenant ID>\", \"scope\": \"epo.evt.r dp.im.r\", \"grant_type\": \"password\" }`",
+      "authRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "\"application/json\""
+        }
+      ],
+      "collectUrl": "`https://arevents.manage.trellix.com/eventservice/api/v2/events`",
+      "collectRequestParams": [
+        {
+          "name": "type",
+          "value": "`incidents`"
+        },
+        {
+          "name": "since",
+          "value": "`${state && state.latestTime ? new Date(state.latestTime*1000).toISOString() : new Date(Date.now() - 180000 ).toISOString()}`"
+        },
+        {
+          "name": "sort",
+          "value": "`asc`"
+        },
+        {
+          "name": "limit",
+          "value": "`1000`"
+        }
+      ],
+      "textSecret": "<secret_name|Your Secret Name>",
+      "authRequestParams": [
+        {
+          "name": "username",
+          "value": "'<username | Your User Name>'"
+        },
+        {
+          "name": "client_id",
+          "value": "'<client_id | Your Client ID>'"
+        },
+        {
+          "name": "tenant_id",
+          "value": "'<tenant_id| Your Tenant ID>'"
+        },
+        {
+          "name": "scope",
+          "value": "'epo.evt.r dp.im.r'"
+        },
+        {
+          "name": "grant_type",
+          "value": "\"password\""
+        }
+      ],
+      "collectRequestHeaders": []
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "trellix-api"
+    ],
+    "pipeline": "passthru",
+    "output": "devnull",
+    "metadata": [
+      {
+        "name": "source",
+        "value": "__collectStats.url"
+      },
+      {
+        "name": "sourcetype",
+        "value": "\"mcafee_epo\""
+      },
+      {
+        "name": "index",
+        "value": "\"mcafee_epo\""
+      }
+    ]
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "latestTime": 1741108724.455
+      }
+    }
+  },
+  "id": "mvision-incidents-with-state"
+}

@@ -1,0 +1,120 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5,15,25,35,45,55 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": false,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 50,
+        "attribute": [
+          "scrollCursor"
+        ]
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "loginUrl": "",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "tokenRespAttribute": "token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "'https://portal.zeronetworks.com/api/v1/audit'",
+      "collectRequestHeaders": [
+        {
+          "name": "Authorization",
+          "value": "'<Authorization|token value in the format ejJ....>'"
+        },
+        {
+          "name": "accept",
+          "value": "'application/json'"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "_limit",
+          "value": "100"
+        },
+        {
+          "name": "from",
+          "value": "`${new Date(Math.floor(Date.now()/(60*1000*10)) * (60*1000*10)).getTime()-(60*1000*10)/*current time -> round to nearest prior 10 min -> subtracts 10 minutes */}`"
+        },
+        {
+          "name": "to",
+          "value": "`${new Date(Math.floor(Date.now()/(60*1000*10)) * (60*1000*10)).getTime()}`"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "ZeroNetworksAPI"
+    ],
+    "metadata": [
+      {
+        "name": "index",
+        "value": "'<index| Desired Index>'"
+      },
+      {
+        "name": "sourcetype",
+        "value": "'zeronet:audit'"
+      },
+      {
+        "name": "source",
+        "value": "'zeronet_api'"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "ZeroNetworks_Audit"
+}
