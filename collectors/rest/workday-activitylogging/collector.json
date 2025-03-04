@@ -1,0 +1,134 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 3,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "300s",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timestampTimezone": "UTC",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {},
+      "earliest": "-6m@m",
+      "latest": "-1m@m"
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "discoverMethod": "get"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "request_offset",
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 100,
+        "maxPages": 0,
+        "zeroIndexed": true
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "rejectUnauthorized": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://wd3-services1.myworkday.com/ccx/oauth2/<Customer Directory| Provided by WorkDay. Location of your services.>/token'",
+      "tokenRespAttribute": "access_token",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "`https://wd3-services1.myworkday.com/ccx/api/privacy/v1/<Customer Directory| Provided by WorkDay. Location of your services.>/activityLogging`",
+      "collectRequestParams": [
+        {
+          "name": "to",
+          "value": "`${latest ? new Date(latest * 1000).toISOString() : new Date(Date.now()).toISOString()}`"
+        },
+        {
+          "name": "from",
+          "value": "`${earliest ? new Date(earliest * 1000).toISOString() : new Date(Date.now() - (3600000)).toISOString()}`"
+        }
+      ],
+      "collectRequestHeaders": [],
+      "clientSecretParamValue": "<client_secret| Provided by WorkDay. Secret Key. Can use shared secrets.>",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "`<client_id| Provided by WorkDay. client id>`"
+        },
+        {
+          "name": "refresh_token",
+          "value": "`<refresh_token| Provided by WorkDay. refresh token>`"
+        },
+        {
+          "name": "grant_type",
+          "value": "`refresh_token`"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Workday-API"
+    ],
+    "metadata": [
+      {
+        "name": "index",
+        "value": "\"workday\""
+      },
+      {
+        "name": "sourcetype",
+        "value": "\"workday:user_activity\""
+      },
+      {
+        "name": "source",
+        "value": "__collectStats.url"
+      },
+      {
+        "name": "__collector_name",
+        "value": "\"workday\""
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "workday-activityLogging"
+}

@@ -1,0 +1,27 @@
+{
+  "id": "Workday-API",
+  "lib": "custom",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "__collectStats.url.includes(\"/activityLogging\")",
+      "type": "json_array",
+      "timestampAnchorRegex": "/requestTime/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "activityLogging",
+      "jsonArrayField": "data"
+    }
+  ]
+}
