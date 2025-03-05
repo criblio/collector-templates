@@ -1,0 +1,166 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {}
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "request_offset",
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 100,
+        "maxPages": 100,
+        "zeroIndexed": false,
+        "attribute": [
+          "_raw.pageId"
+        ],
+        "offset": 0
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "'https://management.island.io/api/external/v1/timeline'",
+      "collectRequestHeaders": [
+        {
+          "name": "Api-Key",
+          "value": "REDACTED"
+        },
+        {
+          "value": "REDACTED",
+          "name": "accept"
+        },
+        {
+          "name": "Content-Type",
+          "value": "REDACTED"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "start",
+          "value": "`${new Date(earliest*1000).toISOString()}`"
+        },
+        {
+          "name": "end",
+          "value": "`${new Date(latest*1000).toISOString()}`"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "id": "island_browser_logs_collector",
+    "name": "Island_Browser_Logs",
+    "type": "rest",
+    "description": "REST Collector for Island Enterprise Browser logs",
+    "enabled": true,
+    "params": {
+      "requests": [
+        {
+          "name": "Fetch Island Browser Logs",
+          "url": "`https://api.island.io/services/siem/api/v1/Audits/d93767a8-500b-4151-b10b-2816fd1bd2f2`",
+          "method": "GET",
+          "headers": [
+            {
+              "name": "Authorization",
+              "value": "`Bearer ${C.env.API_KEY}`"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "response": {
+            "eventBreaker": {
+              "type": "json"
+            },
+            "json": {
+              "eventRoot": "$.audits",
+              "fieldMappings": [
+                {
+                  "name": "pageId",
+                  "path": "$.pageId"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "schedule": {
+        "type": "interval",
+        "intervalSeconds": 60
+      },
+      "stateTracking": {
+        "enabled": true,
+        "keys": [
+          "pageId"
+        ]
+      }
+    },
+    "destination": {
+      "type": "cribl",
+      "pipeline": "default"
+    }
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Island"
+    ]
+  },
+  "savedState": {},
+  "id": "island_browser_collector-MDB"
+}
