@@ -1,0 +1,34 @@
+{
+  "id": "google_sdk",
+  "minRawLength": 256,
+  "tags": "google",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "get_items",
+      "jsonArrayField": "items",
+      "jsonTimeField": "id.time",
+      "fields": [
+        {
+          "name": "_data_source",
+          "value": "'http_google_workspace_admin'"
+        }
+      ]
+    }
+  ]
+}
