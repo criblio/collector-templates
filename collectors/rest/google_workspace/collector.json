@@ -1,0 +1,116 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "earliest": "-10m@m",
+      "latest": "-5m@m"
+    },
+    "enabled": true
+  },
+  "streamtags": ["google"],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 50,
+        "attribute": ["nextPageToken"],
+        "lastPageExpr": "nextPageToken === null"
+      },
+      "authentication": "google_oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [429, 503],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "scopes": [
+        "https://www.googleapis.com/auth/admin.reports.audit.readonly"
+      ],
+      "collectUrl": "'https://admin.googleapis.com/admin/reports/v1/activity/users/all/applications/admin'",
+      "collectRequestParams": [
+        {
+          "value": "`${new Date((earliest * 1000 || Date.now()-(7*24*60*60*1000))).toISOString()}`",
+          "name": "startTime"
+        },
+        {
+          "name": "endTime",
+          "value": "`${new Date((latest * 1000 || Date.now())).toISOString()}`"
+        },
+        {
+          "name": "maxResults",
+          "value": "100"
+        },
+        {
+          "name": "pageToken",
+          "value": "`${__e['nextPageToken'] === null ? null : __e['nextPageToken']}`"
+        }
+      ],
+      "subject": "<subject | Your Subject>",
+      "serviceAccountCredentials": "<serviceAccountCredentials| Your Service Account Credentials>"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": ["google_sdk"]
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "latestTime": 1741215077.005
+      }
+    }
+  },
+  "id": "google_workspace_admin"
+}
+
