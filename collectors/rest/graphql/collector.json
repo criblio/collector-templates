@@ -1,0 +1,123 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "new_marker !== false && {marker: state.marker !== new_marker ? new_marker : state.marker}",
+        "stateMergeExpression": "prevState.marker !== newState.marker ? newState : prevState",
+        "enabled": true
+      }
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "itemList": [],
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": false,
+        "discoverRequestParams": [],
+        "manualDiscoverResult": "{\n  \"fakeDiscover\": true,\n  \"stateKey\": \"restCollectorState\",\n  \"host\": \"<host| Your Host Here>\",\n  \"collectorId\": \"<collectorId| Your Collector ID>\",\n  \"taskId\": \"discover\",\n  \"guid\": \"<guid| Your Guid Here>\",\n  \"state\": {\n    \"marker\": \"<marker| Your Marker Here>"\n  }\n}",
+        "discoverDataField": "state"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 50,
+        "zeroIndexed": false,
+        "pageField": "page",
+        "sizeField": "size",
+        "size": 50,
+        "attribute": [
+          "data.eventsFeed.marker"
+        ],
+        "lastPageExpr": "data.eventsFeed.fetchedCount == 0"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "static",
+        "interval": 1000,
+        "limit": 5,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after",
+        "multiplier": 2,
+        "maxIntervalMs": 20000
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "'https://api.catonetworks.com/api/v1/graphql2'",
+      "collectRequestHeaders": [
+        {
+          "name": "x-api-key",
+          "value": "<x-api-key| Your API Key Here>"
+        }
+      ],
+      "collectBody": "{\n  \"query\": `query eventsFeed($eventFeedFieldFilterInput: [EventFeedFieldFilterInput!]) { eventsFeed(filters: $eventFeedFieldFilterInput, accountIDs: \\\"REDACTED\\\", marker: \\\"${state.marker}\\\" ) { marker fetchedCount accounts { id errorString records { time fieldsMap } } } }`,\n  \"variables\": {\n    \"eventFeedFieldFilterInput\": [\n      {\n        \"fieldName\": \"event_type\",\n        \"operator\": \"in\",\n        \"values\": [\n          \"Security\",\n          \"Connectivity\",\n          \"System\"\n        ]\n      },\n      {\n        \"fieldName\": \"event_sub_type\",\n        \"operator\": \"not_in\",\n        \"values\": [\n          \"DHCP Lease\",\n          \"Changed Pop\",\n          \"Passive Connected\",\n          \"Passive Disconnected\",\n          \"Multiple Users Detected\",\n          \"QUOTA LIMIT\"\n        ]\n      }\n    ]\n  }\n}"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 20000,
+    "sendToRoutes": false,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Matts Please Just Give Me Everything Ruleset"
+    ],
+    "pipeline": "REDACTED",
+    "output": "REDACTED"
+  },
+  "description": "Gets Logs via GraphQL query.",
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "marker": "<marker| Your Marker Here>"
+      }
+    }
+  },
+  "id": "GraphQL"
+}
