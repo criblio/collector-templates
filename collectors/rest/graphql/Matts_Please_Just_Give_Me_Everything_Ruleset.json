@@ -1,0 +1,48 @@
+{
+  "id": "Matts Please Just Give Me Everything Ruleset",
+  "minRawLength": 50,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "regex",
+      "timestampAnchorRegex": "/$/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 20971520,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/^\\b$/",
+      "name": "Large Size",
+      "fields": [
+        {
+          "value": "JSON.parse([_raw]).data.eventsFeed.marker",
+          "name": "new_marker"
+        }
+      ]
+    },
+    {
+      "condition": "true",
+      "type": "json",
+      "timestampAnchorRegex": "/$/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 20971520,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "parse json for other thing."
+    }
+  ]
+}
