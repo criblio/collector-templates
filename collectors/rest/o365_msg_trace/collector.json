@@ -55,7 +55,7 @@
         "collectRequestParams": [
           {
             "name": "$filter",
-            "value": "`StartDate eq datetime'${C.Time.strftime((earliest ? earliest : Date.now()/1000 - 300),"%Y-%m-%dT%H:%M:%S.%fZ")}' and EndDate eq datetime'${C.Time.strftime(Date.now()/1000,"%Y-%m-%dT%H:%M:%S.%fZ")}'`"
+            "value": "`StartDate eq datetime'${C.Time.strftime((earliest ? earliest : Date.now()/1000 - 300),'%Y-%m-%dT%H:%M:%S.%fZ')}' and EndDate eq datetime'${C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%S.%fZ')}'`"
           }
         ]
       },
