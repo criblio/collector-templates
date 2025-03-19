@@ -22,7 +22,7 @@ The Event Breaker strips headers from events, leaving only the records of intere
 2. Click **Add Ruleset**.
 3. Click **Manage as JSON** at lower left.
 4. Click **Import** at top right.
-5. Select the breaker.json file you downloaded from [here](https://github.com/criblio/collector-templates/tree/main/collectors/rest/alphasoc_findings).
+5. Select the breaker.json file you downloaded from the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/alphasoc_findings).
 6. Click **OK**.
 
 ## Importing and Configuring each REST Collector
