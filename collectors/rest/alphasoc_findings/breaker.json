@@ -1,0 +1,28 @@
+{
+  "id": "AlphaSOC Large Response Event Breaker",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 1500
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 10000000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "large",
+      "fields": [],
+      "jsonArrayField": "findings",
+      "jsonTimeField": "JSO"
+    }
+  ]
+}
