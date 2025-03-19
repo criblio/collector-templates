@@ -1,7 +1,6 @@
 {
-  "id": "AlphaSOC API Findings",
+  "id": "AlphaSOC Large Response Event Breaker",
   "minRawLength": 256,
-  "tags": "alphasoc",
   "rules": [
     {
       "condition": "true",
@@ -9,21 +8,21 @@
       "timestampAnchorRegex": "/^/",
       "timestamp": {
         "type": "auto",
-        "length": 1000
+        "length": 1500
       },
       "timestampTimezone": "local",
       "timestampEarliest": "-420weeks",
       "timestampLatest": "+1week",
-      "maxEventBytes": 134217728,
+      "maxEventBytes": 10000000,
       "disabled": false,
       "parserEnabled": false,
       "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
-      "name": "API default",
-      "jsonArrayField": "findings",
+      "name": "large",
       "fields": [],
-      "jsonTimeField": "event.ts"
+      "jsonArrayField": "findings",
+      "jsonTimeField": "JSO"
     }
   ]
 }
