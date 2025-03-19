@@ -38,7 +38,7 @@ From the top nav of a Cribl Stream instance or Group, select **Data > Sources**,
 7. Click **Save**.
 
 ## Testing
-The AlphaSOC REST API does not yet support passing of earliest/latest time values into the query.  The initial query will capture 3 dayas worth of data then Cribl tream state tracking will ensure incremental updates after that.  
+The AlphaSOC REST API does not yet support passing of earliest/latest time values into the query.  The initial query will capture 3 days worth of data then Cribl Stream state tracking will ensure incremental updates after that.  
 
 Perform a Preview:
 
