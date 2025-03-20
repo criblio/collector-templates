@@ -32,7 +32,7 @@ From the top nav of a Cribl Stream instance or Group, select **Data > Sources**,
 1. Click **Configure as JSON** to open the configuration editor.
 2. Select **Import** from the top right and choose the collector.json file you downloaded from the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/alphasoc_findings).
 3. Click **OK**.
-4. A modal will open and prompt you for the two values you captured from your Falcon portal. Populate the form fields for `clientSecretParamValue_value` , and `client_id_value`. 
+4. A modal will open and prompt you for the two values you captured from your AlphaSOC portal. Populate the form fields for `clientSecretParamValue_value` , and `client_id_value`. 
 5. Click **Replace Values**.
 6. Click **OK**.
 7. Click **Save**.
