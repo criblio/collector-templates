@@ -1,0 +1,121 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": false,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "3m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "{follow: __collectible.resHeaders['x-stream-follow']}",
+        "stateMergeExpression": "newState",
+        "enabled": true
+      },
+      "discoverToRoutes": false,
+      "timestampTimezone": "UTC",
+      "earliest": "",
+      "latest": ""
+    },
+    "resumeMissed": false,
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "follow",
+          "more"
+        ],
+        "lastPageExpr": "more === false"
+      },
+      "authentication": "basic",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://api.alphasoc.net/v1/findings`",
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "schema",
+          "value": "'ocsf'"
+        },
+        {
+          "name": "follow",
+          "value": "`${follow ? follow : state.follow}`"
+        },
+        {
+          "name": "maxAge",
+          "value": "`${earliest ? (Math.floor(Date.now()/1000 - earliest)) + 's' : ''}`"
+        }
+      ],
+      "username": "<API Key|Provide your AlphaSOC API Key>",
+      "password": "-"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "AlphaSOC Records Event Breaker"
+    ]
+  },
+  "description": "AlphaSOC OCSF DetectionFinding REST colector. Documentation: https://docs.alphasoc.com/destinations/cribl/",
+  "savedState": {
+    "restCollectorState": {
+      "data": {}
+    }
+  },
+  "id": "AlphaSOC_Findings"
+}
