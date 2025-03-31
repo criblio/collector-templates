@@ -19,10 +19,11 @@
       "minTaskSize": "1MB",
       "maxTaskSize": "10MB",
       "stateTracking": {
-        "stateUpdateExpression": "{follow: JSON.parse(_raw).follow}",
+        "stateUpdateExpression": "{follow: __collectible.resHeaders['x-stream-follow']}",
         "stateMergeExpression": "newState",
         "enabled": true
       },
+      "discoverToRoutes": false,
       "timestampTimezone": "UTC",
       "earliest": "",
       "latest": ""
@@ -42,15 +43,15 @@
         "type": "response_body",
         "maxPages": 0,
         "attribute": [
-          "more",
-          "follow"
+          "follow",
+          "more"
         ],
         "lastPageExpr": "more === false"
       },
       "authentication": "basic",
       "timeout": 0,
       "useRoundRobinDns": false,
-      "disableTimeFilter": false,
+      "disableTimeFilter": true,
       "decodeUrl": false,
       "rejectUnauthorized": true,
       "captureHeaders": true,
@@ -73,22 +74,28 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "authHeaderKey": "Authorization",
-      "authHeaderExpr": "`Bearer ${token}`",
-      "collectUrl": "`https://api.alphasoc.net/v1/findings?format=ocsf`",
+      "collectUrl": "`https://api.alphasoc.net/v1/findings`",
       "collectRequestHeaders": [
         {
-          "name": "accept",
-          "value": "'application/json'"
+          "name": "Accept",
+          "value": "application/json"
         }
       ],
       "collectRequestParams": [
         {
+          "name": "schema",
+          "value": "'ocsf'"
+        },
+        {
           "name": "follow",
           "value": "`${follow ? follow : state.follow}`"
+        },
+        {
+          "name": "maxAge",
+          "value": "`${earliest ? (Math.floor(Date.now()/1000 - earliest)) + 's' : ''}`"
         }
       ],
-      "username": "'<username_value|Provide your AlphaSOC API key as the username>'",
+      "username": "<API Key|Provide your AlphaSOC API Key>",
       "password": "-"
     },
     "destructive": false,
@@ -99,21 +106,16 @@
     "type": "collection",
     "staleChannelFlushMs": 10000,
     "sendToRoutes": true,
-    "preprocess": {
-      "disabled": true
-    },
     "throttleRatePerSec": "0",
     "breakerRulesets": [
-      "AlphaSOC Large Response Event Breaker"
+      "AlphaSOC Records Event Breaker"
     ]
   },
+  "description": "AlphaSOC OCSF DetectionFinding REST colector. Documentation: https://docs.alphasoc.com/destinations/cribl/",
   "savedState": {
     "restCollectorState": {
-      "data": {
-        "follow": ""
-      }
+      "data": {}
     }
   },
-  "description": "Documentation: https://docs.alphasoc.com/destinations/cribl/",
   "id": "AlphaSOC_Findings"
 }
