@@ -1,0 +1,24 @@
+{
+  "id": "AlphaSOC Records Event Breaker",
+  "minRawLength": 256,
+  "tags": "alphasoc",
+  "description": "Splits records JSON array of into single events ",
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "jsonArrayField": "records",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 350
+      },
+      "timestampTimezone": "local",
+      "maxEventBytes": 10485760,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "name": "split"
+    }
+  ]
+}
