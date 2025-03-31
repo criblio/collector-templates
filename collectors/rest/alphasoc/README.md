@@ -44,4 +44,4 @@ Perform a Preview:
 4. Click **Run** to retrieve Preview results.
 
 
-Note: The AlphaSOC REST API use stream pagination so only earlies value is respected by the **Time range** filter.
+Note: The AlphaSOC REST API supports the ability to pass an **earliest** value.  Any **latest** value assignments are ignored.
