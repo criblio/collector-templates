@@ -1,8 +1,8 @@
 # AlphaSOC REST Collector
 
-This collector template allows you to collect OCSF Detection Findings from the AlphaSOC [REST API](https://docs.alphasoc.com/api/).
+This collector template allows you to collect OCSF Detection Findings from the AlphaSOC [REST API](https://docs.alphasoc.com/api_reference/).
 
-Cribl specific documentation from AlphaSOC is maintained by them [here](https://docs.alphasoc.com/destinations/cribl/).
+Cribl specific documentation from AlphaSOC is maintained by them [here](https://docs.alphasoc.com/escalating_detections/transports/cribl/).
 
 You will need the **AlphaSOC API Key** from the AlphaSOC console to complete the integration.
 
