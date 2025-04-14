@@ -1,6 +1,6 @@
 # SailPoint REST Collector
 
-This collector template allows you to collect threat details from the SailPoint API.
+This collector template allows you to collect threat details from the ONPREM, self-run SailPoint API. The Sailpoint SaaS API is different and not yet available in the repo.
 
 # Installation
 
@@ -24,6 +24,6 @@ The collector is scheduled to run 15 minutes and to retrieve either the 15 minut
 Import the provided event breaker and configure the REST Collector to use the `sailpoint` event breaker rule set.
 
 ## Authors
-Brian Rampley - brampley@cribl.io
+Brian Rampley - brampley@cribl.io    
 Michael Buehler -- mbuehler@cribl.io
 
