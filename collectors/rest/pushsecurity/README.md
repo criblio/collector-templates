@@ -15,7 +15,7 @@ These steps will allow you import the provided event breaker and configure colle
 3. Create a new breaker ruleset
 4. Edit as JSON and paste the previously copied JSON into place; save
 
-### Collector 
+### Collector(s) 
 
 After the event breaker is set up: 
 
@@ -27,8 +27,8 @@ After the event breaker is set up:
 6. Navigate to the Results section location the event breaker rulesets and ensure your `push-api-findings` event breaker is selected
 7. Once appropriately configured, commit & deploy
 8. You should schedule a job and provide a relevant time range.
+9. You can add subsequent endpoints by picking from the browsers, accounts, detections, and employees collectors to be used in the Search pack for Push Security
 
-
-##Author 
+## Author 
 
 Alex Crusco - acrusco@cribl.io
