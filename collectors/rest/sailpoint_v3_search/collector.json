@@ -1,0 +1,142 @@
+{
+    "type": "collection",
+    "ttl": "4h",
+    "ignoreGroupJobsLimit": false,
+    "removeFields": [],
+    "resumeOnBoot": false,
+    "schedule": {
+      "cronSchedule": "*/5 * * * *",
+      "maxConcurrentRuns": 1,
+      "skippable": true,
+      "run": {
+        "rescheduleDroppedTasks": true,
+        "maxTaskReschedule": 1,
+        "logLevel": "info",
+        "jobTimeout": "60m",
+        "mode": "run",
+        "timeRangeType": "relative",
+        "timeWarning": {},
+        "expression": "true",
+        "minTaskSize": "1MB",
+        "maxTaskSize": "10MB",
+        "stateTracking": {
+          "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+          "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+          "enabled": true
+        },
+        "timestampTimezone": "UTC",
+        "earliest": "-5m@m"
+      },
+      "enabled": true
+    },
+    "streamtags": [],
+    "workerAffinity": false,
+    "collector": {
+      "conf": {
+        "discovery": {
+          "discoverType": "none"
+        },
+        "collectMethod": "post_with_body",
+        "pagination": {
+          "type": "request_page",
+          "pageField": "startIndex",
+          "sizeField": "count",
+          "size": 1000,
+          "maxPages": 12,
+          "zeroIndexed": false,
+          "offsetField": "startIndex",
+          "limitField": "count",
+          "limit": 50,
+          "offset": 1,
+          "page": 1,
+          "totalRecordField": "totalResults"
+        },
+        "authentication": "oauth",
+        "timeout": 0,
+        "useRoundRobinDns": false,
+        "disableTimeFilter": false,
+        "decodeUrl": true,
+        "rejectUnauthorized": false,
+        "captureHeaders": false,
+        "safeHeaders": [],
+        "retryRules": {
+          "type": "backoff",
+          "interval": 1000,
+          "limit": 5,
+          "multiplier": 2,
+          "maxIntervalMs": 20000,
+          "codes": [
+            429,
+            503
+          ],
+          "enableHeader": true,
+          "retryConnectTimeout": false,
+          "retryConnectReset": false,
+          "retryHeaderName": "retry-after"
+        },
+        "__scheduling": {
+          "stateTracking": {}
+        },
+        "loginUrl": "'https://<endpoint_host|Host for the endpoint>.api.identitynow/oauth/token'",
+        "authHeaderKey": "authorization",
+        "authHeaderExpr": "`Bearer ${token}`",
+        "clientSecretParamName": "client_secret",
+        "loginBody": "'grant_type=client_credentials'",
+        "tokenRespAttribute": "access_token",
+        "username": "'<client_id|client id for the client secret>'",
+        "password": "<client_secret|client secret for the client id>",
+        "authRequestHeaders": [
+          {
+            "name": "scope",
+            "value": "'sp:scope:all'"
+          }
+        ],
+        "collectUrl": "'https://<endpoint_host|Host for the endpoint>.api.identitynow.com/v3/search'",
+        "collectRequestHeaders": [],
+        "collectRequestParams": [
+          {
+            "name": "limit",
+            "value": "250"
+          }
+        ],
+        "clientSecretParamValue": "<client_secret|client secret for the client id>",
+        "authRequestParams": [
+          {
+            "name": "client_id",
+            "value": "'<client_id|client id for the client secret>'"
+          },
+          {
+            "name": "grant_type",
+            "value": "'client_credentials'"
+          }
+        ],
+        "collectBody": "{\r\n  \"indices\": [\r\n    \"events\"\r\n  ],\r\n  \"query\": {\r\n    \"query\": \"type:*\"\r\n  }\r\n}"
+      },
+      "destructive": false,
+      "encoding": "utf8",
+      "type": "rest"
+    },
+    "input": {
+      "type": "collection",
+      "staleChannelFlushMs": 10000,
+      "sendToRoutes": true,
+      "preprocess": {
+        "disabled": true
+      },
+      "throttleRatePerSec": "0",
+      "breakerRulesets": [
+        "sailpoint_v3_search_eb"
+      ],
+      "metadata": [
+        {
+          "name": "sourcetype",
+          "value": "'sailpoint:iiq:audit'"
+        }
+      ],
+      "pipeline": "passthru",
+      "output": "devnull"
+    },
+    "savedState": {},
+    "description": "Pulling events from SailPoint V3 Search",
+    "id": "sailpoint_v3_search"
+  }
