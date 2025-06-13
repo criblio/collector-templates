@@ -1,0 +1,122 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "{lastid: (state.lastid || 0) > id ? state.lastid : id}",
+        "stateMergeExpression": "(prevState.lastid || 0) > newState.lastid ? prevState : newState",
+        "enabled": true
+      },
+      "earliest": "-2h@h",
+      "latest": "@h"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "manualDiscoverResult": "{\n  \"result\": {\n    \"logs\": [\n      { \"timestamp\": \"...\", \"user\": \"admin\", ... }\n    ]\n  }\n}"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "'https://dc2api.adminbyrequest.com/auditlog'",
+      "collectRequestHeaders": [
+        {
+          "name": "apikey",
+          "value": "`<api_token| Your API token here >`"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "startdate",
+          "value": "C.Time.strftime(earliest ? earliest : Date.now()/1000 - 7200,'%Y-%m-%d')"
+        },
+        {
+          "name": "enddate",
+          "value": "C.Time.strftime(latest ? latest : Date.now()/1000,'%Y-%m-%d')"
+        },
+        {
+          "name": "take",
+          "value": "1000"
+        },
+        {
+          "name": "startid",
+          "value": "state.lastid ? `${state.lastid}` : `1`"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "metadata": [
+      ],
+    "breakerRulesets": [
+      "AdminByReq_JSON_Array"
+    ]
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "lastid": 1
+      }
+    }
+  },
+  "id": "AdminByRequest_Audit"
+}

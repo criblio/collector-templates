@@ -22,4 +22,6 @@ This collector template allows you to collect logs from your Proofpoint TAP.
 
 
 ## Author
-Unknown User - unknown@cribl.io
+Brendan Dalpe
+Jon Rust <jrust@cribl.io>
+
