@@ -19,6 +19,7 @@
       "timeout": 0,
       "useRoundRobinDns": false,
       "disableTimeFilter": false,
+      "decodeUrl": true,
       "rejectUnauthorized": false,
       "safeHeaders": [],
       "retryRules": {
@@ -29,13 +30,12 @@
         "codes": [429, 503],
         "enableHeader": true
       },
-      "loginUrl": "`<Login URL| >`",
+      "loginUrl": "`<Salesforce Login URL|Enter the Salesforce OAuth URL for authentication, e.g. https://your_salesforce_org.my.salesforce.com/services/oauth2/token>`",
       "tokenRespAttribute": "access_token",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
-      "collectUrl": "`<Collection URL| >`",
+      "collectUrl": "`<Salesforce Collect URL|Enter the Salesforce API URL for collection, e.g. https://your-salesforce-org.my.salesforce.com/services/data/v64.0/sobjects/Account/describe>`",
       "collectRequestParams": [
         {
           "name": "Accept",
@@ -50,18 +50,23 @@
           "value": "`keep-alive`"
         }
       ],
-      "password": "<Password| >",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "`<Client ID| >`"
+          "value": "`<Salesforce Consumer Key|Consumer Key provided by Salesforce, used here as client_id>`"
         },
         {
           "name": "grant_type",
           "value": "`client_credentials`"
         }
       ],
-      "clientSecretParamValue": "`<Client Secret| >`"
+      "clientSecretParamValue": "`<Salesforce Consumer Secret|Consumer Secret provided by Salesforce, used here as client_secret>`",
+      "authRequestHeaders": [
+        {
+          "value": "`application/x-www-form-urlencoded`",
+          "name": "Content-Type"
+        }
+      ]
     },
     "destructive": false,
     "type": "rest"
