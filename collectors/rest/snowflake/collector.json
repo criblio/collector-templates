@@ -1,0 +1,90 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "'https://<snowflake_id>.snowflakecomputing.com/api/v2/statements'",
+      "collectBody": "{\n  \"statement\": \"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY WHERE EVENT_TIMESTAMP >= DATEADD(hour, -24, CURRENT_TIMESTAMP())\"\n}",
+      "collectRequestParams": [
+        {
+          "name": "Body"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "content-type",
+          "value": "REDACTED"
+        },
+        {
+          "name": "accept",
+          "value": "REDACTED"
+        },
+        {
+          "name": "authorization",
+          "value": "REDACTED"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Cribl"
+    ]
+  },
+  "description": "Collect from Snowflake REST API for SQL for login history",
+  "savedState": {},
+  "id": "criblsnowflake-loginhistory"
+}
