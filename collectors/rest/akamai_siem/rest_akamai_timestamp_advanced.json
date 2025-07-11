@@ -75,7 +75,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://akab-mxm2wjd4fsrxuxai-ahbxjsue26olsoa2.luna.akamaiapis.net/siem/v1/configs/xxxx`",
+      "collectUrl": "`https://<Akamai Subdomain| URL part before .luna.akamaiapis.net>.luna.akamaiapis.net/siem/v1/configs/xxxx`",
       "collectRequestParams": [
         {
           "value": "`${state.lag_status=='ok'&& Number(state.latestTime)? `${Number(state.latestTime) + Math.round(Number(id))\n}`:(state.lag_status=='above300s'?`${Math.round(Date.now() / 1000) - 180+Math.round(Number(id))}`:(state.lag_status=='above200s' ? `${Math.round(Date.now() / 1000) - 60+Math.round(Number(id))}` : `${Math.round(Date.now() / 1000) - 60+Math.round(Number(id))}`))}`",
