@@ -1,0 +1,56 @@
+{
+  "id": "monitor_rest_collection_lag",
+  "conf": {
+    "output": "default",
+    "streamtags": [],
+    "groups": {},
+    "asyncFuncTimeout": 1000,
+    "functions": [
+      {
+        "filter": "true",
+        "conf": {
+          "add": [
+            {
+              "disabled": false,
+              "name": "lag",
+              "value": "(Date.now()/1000-httpMessage.start).toFixed(0)"
+            },
+            {
+              "disabled": false,
+              "name": "eventTime",
+              "value": "httpMessage.start"
+            },
+            {
+              "disabled": false,
+              "name": "_time",
+              "value": "Date.now()/1000"
+            },
+            {
+              "disabled": false,
+              "name": "input",
+              "value": "__inputId"
+            },
+            {
+              "disabled": false,
+              "name": "sha",
+              "value": "C.Mask.sha256(httpMessage.start+__raw)"
+            }
+          ],
+          "remove": [
+            "*"
+          ],
+          "keep": [
+            "_time",
+            "lag",
+            "eventTime",
+            "input",
+            "id",
+            "sha"
+          ]
+        },
+        "id": "eval"
+      }
+    ],
+    "description": "this pipeline modifies the time of the event to the time of ingest and calculates the lag. The sha fields enables you to monitor for duplicates while obfuscating the data"
+  }
+}
