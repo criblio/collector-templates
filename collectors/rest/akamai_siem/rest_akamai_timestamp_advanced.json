@@ -1,0 +1,128 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "* * * * *",
+    "maxConcurrentRuns": 20,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "debug",
+      "jobTimeout": "1m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "{\n      latestTime: _raw.httpMessage.start ?(((state.latestTime || 0) > _time)\n      ? state.latestTime \n      : Math.round(_raw.httpMessage.start))\n      :state.latestTime ,\n      lag_status: ((Date.now() / 1000)-state.latestTime) >300?'above300s':(((Date.now() / 1000)-state.latestTime)>200?'above200s':'ok'),\n      earliestTime: (state.earliestTime || (Date.now()/1000)) < _time \n      ? state.earliestTime \n      : Number.parseInt(`${_time}`),\n      eventcount: __timestampExtracted !== false?(state.eventcount || 0)+1:(state.eventcount || 0)\n} ",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "discoverToRoutes": false,
+      "timestampTimezone": "UTC"
+    },
+    "resumeMissed": false,
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "0",
+          "10",
+          "20",
+          "30",
+          "40",
+          "50"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "hmac",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://akab-mxm2wjd4fsrxuxai-ahbxjsue26olsoa2.luna.akamaiapis.net/siem/v1/configs/83339`",
+      "collectRequestParams": [
+        {
+          "value": "`${state.lag_status=='ok'&& Number(state.latestTime)? `${Number(state.latestTime) + Math.round(Number(id))\n}`:(state.lag_status=='above300s'?`${Math.round(Date.now() / 1000) - 180+Math.round(Number(id))}`:(state.lag_status=='above200s' ? `${Math.round(Date.now() / 1000) - 60+Math.round(Number(id))}` : `${Math.round(Date.now() / 1000) - 60+Math.round(Number(id))}`))}`",
+          "name": "from"
+        },
+        {
+          "name": "limit",
+          "value": "'150000'"
+        },
+        {
+          "name": "to",
+          "value": "`${state.lag_status=='ok'&& Number(state.latestTime)? `${state.latestTime+Math.round(Number(id))+10}`:(state.lag_status=='above300s'?`${Math.round(Date.now() / 1000) - 180+10+Math.round(Number(id))}`:(state.lag_status=='above200s' ? `${Math.round(Date.now() / 1000) - 60+10+Math.round(Number(id))}` : `${Math.round(Date.now() / 1000) - 60+10+Math.round(Number(id))}`))}`\n"
+        }
+      ],
+      "hmacFunctionId": "hmac_akamai_edgegrid",
+      "collectRequestHeaders": []
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Akamai SIEM Integration"
+    ],
+    "pipeline": "parse_akamai_siem",
+    "output": "devnull",
+    "metadata": [
+      {
+        "name": "id",
+        "value": "`${__collectible.id}`"
+      }
+    ]
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        
+      }
+    }
+  },
+  "id": "akamai_siem_integration_offset_advanced"
+}
