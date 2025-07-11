@@ -70,7 +70,7 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "collectUrl": "`https://akab-mxm2wjd4fsrxuxai-ahbxjsue26olsoa2.luna.akamaiapis.net/siem/v1/configs/${id}`",
+      "collectUrl": "`https://<Akamai Subdomain| URL part before .luna.akamaiapis.net>.luna.akamaiapis.net/siem/v1/configs/${id}`",
       "collectRequestParams": [
         {
           "value": "`${state[`${id}`].lag_status=='ok'&& state[`${id}`].offset?undefined:(state[`${id}`].lag_status=='above300s'?`${Math.round(Date.now() / 1000) - 180}`:(state[`${id}`].lag_status=='above180s' ? `${Math.round(Date.now() / 1000) - 30}` : `${Math.round(Date.now() / 1000) - 43000}`))}`\n",
