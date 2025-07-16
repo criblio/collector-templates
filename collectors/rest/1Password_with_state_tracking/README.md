@@ -34,7 +34,7 @@ From the top nav of a Cribl Stream instance or Group, select **Data > Sources**,
 2. Select **Import** from the top right and choose the collector.json file you downloaded from the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/1Password_with_state_tracking).
 6. Click **OK**.
 7. Enter the value for **Collect URL** based on info in the above API reference.  Example:  'https://events.1password.com/api/v2/auditevents'.
-8. Enter the value for the Collect header field named **Authorization**.  Example:  'Bearer eYk4hkj3hk3h423424<truncated>' 
+8. Enter the value for the Collect header field named **Authorization**.  Example:  'Bearer eYk4hkj3hk3h423424...........' 
 9. Click **Save**.
 
 ## Testing
