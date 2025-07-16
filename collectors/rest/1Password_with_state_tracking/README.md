@@ -1,6 +1,6 @@
 # 1Password REST Collector with State Tracking for Audit logs
 
-This uses the 1Password Events API to retrieve information about activity in your 1Password account – like audit events, item usage, and sign-in attempts – and send it to your security information and event management (SIEM) system.
+This uses the 1Password Events API to retrieve audit logs from your 1Password account so you can send them to your SIEM or object storage for long-term search or retention.
 
 1Password Events API reference [here](https://developer.1password.com/docs/events-api/reference)
 
