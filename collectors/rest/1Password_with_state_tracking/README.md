@@ -48,7 +48,7 @@ Perform a Preview:
 
 ## Pagination
 
-The 1Password API requires the first query to provide the **limit** and **start_time** objects (**end_time** is optional but implemented in this collector) within the HTTP body.  If more records need to be returned than the configured limit,  **cursor** and **has_more** fields are returned and need to be used in each successive query until **has_more** equals false.
+The 1Password API requires the first query to provide the **limit** and **start_time** objects (**end_time** is optional but implemented in this collector) within the HTTP body.  If more records need to be returned than the configured limit,  **cursor** and **has_more** fields are returned which need to be used in each successive query until **has_more** equals false.
 
 ## Scheduling and State Tracking
 
