@@ -1,0 +1,104 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": true,
+        "discoverUrl": "'https://{{OKTA DOMAIN}}.okta.com/api/v1/apps'",
+        "discoverRequestParams": [],
+        "discoverRequestHeaders": [
+          {
+            "name": "Accept",
+            "value": "'application/json'"
+          },
+          {
+            "name": "Authorization",
+            "value": "'SSWS {{API TOKEN}}'"
+          }
+        ],
+        "formatResultCode": "let discovery_response = __e;\r\nlet new_discovery_list = [];\r\n\r\n// iterate the app list response, which contains a user and group href.  \r\n// clone each item of app list and set a collect_url, respectively to be used downstream\r\nfor (let index = 0; index < discovery_response.length; ++index) {\r\n  \r\n  let orig_obj = discovery_response[index];\r\n  let clone_obj = Object.assign({}, orig_obj);\r\n\r\n  orig_obj['collect_url'] = orig_obj._links.groups.href;\r\n  clone_obj['collect_url'] = clone_obj._links.users.href;\r\n\r\n  new_discovery_list.push(orig_obj);\r\n  new_discovery_list.push(clone_obj);\r\n\r\n}\r\n\r\n__e['items'] = new_discovery_list;\r\n",
+        "discoverDataField": "items"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`${collect_url}`",
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "'application/json'"
+        },
+        {
+          "name": "Authorization",
+          "value": "'SSWS {{API TOKEN}}'"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "okta_apps"
+    ],
+    "metadata": [
+      {
+        "name": "app_data",
+        "value": "__collectible"
+      },
+      {
+        "value": "app_data.collect_url.split(\"/\").pop()",
+        "name": "item_type"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "okta_apps"
+}
