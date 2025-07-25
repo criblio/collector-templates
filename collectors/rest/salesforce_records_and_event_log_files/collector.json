@@ -1,0 +1,111 @@
+{
+  "id": "salesforce",
+  "type": "collection",
+  "ttl": "4h",
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableDiscoverCode": true,
+        "discoverUrl": "`https://<Domain of the customer in Salesforce| e.g. mycompany.my.salesforce.com>/services/data/<Salesforce API version | e.g. v53.0>/query?q=SELECT Id,CreatedDate,Interval,LogDate,LogFile FROM EventLogFile WHERE Interval = 'Hourly' AND CreatedDate >= ` +  new Date(earliest ? earliest*1000 : Date.now()-960*1000).toISOString() + ` AND CreatedDate < ` +  new Date(latest ? latest*1000 : Date.now()-60*1000).toISOString() + ` ORDER BY CreatedDate ASC NULLS FIRST`",
+        "discoverRequestParams": [],
+        "discoverDataField": "records",
+        "formatResultCode": "// Set a static discovery result of list of Salesforce queries and cursors.\n// The cursor is the time field used to set time range fo the events.\nconst queries = [\n  {\n    query: \"SELECT LoginHistory.Id, LoginHistory.LoginTime, LoginHistory.UserId, LoginHistory.LoginType, LoginHistory.Status, LoginHistory.Platform, LoginHistory.SourceIp, LoginHistory.CountryIso, LoginHistory.Browser, LoginHistory.Application, LoginHistory.ClientVersion, LoginHistory.APIversion, LoginHistory.LoginUrl FROM LoginHistory\",\n    cursor: \"LoginTime\"\n  },\n  {\n    query: \"SELECT SetupAuditTrail.Id, SetupAuditTrail.CreatedById,  SetupAuditTrail.DelegateUser, SetupAuditTrail.Action, SetupAuditTrail.Display, SetupAuditTrail.Section, SetupAuditTrail.CreatedDate FROM SetupAuditTrail\",\n    cursor: \"CreatedDate\"\n  }\n];\n// Add static discovery results to already obtained.\n__e[\"records\"] = (__e[\"records\"] || []).concat(queries);"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "nextRelationAttribute": "next",
+        "attribute": []
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://login.salesforce.com/services/oauth2/token'",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "loginBody": "`{ \"username\": \"${username}\", \"password\": \"${password}\" }`",
+      "tokenRespAttribute": "access_token",
+      "collectUrl": "'https://<Domain of the customer in Salesforce| e.g. mycompany.my.salesforce.com>' + (LogFile ? `/services/data/<Salesforce API version | e.g. v53.0>/sobjects/EventLogFile/${Id}/LogFile` : (nextRecordsUrl || '/services/data/<Salesforce API version | e.g. v53.0>/query'))",
+      "collectRequestParams": [
+        {
+          "name": "q",
+          "value": "nextRecordsUrl === undefined ? query + ' WHERE ' + cursor + ' >= ' + new Date(earliest ? earliest*1000 : Date.now()-960*1000).toISOString() + ' AND ' + cursor + ' < ' + new Date(latest ? latest*1000 : Date.now()-60*1000).toISOString() + ` ORDER BY ${cursor} ASC`: ''"
+        }
+      ],
+      "authRequestParams": [
+        {
+          "name": "grant_type",
+          "value": "'password'"
+        },
+        {
+          "name": "client_id",
+          "value": "'<Client ID | Client ID>'"
+        },
+        {
+          "name": "username",
+          "value": "'<User name | User name>'"
+        },
+        {
+          "name": "password",
+          "value": "'<Password | Password>'"
+        }
+      ],
+      "clientSecretParamValue": "<Client secret | Client secret>",
+      "collectRequestHeaders": [],
+      "username": "'<User name | User name>'",
+      "password": "'<Password | Password>'"
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Salesforce Ruleset"
+    ],
+    "metadata": []
+  },
+  "savedState": {},
+  "description": "This Cribl REST collector enables a compact way to get:\n\n- Salesforce records using the Query endpoint and\n- Salesforce event monitoring content from EventLogFile records using the sObject Blob Get endpoint.  "
+}

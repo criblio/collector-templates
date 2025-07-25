@@ -1,0 +1,99 @@
+{
+  "id": "Salesforce Ruleset",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "__collectible.cursor == 'LoginTime'",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "Salesforce Breaker Rule LoginTime",
+      "jsonArrayField": "records",
+      "fields": [],
+      "jsonTimeField": "LoginTime"
+    },
+    {
+      "condition": "__collectible.cursor == 'CreatedDate'",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "records",
+      "fields": [],
+      "jsonTimeField": "CreatedDate",
+      "name": "Salesforce Breaker Rule CreatedDate"
+    },
+    {
+      "condition": "__collectible.cursor == 'LogDate'",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "records",
+      "fields": [],
+      "jsonTimeField": "LogDate",
+      "name": "Salesforce Breaker Rule LogDate"
+    },
+    {
+      "condition": "__collectible.attributes.type == 'EventLogFile'",
+      "type": "csv",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 1024000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "delimiter": ",",
+      "quoteChar": "\"",
+      "escapeChar": "\"",
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "records",
+      "fields": [],
+      "jsonTimeField": "LogDate",
+      "name": "Salesforce Breaker Rule EventLogFile"
+    }
+  ],
+  "description": "Event breaking rules for Salesforce API ",
+  "tags": "salesforce"
+}
