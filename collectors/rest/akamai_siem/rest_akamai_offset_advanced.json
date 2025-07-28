@@ -1,0 +1,119 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/30 * * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "error",
+      "jobTimeout": "1m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "{\n  [__collectible.id]: {\n    latestTime: _raw.httpMessage.start ?(((state[__collectible.id].latestTime || 0) > _time)\n      ? state[__collectible.id].latestTime \n      : Math.round(_raw.httpMessage.start))\n      :state[__collectible.id].latestTime ,\n      offset: offset!==false?offset:'',\n      lag_status: ((Date.now() / 1000)-state[__collectible.id].latestTime) >300?'above300s':(((Date.now() / 1000)-state[__collectible.id].latestTime)>180?'above180s':'ok'),\n      earliestTime: (state[__collectible.id].earliestTime || (Date.now()/1000)) < _time \n      ? state[__collectible.id].earliestTime \n      : Number.parseInt(`${_time}`),\n      eventcount: __timestampExtracted !== false?(state[__collectible.id].eventcount || 0)+1:(state[__collectible.id].eventcount || 0),\n  }\n} ",
+        "stateMergeExpression": "newState !== '' ? Object.assign(prevState, newState) : (prevState || {})",
+        "enabled": true
+      },
+      "discoverToRoutes": false,
+      "timestampTimezone": "UTC"
+    },
+    "resumeMissed": false,
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "list",
+        "itemList": [
+          "83339"
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "hmac",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://<Akamai Subdomain| URL part before .luna.akamaiapis.net>.luna.akamaiapis.net/siem/v1/configs/${id}`",
+      "collectRequestParams": [
+        {
+          "value": "`${state[`${id}`].lag_status=='ok'&& state[`${id}`].offset?undefined:(state[`${id}`].lag_status=='above300s'?`${Math.round(Date.now() / 1000) - 180}`:(state[`${id}`].lag_status=='above180s' ? `${Math.round(Date.now() / 1000) - 30}` : `${Math.round(Date.now() / 1000) - 43000}`))}`\n",
+          "name": "from"
+        },
+        {
+          "name": "limit",
+          "value": "'50000'"
+        },
+        {
+          "name": "offset",
+          "value": "`${state[`${id}`].lag_status=='ok' && state[`${id}`].offset ?  state[`${id}`].offset: undefined}`"
+        }
+      ],
+      "hmacFunctionId": "hmac_akamai_edgegrid",
+      "collectRequestHeaders": []
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Akamai SIEM Integration"
+    ],
+    "pipeline": "parse_akamai_siem",
+    "output": "devnull",
+    "metadata": []
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        
+        }
+      }
+    }
+  },
+  "id": "akamai_siem_integration_offset_advanced"
+}
