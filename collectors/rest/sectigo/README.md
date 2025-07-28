@@ -23,7 +23,7 @@ This collector template allows you to collect logs from Sectigo's records api.
    * If earliest is not available, but state is, the state.latestTime will be used as earliest
    * If neither earliest nor state is available, it will use 30 minutes ago
 * The latest time will default to now if not specified
-* There is LogType fields defined, set to value `Sectigo`. This can help with routing and filtering, but is not required. Remove it if you don't use it.
+* There is a LogType field defined, set to value `Sectigo`. This can help with routing and filtering, but is not required. Remove it if you don't use it.
 
 ### Event Breaker
 * The included EB is a simple JSON Array event breaker, with `timestamp` listed as the timestamp prefix, and Parse JSON selected. This will result in the original data in _raw, and all extracted fields at the top level of the event. This duplication should be cleared up in your pipeline. I recommend dropping the _raw field as step 1.
