@@ -1,0 +1,131 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/30 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "earliest": "",
+      "latest": ""
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://auth.sso.sectigo.com/auth/realms/apiclients/protocol/openid-connect/token`",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "clientSecretParamValue": "<Client Secret|>",
+      "authRequestParams": [
+        {
+          "name": "grant_type",
+          "value": "`client_credentials`"
+        },
+        {
+          "name": "client_id",
+          "value": "`<Client ID|>`"
+        },
+        {
+          "name": "accept",
+          "value": "'*/*'"
+        }
+      ],
+      "authRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "`application/x-www-form-urlencoded`"
+        }
+      ],
+      "collectUrl": "`https://audit.hard.sectigo.com/api/v1/records`",
+      "collectRequestParams": [
+        {
+          "name": "from",
+          "value": "C.Time.strftime( earliest ? earliest : (state.latestTime ? state.latestTime : Date.now()/1000 - 1800), \"%Y-%m-%dT%H:%M:%SZ\")"
+        },
+        {
+          "name": "to",
+          "value": "C.Time.strftime(latest ? latest : Date.now()/1000, \"%Y-%m-%dT%H:%M:%SZ\")"
+        }
+      ],
+      "tokenRespAttribute": "access_token"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "sectigo"
+    ],
+    "metadata": [
+      {
+        "name": "LogType",
+        "value": "'Sectigo'"
+      }
+    ],
+  },
+  "savedState": {},
+  "id": "SectigoRecords"
+}
