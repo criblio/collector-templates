@@ -1,0 +1,26 @@
+{
+  "id": "openai",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes('organization.audit_log')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/effective_at/",
+      "timestamp": {
+        "type": "auto",
+        "length": 20
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "audit_log",
+      "jsonArrayField": "data"
+    }
+  ]
+}
