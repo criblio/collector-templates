@@ -1,6 +1,6 @@
-# Boomi REST Collector
+# OpenAI REST Collector
 
-This collector template allows you to collect logs from Boomi's api.
+This collector template allows you to collect logs from OpenAI's REST API for audit logs
 
 # Installation
 
