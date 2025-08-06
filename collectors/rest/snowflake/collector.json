@@ -46,7 +46,7 @@
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
-      "collectUrl": "'https://<snowflake_id>.snowflakecomputing.com/api/v2/statements'",
+      "collectUrl": "'https://<snowflake_id|>.snowflakecomputing.com/api/v2/statements'",
       "collectBody": "{\n  \"statement\": \"SELECT * FROM SNOWFLAKE.ACCOUNT_USAGE.LOGIN_HISTORY WHERE EVENT_TIMESTAMP >= DATEADD(hour, -24, CURRENT_TIMESTAMP())\"\n}",
       "collectRequestParams": [
         {
@@ -56,15 +56,15 @@
       "collectRequestHeaders": [
         {
           "name": "content-type",
-          "value": "REDACTED"
+          "value": "'application/json'"
         },
         {
           "name": "accept",
-          "value": "REDACTED"
+          "value": "'*/*'"
         },
         {
-          "name": "authorization",
-          "value": "REDACTED"
+          "name": "Authorization",
+          "value": "'Bearer <api_token|>'"
         }
       ]
     },
