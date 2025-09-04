@@ -1,0 +1,29 @@
+{
+  "id": "drop_duplicates",
+  "conf": {
+    "output": "default",
+    "streamtags": [],
+    "groups": {},
+    "asyncFuncTimeout": 1000,
+    "functions": [
+      {
+        "id": "numerify",
+        "filter": "true",
+        "conf": {
+          "depth": 5,
+          "format": "none",
+          "ignoreFields": [],
+          "filterExpr": "",
+          "digits": null
+        }
+      },
+      {
+        "id": "drop",
+        "filter": " __collectible.state.latestTime > httpMessage.start",
+        "conf": {},
+        "final": true
+      }
+    ],
+    "description": ""
+  }
+}
