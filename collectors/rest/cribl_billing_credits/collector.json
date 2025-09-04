@@ -1,0 +1,87 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://login.cribl.cloud/oauth/token`",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "tokenRespAttribute": "access_token",
+      "collectUrl": "`https://api.cribl.cloud/v4/organizations/<orgId | OrgId>/billing/credits`",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'<client_id | client_id>'"
+        },
+        {
+          "name": "audience",
+          "value": "'https://api.cribl.cloud'"
+        },
+        {
+          "name": "grant_type",
+          "value": "'client_credentials'"
+        }
+      ],
+      "collectRequestParams": [],
+      "clientSecretParamValue": "<client_secret | client_secret>"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "criblApi"
+    ]
+  },
+  "savedState": {},
+  "id": "Cribl_Billings_Credits"
+}
+

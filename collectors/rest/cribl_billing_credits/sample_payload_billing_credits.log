@@ -1,0 +1,13 @@
+{
+    "totalCreditsAvailable": 4807305.250183054,
+    "totalCreditsPurchased": 12757630.51,
+    "totalCreditsUsed": 7950325.2598169455,
+    "breakdown": {
+        "infrastructureCredits": 923912.3295098669,
+        "processingCredits": 72881.6882274,
+        "searchCredits": 5876530.438019484,
+        "lakeCredits": 2076.5421264588267,
+        "lakehouseCredits": 778.1041666666666
+    }
+}
+
