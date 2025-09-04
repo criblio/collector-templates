@@ -21,3 +21,8 @@ This collector leverages an **internal API endpoint** that is subject to change.
 
 ### Sample Data 
 API response example can be found at ```sample_payload_billing_credits.log```
+
+### Authors
+
+Andrew Hendrix - ahendrix@criblservices.io 
+Brandon Swanson - Brandon.Swanson@blackbaud.com
