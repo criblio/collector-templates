@@ -84,7 +84,7 @@ This file uses four threads, one per 15-second request, with one job per minute.
 Note that this collection will generate duplicate data. A keen eye will see that Akamai will randomly send you data outside the date boundary, data that you have already collected a minute ago. Disappointed? blame Akamai :) However, don't fret, Cribl Stream can extract data outside the time boundary. To solve this issue got to step 3
 3. use pipeline_drop_duplicates.json as a pipeline to drop event where the eventtime is before the time boundary set.
 and you are all set.
-you may want to check the lag status on the state tracking (the easiest it to just check your state in your input->manage state : it will show you the latest event time. ).
+4. optional : you may want to check the lag status on the state tracking (the easiest it to just check your state in your input->manage state : it will show you the latest event time. ).
 If data collection is lagging constantly, add more threads. To do so, check the discovery itemList to split every minute : 0,15,30,45 means 4 thread of 15 seconds. Having 6 threads can be achieved by having the discovery itemlist set to : 0,10,20,30,40,50 and changing the to and from request parameters to adjust for the 10-second difference instead of 15. But refrain from changing the current config of 4 threads in a minutes, this is a sweet spot.
 
 
