@@ -7,6 +7,24 @@
     "asyncFuncTimeout": 1000,
     "functions": [
       {
+        "id": "numerify",
+        "filter": "true",
+        "conf": {
+          "depth": 5,
+          "format": "none",
+          "ignoreFields": [],
+          "filterExpr": "",
+          "digits": 0
+        }
+      },
+      {
+        "id": "drop",
+        "filter": " __collectible.state.latestTime > httpMessage.start",
+        "disabled": true,
+        "conf": {}
+      },
+      {
+        "id": "eval",
         "filter": "true",
         "conf": {
           "add": [
@@ -34,21 +52,61 @@
               "disabled": false,
               "name": "sha",
               "value": "C.Mask.sha256(httpMessage.start+__raw)"
+            },
+            {
+              "disabled": false,
+              "name": "offset",
+              "value": "__collectible.state.latestTime?__collectible.state.latestTime:__collectible.state[6162].offset"
+            },
+            {
+              "disabled": false,
+              "name": "channel",
+              "value": "__channel"
+            },
+            {
+              "disabled": false,
+              "name": "duration",
+              "value": "__collectStats.elapsedMS/1000"
+            },
+            {
+              "disabled": false,
+              "name": "taskId",
+              "value": "__collectible.id"
+            },
+            {
+              "disabled": false,
+              "name": "requestId",
+              "value": "httpMessage.requestId"
+            },
+            {
+              "disabled": false,
+              "name": "action",
+              "value": " __collectible.state.latestTime > httpMessage.start?'dropped':'collected'"
             }
           ],
           "remove": [
             "*"
           ],
           "keep": [
+            "from",
+            "to",
+            "state",
             "_time",
+            "query*",
+            "my*",
             "lag",
             "eventTime",
+            "sha",
             "input",
-            "id",
-            "sha"
+            "job",
+            "channel",
+            "offset",
+            "duration",
+            "taskId",
+            "requestId",
+            "action"
           ]
-        },
-        "id": "eval"
+        }
       }
     ],
     "description": "this pipeline modifies the time of the event to the time of ingest and calculates the lag. The sha fields enables you to monitor for duplicates while obfuscating the data"
