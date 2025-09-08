@@ -1,0 +1,110 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "{latestId: (state.latestId || 0) > id ? state.latestId : id}",
+        "stateMergeExpression": "(prevState.latestId || 0) > newState.latestId ? prevState : newState",
+        "enabled": true
+      }
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "meta.next_page"
+        ]
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "\"https://<tines_domain| Your tenant domain >/api/v1/events/\"",
+      "collectRequestHeaders": [
+        {
+          "name": "Authorization",
+          "value": "\"Bearer <api_token| Your API token here >\""
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "since_id",
+          "value": "state.lastid ? `${state.lastid}` : `1`"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "tines"
+    ],
+    "metadata": []
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "latestId": 2528670543
+      }
+    }
+  },
+  "id": "tines_list_events"
+}
