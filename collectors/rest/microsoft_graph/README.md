@@ -1,6 +1,6 @@
-# Azure Graph REST Collector
+# Microsoft Graph REST Collector
 
-This collector template allows you to collect Logs from your Azure Graph .
+This collector template allows you to collect Logs from your Microsoft Graph .
 
 # Installation
 

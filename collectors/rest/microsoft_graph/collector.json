@@ -49,10 +49,10 @@
     },
     "throttleRatePerSec": "0",
     "breakerRulesets": [
-      "AzureGraph-API"
+      "MicrosoftGraph-API"
     ]
   },
-  "id": "Azure-Graph"
+  "id": "MicrosoftGraph"
 }
-AzureGraph-API.json
-Displaying AzureGraph-API.json.
+MicrosoftGraph-API.json
+Displaying MicrosoftGraph-API.json.

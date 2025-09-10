@@ -1,5 +1,5 @@
 {
-  "id": "AzureGraph-API",
+  "id": "MicrosoftGraph-API",
   "minRawLength": 256,
   "lib": "custom",
   "rules": [
@@ -19,7 +19,7 @@
       "parserEnabled": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
-      "name": "AzureGraph-API"
+      "name": "MicrosoftGraph-API"
     }
   ]
 }
