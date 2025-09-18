@@ -41,7 +41,8 @@
         "limitField": "limit",
         "limit": 100,
         "maxPages": 0,
-        "zeroIndexed": true
+        "zeroIndexed": true,
+        "totalRecordField": "total"
       },
       "authentication": "oauth",
       "timeout": 0,
