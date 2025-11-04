@@ -5,7 +5,29 @@
   "removeFields": [],
   "dontStoreDiscoveryResults": false,
   "resumeOnBoot": false,
-  "schedule": {},
+  "schedule": {
+    "cronSchedule": "*/15 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      }
+    },
+    "enabled": false
+  },
   "streamtags": [],
   "workerAffinity": false,
   "collector": {

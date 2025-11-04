@@ -6,7 +6,7 @@
   "dontStoreDiscoveryResults": false,
   "resumeOnBoot": false,
   "schedule": {
-    "cronSchedule": "*/5 * * * *",
+    "cronSchedule": "*/15 * * * *",
     "maxConcurrentRuns": 1,
     "skippable": true,
     "run": {
