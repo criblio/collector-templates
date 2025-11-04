@@ -1,0 +1,139 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "dontStoreDiscoveryResults": false,
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/15 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      }
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "response_header",
+          "maxPages": 50,
+          "attribute": [
+            "nextpageuri"
+          ]
+        },
+        "enableStrictDiscoverParsing": false,
+        "enableDiscoverCode": false,
+        "discoverUrl": "`https://manage.office.com/api/v1.0/${C.vars.o365_tenant_id}/activity/feed/subscriptions/content`",
+        "discoverRequestParams": [
+          {
+            "name": "PublisherIdentifier",
+            "value": "`${C.vars.o365_publisher_id}`"
+          },
+          {
+            "name": "contentType",
+            "value": "\"DLP.All\""
+          },
+          {
+            "name": "startTime",
+            "value": "`${state.latestTime != null ? new Date(state.latestTime*1000).toISOString() : earliest != null ? new Date(earliest*1000).toISOString() : new Date(Date.now() - 15 * 60 * 1000).toISOString()}`"
+          },
+          {
+            "name": "endTime",
+            "value": "`${latest != null ? new Date(latest*1000).toISOString() : new Date().toISOString()}`"
+          }
+        ]
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "stopOnEmptyResults": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          500,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://login.microsoftonline.com/${C.vars.o365_tenant_id}/oauth2/token`",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectUrl": "`https://manage.office.com/api/v1.0/${C.vars.o365_tenant_id}/activity/feed/audit/${contentId}`",
+      "clientSecretParamValue": "REDACTED",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "\"CLIENT_ID_HERE\""
+        },
+        {
+          "name": "resource",
+          "value": "\"https://manage.office.com\""
+        },
+        {
+          "name": "grant_type",
+          "value": "\"client_credentials\""
+        }
+      ],
+      "tokenRespAttribute": "access_token"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "Office 365"
+    ]
+  },
+  "savedState": {},
+  "id": "O365_Activity-DLP"
+}
