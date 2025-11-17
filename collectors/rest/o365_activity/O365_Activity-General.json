@@ -11,7 +11,7 @@
     "run": {
       "rescheduleDroppedTasks": true,
       "maxTaskReschedule": 1,
-      "logLevel": "debug",
+      "logLevel": "info",
       "jobTimeout": "60m",
       "mode": "run",
       "timeRangeType": "relative",
