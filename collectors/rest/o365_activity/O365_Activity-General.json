@@ -3,10 +3,9 @@
   "ttl": "4h",
   "ignoreGroupJobsLimit": false,
   "removeFields": [],
-  "dontStoreDiscoveryResults": false,
   "resumeOnBoot": false,
   "schedule": {
-    "cronSchedule": "*/15 * * * *",
+    "cronSchedule": "*/5 * * * *",
     "maxConcurrentRuns": 1,
     "skippable": true,
     "run": {
@@ -57,11 +56,11 @@
           },
           {
             "name": "startTime",
-            "value": "`${state.latestTime != null ? new Date(state.latestTime*1000).toISOString() : earliest != null ? new Date(earliest*1000).toISOString() : new Date(Date.now() - 15 * 60 * 1000).toISOString()}`"
+            "value": "`${state.latestTime != null ? new Date(state.latestTime * 1000).toISOString() : earliest != null ? new Date((earliest - (C.vars['o365_ingestion_lag_min'] || 0) * 60) * 1000).toISOString() : new Date(Date.now() - (C.vars['o365_ingestion_lag_min'] || 0) * 60 * 1000 - (C.vars['o365_polling_interval_min'] || 5) * 60 * 1000).toISOString()}`"
           },
           {
             "name": "endTime",
-            "value": "`${latest != null ? new Date(latest*1000).toISOString() : new Date().toISOString()}`"
+            "value": "`${latest != null ? new Date((latest - (C.vars['o365_ingestion_lag_min'] || 0) * 60) * 1000).toISOString() : new Date(Date.now() - (C.vars['o365_ingestion_lag_min'] || 0) * 60 * 1000).toISOString()}`"
           }
         ]
       },
@@ -106,7 +105,7 @@
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "\"CLIENT_ID_HERE\""
+          "value": "`${C.vars['o365_publisher_id']}`"
         },
         {
           "name": "resource",
@@ -135,12 +134,7 @@
       "Office 365"
     ]
   },
-  "savedState": {
-    "restCollectorState": {
-      "data": {
-        "latestTime": 1762267199.448
-      }
-    }
-  },
+  "dontStoreDiscoveryResults": false,
+  "savedState": {},
   "id": "O365_Activity-General"
 }
