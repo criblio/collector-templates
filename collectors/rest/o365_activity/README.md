@@ -38,20 +38,20 @@ These variables make the collectors robust across all tenants and content types 
 | `o365_polling_interval_min`   | Number | `5`                                      | Should match your cron schedule        |
 
 ### 2–11. Add each collector
-1. Navigate to **Data → Sources → REST Collectors**
-2. Click **+ New REST Collector**
-3. Switch to the **JSON** tab
-4. Click **Import** → select the desired `.json` file → **Save**
-5. Authentication tab → set **Client secret parameter** to your app’s client secret
-6. Authentication tab → **Extra authentication parameters** → set `client_id` to your app’s client ID
-7. Save
-8. Schedule tab → **Enable State Tracking** (keep default expressions)
-9. Save
-10. (Optional) Commit & Deploy
-11. Repeat for each content type you need
+2. Navigate to **Data → Sources → REST Collectors**
+3. Click **+ New REST Collector**
+4. Switch to the **JSON** tab
+5. Click **Import** → select the desired `.json` file → **Save**
+6. Authentication tab → set **Client secret parameter** to your app’s client secret
+7. Authentication tab → **Extra authentication parameters** → set `client_id` to your app’s client ID
+8. Save
+9. Schedule tab → **Enable Schedule and State Tracking** (keep default expressions)
+10. Save
+11. (Optional) Commit & Deploy
+12. Repeat for each content type you need
 
 You’re all set — the collectors will now safely handle Microsoft’s 60–90 minute ingestion delay with zero gaps or duplicates.
 
 ## Author
 
-Harry Gardner – [hgardner@cribl.io](mailto:hgardner@cribl.io)  
+Harry Gardner – [hgardner@cribl.io](mailto:hgardner@cribl.io)
