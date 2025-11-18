@@ -1,7 +1,21 @@
 # O365 Activity REST Collectors
 
-These collector templates let you pull **Office 365 Activity** logs for every available content type **with built-in state tracking**.  
-Use them today—full state-tracking support is coming to the native O365 Activity Source soon.
+These collector templates enable collection of **Microsoft Office 365 Management Activity API** logs for all supported content types — **with full state tracking** and **proper handling of Microsoft’s built-in ingestion delays**.
+
+Microsoft does **not** provide this data in real time.
+Events typically appear in the API **60–90 minutes** (sometimes longer) after they occur in Office 365.
+These updated templates automatically account for that lag so you never miss data — even though customers often expect near-real-time visibility.
+
+**All templates in this directory have been enhanced** with smarter `startTime`/`endTime` logic that prevents gaps and overlap.
+
+## Why the new global variables exist
+
+| Variable                      | Type   | Default | Purpose |
+|-------------------------------|--------|---------|---------------------------------------------------------------------|
+| `o365_ingestion_lag_min`      | Number | `90`    | How many minutes to “look back” to compensate for Microsoft’s data availability delay. 90 minutes covers >99% of events. |
+| `o365_polling_interval_min`   | Number | `5`     | How often the collector runs (matches the default `*/5 * * * *` cron). Used on first run to set a safe initial time window. |
+
+These variables make the collectors robust across all tenants and content types — no more missed events due to premature polling.
 
 ## Supported Content Types
 
@@ -9,44 +23,35 @@ Use them today—full state-tracking support is coming to the native O365 Activi
 - **`Audit.SharePoint`** → `O365_Activity-SharePoint.json`
 - **`Audit.Exchange`** → `O365_Activity-Exchange.json`
 - **`Audit.AzureActiveDirectory`** → `O365_Activity-AzureActiveDirectory.json`
-- **`DLP.All`** → `O365_Activity-DLP.json`
+- **`DLP.All`** → `O365_Activity-DLP.json` *(fully updated with lag-aware time windows)*
 
-## Installation (12 easy steps)
+## Installation
 
-1. **Create two global variables**  
-   `Processing → Knowledge → Variables`  
-   - Name: `o365_tenant_id` → Value: `"your-tenant-id"` (quoted string)  
-   - Name: `o365_publisher_id` → Value: `"your-app-id"` (quoted string)
+### 1. Create global variables
+`Processing → Knowledge → Variables`
 
+| Name                          | Type   | Example / Default Value                  | Notes                                  |
+|-------------------------------|--------|------------------------------------------|----------------------------------------|
+| `o365_tenant_id`              | String | `"d6e4f0c1-..."`                         | Quote the value                        |
+| `o365_publisher_id`           | String | `"a1b2c3d4-..."` (your App/Client ID)    | Quote the value                        |
+| `o365_ingestion_lag_min`      | Number | `90`                                     | Adjust higher if your tenant is slower |
+| `o365_polling_interval_min`   | Number | `5`                                      | Should match your cron schedule        |
+
+### 2–11. Add each collector
 2. Navigate to **Data → Sources → REST Collectors**
-
 3. Click **+ New REST Collector**
+4. Switch to the **JSON** tab
+5. Click **Import** → select the desired `.json` file → **Save**
+6. Authentication tab → set **Client secret parameter** to your app’s client secret
+7. Authentication tab → **Extra authentication parameters** → set `client_id` to your app’s client ID
+8. Save
+9. Schedule tab → **Enable Schedule and State Tracking** (keep default expressions)
+10. Save
+11. (Optional) Commit & Deploy
+12. Repeat for each content type you need
 
-4. Switch to the **JSON** tab (top of the window)
-
-5. Click **Import** → choose the desired JSON file (e.g. `O365_Activity-General.json`) → **Save**
-
-6. Open the **Authentication** tab  
-   - Set **Client secret parameter** → your O365 client secret
-
-7. Still in **Authentication** → **Extra authentication parameters**  
-   - Set `client_id` → your O365 client ID
-
-8. Click **Save**
-
-9. Enable state tracking  
-   - Open the **Schedule** tab  
-   - Turn on **State Tracking** → **Enable**  
-   - Keep default **State update expression** and **State merge expression**  
-   - Click **Save**
-
-10. (Optional) **Commit & Deploy**
-
-11. **Repeat steps 3–10** for every content type you want to collect.
-
-12. You’re done—logs will flow with full state tracking!
+You’re all set — the collectors will now safely handle Microsoft’s 60–90 minute ingestion delay with zero gaps or duplicates.
 
 ## Author
 
-Harry Gardner – [hgardner@cribl.io](mailto:hgardner@cribl.io)  
-X: [@HarryGardnerIV](https://x.com/HarryGardnerIV)
+Harry Gardner – [hgardner@cribl.io](mailto:hgardner@cribl.io)
