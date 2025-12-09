@@ -36,7 +36,7 @@
         "discoverMethod": "get",
         "pagination": {
           "type": "response_header",
-          "maxPages": 50,
+          "maxPages": 0,
           "attribute": [
             "nextpageuri"
           ]
