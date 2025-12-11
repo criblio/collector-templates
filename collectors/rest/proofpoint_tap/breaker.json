@@ -1,7 +1,6 @@
 {
   "id": "Proofpoint TAP REST API Breakers",
   "minRawLength": 256,
-  "lib": "custom",
   "rules": [
     {
       "condition": "_raw.includes('\"messagesDelivered\"')",
@@ -17,6 +16,8 @@
       "timestampLatest": "+1week",
       "maxEventBytes": 132000000,
       "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "jsonArrayField": "messagesDelivered",
@@ -24,7 +25,7 @@
       "fields": [
         {
           "name": "action",
-          "value": "'messageDelivered'"
+          "value": "'messagesDelivered'"
         }
       ]
     },
@@ -42,6 +43,8 @@
       "timestampLatest": "+1week",
       "maxEventBytes": 132000000,
       "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "name": "Messages Blocked",
@@ -49,7 +52,7 @@
       "fields": [
         {
           "name": "action",
-          "value": "'messageBlocked'"
+          "value": "'messagesBlocked'"
         }
       ]
     },
@@ -67,6 +70,8 @@
       "timestampLatest": "+1week",
       "maxEventBytes": 132000000,
       "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "name": "Clicks Permitted",
@@ -74,7 +79,7 @@
       "fields": [
         {
           "name": "action",
-          "value": "'clickPermitted'"
+          "value": "'clicksPermitted'"
         }
       ]
     },
@@ -92,6 +97,8 @@
       "timestampLatest": "+1week",
       "maxEventBytes": 132000000,
       "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
       "jsonExtractAll": false,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "name": "Clicks Blocked",
@@ -99,7 +106,7 @@
       "fields": [
         {
           "name": "action",
-          "value": "'clickBlocked'"
+          "value": "'clicksBlocked'"
         }
       ]
     }
