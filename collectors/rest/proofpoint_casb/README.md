@@ -16,7 +16,7 @@ This collector template allows you to collect logs from Proofpoint CASB. It uses
 10) If there are fields for you to fill out, you will be prompted here. When done, hit Replace variables.
 12) Commit and Deploy
 
-The scheduled is disabled by default. Once you validate operation, you'll want to enable this. By default it would run every 5 minutes. Adjust as you see fit.
+The schedule is disabled by default. Once you validate operation, you'll want to enable this. By default it would run every 5 minutes. Adjust as you see fit.
 
 ## Authors
 - Chris W (thanks, Chris!)
