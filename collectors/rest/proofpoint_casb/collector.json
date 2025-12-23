@@ -1,0 +1,150 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "timestampTimezone": "UTC"
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none",
+        "itemList": [],
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "none"
+        },
+        "enableStrictDiscoverParsing": false,
+        "enableDiscoverCode": false
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "request_page",
+        "pageField": "page",
+        "sizeField": "size",
+        "size": 50,
+        "maxPages": 0,
+        "zeroIndexed": false,
+        "offsetField": "offset",
+        "limitField": "limit",
+        "limit": 50,
+        "attribute": [],
+        "page": 0
+      },
+      "authentication": "login",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": true,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "stopOnEmptyResults": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [429, 503],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "`https://api-us1.protect.proofpoint.com/v1/auth`",
+      "loginBody": "`{ \"client_id\": \"${username}\", \"client_secret\": \"${password}\" }`",
+      "getAuthTokenFromHeader": false,
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`${token}`",
+      "clientSecretParamName": "client_secret",
+      "scopes": [
+        "https://www.googleapis.com/auth/admin.reports.audit.readonly"
+      ],
+      "tokenRespAttribute": "auth_token",
+      "collectUrl": "'https://api-us1.protect.proofpoint.com/v1/alerts'",
+      "password": "<Password|Your Proofpoint password>",
+      "username": "<Client ID|Your Proofpoint client ID>",
+      "collectRequestParams": [],
+      "collectRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "`application/json`"
+        },
+        {
+          "name": "x-api-key",
+          "value": "`<API Key|Your Proofpoint API key>`"
+        }
+      ],
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'<Client ID|Your Proofpoint client ID>'"
+        }
+      ],
+      "authRequestHeaders": [
+        {
+          "name": "x-api-key",
+          "value": "`<API Key|Your Proofpoint API key>`"
+        },
+        {
+          "name": "Content-Type",
+          "value": "`application/json`"
+        }
+      ],
+      "clientSecretParamValue": "",
+      "collectBody": "`{\"page\":${page ? page : 0}, \"time_range\":{\"from\":\"${state.latestTime ? (state.latestTime+.001).toPrecision(13)*1000 : (earliest*1000)}\", \"to\":\"${Date.now()}\"}}`"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": ["Proofpoint CASB REST API Breakers"],
+    "metadata": []
+  },
+  "savedState": {
+    "restCollectorState": {
+      "data": {
+        "latestTime": 1766155614.543
+      }
+    }
+  },
+  "id": "Proofpoint-CASB"
+}
+
