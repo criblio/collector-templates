@@ -1,0 +1,30 @@
+{
+  "id": "Proofpoint CASB REST API Breakers",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "_raw.includes('\"alerts\"')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\"timestamp\"/",
+      "timestamp": {
+        "type": "auto",
+        "length": 50,
+        "format": "%Y-%m-%dT%H:%M:%S.%LZ"
+      },
+      "timestampTimezone": "utc",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 132000000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "alerts",
+      "fields": [],
+      "name": "alerts"
+    }
+  ],
+  "description": "JSON event breakers for Proofpoint CASB - API Specifications - https://proofpoint.my.salesforce.com/sfc/p/#3000000006Bs/a/Uy000000gPbV/QnJwgeOF_q4XsxQYmHUkAl_HzPSl08BxnGpQsEVVS8o",
+  "tags": "rest,json"
+}
