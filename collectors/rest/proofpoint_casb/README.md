@@ -20,5 +20,6 @@ The schedule is disabled by default. Once you validate operation, you'll want to
 
 ## Authors
 - Chris W (thanks, Chris!)
+- Eleane Ye <eye@cribl.io>
 - Randy Correlli <rcorelli@cribl.io>
 - Jon Rust <jrust@cribl.io>
