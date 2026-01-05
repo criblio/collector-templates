@@ -7,32 +7,43 @@
       "oQucZ4": {
         "name": "Parse Attack Data",
         "description": "Handles decoding and reformatting attack data",
-        "index": 1,
-        "disabled": true
+        "index": 2,
+        "disabled": false
       }
     },
     "asyncFuncTimeout": 1000,
     "functions": [
       {
-        "filter": "offset || __drop === true",
+        "filter": "true",
+        "conf": {
+          "mode": "extract",
+          "type": "json",
+          "srcField": "_raw"
+        },
+        "id": "serde"
+      },
+      {
         "conf": {},
         "id": "drop",
+        "filter": "offset || __drop === true",
         "description": "Drop offset context events. This metadata is used for state tracking prior to this pipeline."
       },
       {
+        "id": "code",
         "filter": "true",
+        "disabled": false,
         "conf": {
           "maxNumOfIterations": 5000,
           "activeLogSampleRate": 1,
           "useUniqueLogChannel": true,
           "code": "function decodeAkamaiConfigRule(attackData) {\n\n    let decodedAttackData = {};\n    \n    for (const [key, value] of Object.entries(attackData)) {\n        if (key.startsWith('rule')) {\n            decodedAttackData[key] = Array.from(C.Decode.uri(value).split(';'), (x) => C.Decode.base64(x))\n        }\n    }\n\n    return decodedAttackData\n}\n\nfunction mergeAkamaiConfigData(configData) {\n    let mergedData = [];\n\n    for (const [key, value] of Object.entries(configData)) {\n        for (let i = 0; i < value.length; i++) {\n\n            let formattedKey = key.replace(/^rule(\\w{2,})$/, '$1').replace(/s$/, '');\n            formattedKey = (formattedKey === 'rule' ? 'Rule' : formattedKey);\n\n            try {\n                mergedData[i][formattedKey] = value[i]\n            } catch (e) {\n                mergedData[i] = {[formattedKey]: value[i]}\n            }\n        }\n    }\n\n    return mergedData\n}\n\n__e['attackData']['data'] = mergeAkamaiConfigData(decodeAkamaiConfigRule(__e['attackData']));"
         },
-        "id": "code",
-        "groupId": "oQucZ4",
-        "disabled": true
+        "groupId": "oQucZ4"
       },
       {
+        "id": "eval",
         "filter": "true",
+        "disabled": false,
         "conf": {
           "remove": [
             "attackData.rule*"
@@ -56,12 +67,12 @@
           ],
           "keep": []
         },
-        "id": "eval",
-        "groupId": "oQucZ4",
-        "disabled": true
+        "groupId": "oQucZ4"
       },
       {
+        "id": "eval",
         "filter": "true",
+        "disabled": false,
         "conf": {
           "add": [
             {
@@ -74,14 +85,12 @@
             "attackData.data"
           ]
         },
-        "id": "eval",
-        "groupId": "oQucZ4",
-        "disabled": true
+        "groupId": "oQucZ4"
       },
       {
         "id": "numerify",
         "filter": "true",
-        "disabled": true,
+        "disabled": false,
         "conf": {
           "depth": 5,
           "format": "none",
@@ -109,7 +118,9 @@
         "disabled": false
       },
       {
+        "id": "eval",
         "filter": "true",
+        "disabled": true,
         "conf": {
           "keep": [
             "_raw",
@@ -122,7 +133,6 @@
             "*"
           ]
         },
-        "id": "eval",
         "description": "Removes additional fields and keeps _raw as string"
       }
     ]
