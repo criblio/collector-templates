@@ -20,7 +20,7 @@
       "minTaskSize": "1MB",
       "maxTaskSize": "10MB",
       "stateTracking": {
-        "stateUpdateExpression": "{\n      latestTime: _raw.httpMessage.start ?(((state.latestTime || 0) > _time)\n      ? state.latestTime \n      : Math.round(_raw.httpMessage.start))\n      :state.latestTime,\n      lag_status: ((Date.now() / 1000)-state.latestTime) >60?'lag':'ok',\n      total: total ? total : '',\n      id:__collectible.id?__collectible.id:''\n}",
+        "stateUpdateExpression": "{\n      latestTime: httpMessage.start ?(((state.latestTime || 0) > _time)\n      ? state.latestTime \n      : Math.round(httpMessage.start))\n      :state.latestTime,\n      lag_status: ((Date.now() / 1000)-state.latestTime) >60?'lag':'ok',\n      total: total ? total : '',\n      id:__collectible.id?__collectible.id:''\n}",
         "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
         "enabled": true
       },
