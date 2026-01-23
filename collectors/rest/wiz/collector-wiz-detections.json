@@ -5,7 +5,7 @@
   "removeFields": [],
   "resumeOnBoot": false,
   "schedule": {
-    "cronSchedule": "*/1 * * * *",
+    "cronSchedule": "*/15 * * * *",
     "maxConcurrentRuns": 1,
     "skippable": true,
     "run": {
