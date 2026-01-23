@@ -72,12 +72,13 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "loginUrl": "'https://auth.app.wiz.io/oauth/token'",
+      "loginUrl": "'<login_url|Specific to your Wiz account.  Something like: https://auth.app.wiz.io/oauth/token.  Wiz may refer to this as your Auth URL.>'",,
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
       "tokenRespAttribute": "access_token",
-      "collectUrl": "'https://api.us17.app.wiz.io/graphql'",
+      "collectUrl": 
+      "collectUrl": "'<collect_url|Specific to your Wiz account.  Something like: https://api.us17.app.wiz.io/graphql.  Wiz may refer to this as your API Endpoint.>'",
       "collectBody": "'{\"query\": \"query DetectionsTableV2($after: String, $first: Int, $orderBy: DetectionOrder, $filterBy: DetectionFilters) {detections(filterBy: $filterBy, first: $first, after: $after, orderBy: $orderBy) { nodes { type origins actors {id name externalId providerUniqueId type } resources { id name externalId providerUniqueId type } cloudAccounts { id name externalId cloudProvider } cloudOrganizations { id name externalId cloudProvider } createdAt updatedAt id severity description(format: MARKDOWN) primaryResource { type name externalId region id } triggeringEvents(first: 50) { totalCount nodes { ... on CloudEvent { id description actorIP timestamp rawAuditLogRecord commandLine runtimeProgram { name } parentRuntimeProgram { name } } } } ruleMatch { rule { id name builtin securitySubCategories { id title category { id name framework { id } } } } } } pageInfo { hasNextPage endCursor } totalCount }}\", \"variables\": {\"first\": 100' + `${endCursor ? ', \"after\": \"' + endCursor + '\",' : \",\"}` + '\"orderBy\": {\"direction\": \"DESC\"}, \"filterBy\": {\"severity\": {\"equals\": [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"]}, \"createdAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
       "collectRequestHeaders": [
         {
@@ -89,11 +90,11 @@
           "value": "'application/json'"
         }
       ],
-      "clientSecretParamValue": "'5zPvKduBtxRPCpCeiKRSr60aIejODq4TbykPzGUOX5s9JMR6zyZ24jUVfxC7RAel'",
+      "clientSecretParamValue": "'<client_secret_value|Specific to your Wiz account.  Should be a 64 character string.  Wiz may refer to this as your Client Secret.>'",
       "authRequestParams": [
         {
           "name": "client_id",
-          "value": "'mlipebtwsndhxdmnzdwrxzmioihotytrglivyy5phazggpqikmvws'"
+          "value": "'<client_id_value|Specific to your Wiz account.  Should be a 53 character string.  Wiz may refer to this as your Client ID.>'"
         },
         {
           "name": "audience",
