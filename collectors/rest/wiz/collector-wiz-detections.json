@@ -1,1 +1,125 @@
-xxx
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/1 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "timestampTimezone": "UTC"
+    },
+    "enabled": false
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "post_with_body",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "endCursor",
+          "hasNextPage"
+        ],
+        "lastPageExpr": "hasNextPage === false"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": true,
+      "rejectUnauthorized": false,
+      "captureHeaders": false,
+      "stopOnEmptyResults": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "'https://auth.app.wiz.io/oauth/token'",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "tokenRespAttribute": "access_token",
+      "collectUrl": "'https://api.us17.app.wiz.io/graphql'",
+      "collectBody": "'{\"query\": \"query DetectionsTableV2($after: String, $first: Int, $orderBy: DetectionOrder, $filterBy: DetectionFilters) {detections(filterBy: $filterBy, first: $first, after: $after, orderBy: $orderBy) { nodes { type origins actors {id name externalId providerUniqueId type } resources { id name externalId providerUniqueId type } cloudAccounts { id name externalId cloudProvider } cloudOrganizations { id name externalId cloudProvider } createdAt updatedAt id severity description(format: MARKDOWN) primaryResource { type name externalId region id } triggeringEvents(first: 50) { totalCount nodes { ... on CloudEvent { id description actorIP timestamp rawAuditLogRecord commandLine runtimeProgram { name } parentRuntimeProgram { name } } } } ruleMatch { rule { id name builtin securitySubCategories { id title category { id name framework { id } } } } } } pageInfo { hasNextPage endCursor } totalCount }}\", \"variables\": {\"first\": 100' + `${endCursor ? ', \"after\": \"' + endCursor + '\",' : \",\"}` + '\"orderBy\": {\"direction\": \"DESC\"}, \"filterBy\": {\"severity\": {\"equals\": [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"]}, \"createdAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
+      "collectRequestHeaders": [
+        {
+          "name": "accept",
+          "value": "'application/json'"
+        },
+        {
+          "name": "content-type",
+          "value": "'application/json'"
+        }
+      ],
+      "clientSecretParamValue": "'5zPvKduBtxRPCpCeiKRSr60aIejODq4TbykPzGUOX5s9JMR6zyZ24jUVfxC7RAel'",
+      "authRequestParams": [
+        {
+          "name": "client_id",
+          "value": "'mlipebtwsndhxdmnzdwrxzmioihotytrglivyy5phazggpqikmvws'"
+        },
+        {
+          "name": "audience",
+          "value": "wiz-api"
+        },
+        {
+          "name": "grant_type",
+          "value": "client_credentials"
+        }
+      ]
+    },
+    "destructive": false,
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "wiz-api"
+    ]
+  },
+  "savedState": {},
+  "id": "collector-wiz-detections"
+}
