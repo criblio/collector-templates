@@ -80,7 +80,7 @@ After inspecting these results, launch the Collector run:
 - initial release
 ### Version 1.1
 - Jan 23 2026
-- Added the Detections collector
+- Added the Detections collector and modified the exiting event breaker to account for this new collector.
 - Modified the event breaker for the Vulnerabilities collector to set the _time field to capture updatedAt instead of createdAt.  Also modified the Vulnerabilities collector with that same change from createdAt to updatedAt.  This prevents duplicate data for each scheduled job focusing on returning only what has updated.
 
 ## Author
