@@ -75,14 +75,13 @@ After inspecting these results, launch the Collector run:
 3. Click **Save**.
 
 ## Versions
-Version 1.0 
+### Version 1.0 
 - 2023
 - initial release
-Version 1.1
+### Version 1.1
 - Jan 23 2026
 - Added the Detections collector
-- Modified the event breaker for the Vulnerabilities collector to set the _time field to capture updatedAt instead of createdAt.  Also modified the Vulnerabilities collector with that same change from createdAt to updatedAt.  This prevents duplicate data for each scheduled job focusing on returning only what has updated
-- .
-- 
+- Modified the event breaker for the Vulnerabilities collector to set the _time field to capture updatedAt instead of createdAt.  Also modified the Vulnerabilities collector with that same change from createdAt to updatedAt.  This prevents duplicate data for each scheduled job focusing on returning only what has updated.
+
 ## Author
 Jim Apger - japger@cribl.io
