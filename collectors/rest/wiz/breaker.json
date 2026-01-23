@@ -1,7 +1,6 @@
 {
-  "lib": "custom",
-  "minRawLength": 256,
   "id": "wiz-api",
+  "minRawLength": 256,
   "rules": [
     {
       "condition": "_raw.startsWith('{\"data\":{\"configurationFindings\":{\"nodes\":')",
@@ -63,7 +62,7 @@
       "jsonExtractAll": true,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "jsonArrayField": "data.vulnerabilityFindings.nodes",
-      "jsonTimeField": "createdAt",
+      "jsonTimeField": "updatedAt ",
       "name": "vulnerabilities"
     },
     {
@@ -107,6 +106,28 @@
       "name": "cloudEvents",
       "jsonArrayField": "data.cloudEvents.nodes",
       "jsonTimeField": "timestamp"
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"detections\":{\"nodes\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5000000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.detections.nodes",
+      "jsonTimeField": "timestamp",
+      "name": "detections",
+      "parentFieldsToCopy": []
     }
   ],
   "description": "Collection of rules for the purpose of event breaking data retrieved from the Wiz API"

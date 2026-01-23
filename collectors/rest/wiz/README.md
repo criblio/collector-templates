@@ -1,6 +1,6 @@
 # Wiz REST Collector
 
-This README covers how to configure Cribl Stream REST Collectors and Event Breakers to gather data from the Wiz cloud security platform. To do this, the REST Collectors will communicate with APIs that your organization's Wiz portal exposes. You'll create and configure four REST Collectors, one for each of these Wiz APIs: Audit Logs, Configuration Findings (sometimes called Cloud Configuration), Issues, and Vulnerabilities.
+This README covers how to configure Cribl Stream REST Collectors and Event Breakers to gather data from the Wiz cloud security platform. To do this, the REST Collectors will communicate with APIs that your organization's Wiz portal exposes. You'll create and configure four REST Collectors, one for each of these Wiz APIs: Audit Logs, Configuration Findings (sometimes called Cloud Configuration), Issues, ,Vulnerabilities and Detections.
 
 When creating REST Collectors, you'll replace a few values in the configuration with values from your Wiz portal. The Manage as JSON approach is faster and less error-prone than clicking your way through the relevant UIs, especially since the configurations required to interact with the Wiz APIs are quite complicated.
 
@@ -19,7 +19,7 @@ Download the required event breaker and REST Collector JSON configuration files 
 
 ## Configuring the Event Breaker
 
-Although you will create four REST Collectors, you only need to import a single Event Breaker included in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz), whose ruleset contains one rule per API. All four REST Collectors will use that Event Breaker. Each Wiz REST Collector configuration contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz) will already be configured to use the event breaker (breaker.json) also contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
+Although you will create five REST Collectors, you only need to import a single Event Breaker included in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz), whose ruleset contains one rule per API. All four REST Collectors will use that Event Breaker. Each Wiz REST Collector configuration contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz) will already be configured to use the event breaker (breaker.json) also contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
 
 The Event Breaker strips headers from events, leaving only the records of interest; and, it captures timestamps properly.  You will have a single event for each unique record.
 
@@ -31,7 +31,7 @@ The Event Breaker strips headers from events, leaving only the records of intere
 6. Click **OK**.
 
 ## Importing and Configuring each REST Collector
->You'll need to complete the procedure in this section for each of the 4 Wiz Collectors contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
+>You'll need to complete the procedure in this section for each of the 5 Wiz Collectors contained in the [repo](https://github.com/criblio/collector-templates/tree/main/collectors/rest/wiz).
 
 >To learn more about REST Collectors, see our [Collector Scheduling and Running page](https://docs.cribl.io/stream/collectors-schedule-run/).
 
@@ -73,6 +73,15 @@ After inspecting these results, launch the Collector run:
 1. On the **Manage REST Collectors** page, click **Schedule** in the **Actions** column for your new Collector. The **Run** Collector modal will open.
 2. Toggle **Enable** on and configure the scheduling options as desired.
 3. Click **Save**.
+
+## Versions
+### Version 1.0 
+- 2023
+- initial release
+### Version 1.1
+- Jan 23 2026
+- Added the Detections collector and modified the exiting event breaker to account for this new collector.
+- Modified the event breaker for the Vulnerabilities collector to set the _time field to capture updatedAt instead of createdAt.  Also modified the Vulnerabilities collector with that same change from createdAt to updatedAt.  This prevents duplicate data for each scheduled job focusing on returning only what has updated.
 
 ## Author
 Jim Apger - japger@cribl.io
