@@ -62,7 +62,7 @@
       "jsonExtractAll": true,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "jsonArrayField": "data.vulnerabilityFindings.nodes",
-      "jsonTimeField": "createdAt",
+      "jsonTimeField": "updatedAt ",
       "name": "vulnerabilities"
     },
     {
