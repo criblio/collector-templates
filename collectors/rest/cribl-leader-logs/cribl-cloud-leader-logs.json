@@ -1,0 +1,150 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {},
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "http",
+        "discoverMethod": "get",
+        "pagination": {
+          "type": "request_offset",
+          "offsetField": "offset",
+          "limitField": "limit",
+          "limit": 100,
+          "maxPages": 5,
+          "zeroIndexed": true,
+          "offset": 0,
+          "totalRecordField": "totalCount"
+        },
+        "enableStrictDiscoverParsing": false,
+        "enableDiscoverCode": true,
+        "itemList": [],
+        "discoverUrl": "\"https://<Cribl Cloud Workspace | Enter the Cribl Cloud Workspace>-<Cribl Cloud Organization ID | Enter the Cribl Cloud Organization ID>.cribl.cloud/api/v1/system/logs\"",
+        "discoverRequestHeaders": [],
+        "formatResultCode": "/**\n * Build a filtered list of log file IDs from `__e.items`.\n *\n * Behavior:\n * - If `__e.items` is not an array, it is treated as empty.\n * - Skips null/undefined entries.\n * - Skips items with a missing/invalid `id`.\n * - Skips items where `size <= 0`.\n * - Only includes files explicitly defined in `FILE_ALLOW_LIST`.\n *\n * Result:\n * - Assigns an array of allowed log file IDs to `__e.results`.\n */\n\nconst items = Array.isArray(__e.items) ? __e.items : [];\nconst results = [];\nconst errors  = [];\n\n/**\n * Explicit allow list of log filenames eligible for collection.\n *\n * To disable collection for a specific file, comment it out or remove it.\n * Matching is performed against the basename of the item's `id`.\n */\nconst FILE_ALLOW_LIST = new Set([\n  \"access.log\",            // API request logs\n  \"audit.log\",             // Cribl Audit events\n  \"credentials-audit.log\", // Cribl Lake Audit Events\n  \"cribl_stderr.log\",      // Node.js backend stderr output\n  \"cribl.log\",             // Primary Cribl application log\n  \"metrics.log\",           // Per-minute ingestion/request metrics\n  \"notifications.log\",     // UI notification events\n  \"search_metrics.log\",    // Search performance metrics\n  \"searches.log\",          // Search execution logs\n  \"ui-access.log\",         // UI route/component access logs\n]);\n\nfor (let i = 0; i < items.length; i++) {\n  try {\n    const item = items[i];\n    if (!item || typeof item !== \"object\") continue;\n\n    const { id, size } = item;\n\n    if (typeof id !== \"string\" || id.length === 0) continue;\n    if (typeof size !== \"number\" || size <= 0) continue;\n\n    const fileName = id.split(\"/\").pop();\n    if (!fileName || !FILE_ALLOW_LIST.has(fileName)) continue;\n\n    results.push(id);\n  } catch (error) {\n    errors.push(String(error));\n  } \n}\n\nif(errors.length > 0) __e.errors = errors;\n__e.results = results;",
+        "discoverDataField": "results"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 100,
+        "attribute": [
+          "offset",
+          "endOfResults"
+        ],
+        "lastPageExpr": "endOfResults === true"
+      },
+      "authentication": "oauth",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "stopOnEmptyResults": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": true,
+        "retryConnectReset": true,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "loginUrl": "\"https://login.cribl.cloud/oauth/token\"",
+      "authHeaderKey": "Authorization",
+      "authHeaderExpr": "`Bearer ${token}`",
+      "clientSecretParamName": "client_secret",
+      "collectRequestParams": [
+        {
+          "name": "et",
+          "value": "/** Earliest Time\n *    Order of precedence:\n *      1) State Tracking Value\n *      2) Collector Configuration Value (Schedule or Ad-Hoc \"earliest\")\n *      3) -5m@m (Fallback when no \"earliest\" is provided)\n */\n`${(state.latestTime || earliest) * 1000 || Math.floor(Date.now() / 60000) * 60000 - 5 * 60 * 1000}`"
+        },
+        {
+          "name": "lt",
+          "value": "/** Latest Time\n *    Order of precedence:\n *      1) Collector Configuration Value (Schedule or Ad-Hoc \"latest\")\n *      2) @m (Fallback when no \"latest\" is provided)\n */\n`${(latest * 1000) || Math.floor(Date.now() / 60000) * 60000 - 1 * 60 * 1000}`"
+        },
+        {
+          "name": "files",
+          "value": "/** Log File & Pagination implementation\n *    If __e.offset is present, rely on that for the query parameter\n *      as it will provide the next slice in the current file for more\n *      data\n */\n`${__e.offset || `${id}:0::true`}`"
+        },
+        {
+          "name": "limit",
+          "value": "/** Page Size Limit */ \"100\""
+        },
+        {
+          "name": "type",
+          "value": "/** Type of Log Query */ \"single\""
+        },
+        {
+          "name": "filter",
+          "value": "/** Log Query Filter Expression */ \"\""
+        }
+      ],
+      "collectUrl": "\"https://<Cribl Cloud Workspace | Enter the Cribl Cloud Workspace>-<Cribl Cloud Organization ID | Enter the Cribl Cloud Organization ID>.cribl.cloud/api/v1/system/logs/search\"",
+      "collectRequestHeaders": [],
+      "authRequestParams": [
+        {
+          "name": "grant_type",
+          "value": "\"client_credentials\""
+        },
+        {
+          "name": "client_id",
+          "value":  "\"<Cribl Cloud Client ID | Enter the Cribl Cloud Client ID>\""
+        },
+        {
+          "name": "audience",
+          "value": "\"https://api.cribl.cloud\""
+        }
+      ],
+      "authRequestHeaders": [
+        {
+          "name": "Content-Type",
+          "value": "\"application/x-www-form-urlencoded\""
+        }
+      ],
+      "tokenRespAttribute": "access_token",
+      "clientSecretParamValue": "<Cribl Cloud Client Secret | Enter the Cribl Cloud Client Secret>"
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "metadata": [
+      {
+        "name": "source",
+        "value": "__collectible.id"
+      }
+    ],
+    "breakerRulesets": [
+      "cribl-cloud-leader-logs-breaker-v1"
+    ]
+  },
+  "savedState": {},
+  "description": "Collect the internal logs from the Cribl Cloud Leader Node",
+  "id": "cribl-cloud-leader-logs"
+}

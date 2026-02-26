@@ -1,0 +1,26 @@
+{
+  "id": "cribl-cloud-leader-logs-breaker-v1",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/\\\"time\\\"\\:/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": false,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "default",
+      "jsonArrayField": "items.events"
+    }
+  ]
+}
