@@ -72,14 +72,13 @@
       "__scheduling": {
         "stateTracking": {}
       },
-      "loginUrl": "'<login_url|Specific to your Wiz account.  Something like: https://auth.app.wiz.io/oauth/token.  Wiz may refer to this as your Auth URL.>'",,
+      "loginUrl": "'<login_url|Specific to your Wiz account.  Something like: https://auth.app.wiz.io/oauth/token.  Wiz may refer to this as your Auth URL.>'",
       "authHeaderKey": "Authorization",
       "authHeaderExpr": "`Bearer ${token}`",
       "clientSecretParamName": "client_secret",
       "tokenRespAttribute": "access_token",
-      "collectUrl": 
       "collectUrl": "'<collect_url|Specific to your Wiz account.  Something like: https://api.us17.app.wiz.io/graphql.  Wiz may refer to this as your API Endpoint.>'",
-      "collectBody": "'{\"query\": \"query DetectionsTableV2($after: String, $first: Int, $orderBy: DetectionOrder, $filterBy: DetectionFilters) {detections(filterBy: $filterBy, first: $first, after: $after, orderBy: $orderBy) { nodes { type origins actors {id name externalId providerUniqueId type } resources { id name externalId providerUniqueId type } cloudAccounts { id name externalId cloudProvider } cloudOrganizations { id name externalId cloudProvider } createdAt updatedAt id severity description(format: MARKDOWN) primaryResource { type name externalId region id } triggeringEvents(first: 50) { totalCount nodes { ... on CloudEvent { id description actorIP timestamp rawAuditLogRecord commandLine runtimeProgram { name } parentRuntimeProgram { name } } } } ruleMatch { rule { id name builtin securitySubCategories { id title category { id name framework { id } } } } } } pageInfo { hasNextPage endCursor } totalCount }}\", \"variables\": {\"first\": 100' + `${endCursor ? ', \"after\": \"' + endCursor + '\",' : \",\"}` + '\"orderBy\": {\"direction\": \"DESC\"}, \"filterBy\": {\"severity\": {\"equals\": [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"]}, \"updatedAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
+      "collectBody": "'{     \"query\": \"query CloudResourcesTable($first: Int, $after: String, $filterBy: CloudResourceV2Filters, $orderBy: CloudResourceOrder, $fetchTotalCount: Boolean = true) {   cloudResourcesV2(     first: $first     after: $after     filterBy: $filterBy     orderBy: $orderBy   ) {     totalCount: totalServiceUsageResourceCount @include(if: $fetchTotalCount)     pageInfo {       hasNextPage       endCursor     }     nodes {       ...CloudResourceV2     }   } }  fragment CloudResourceV2 on CloudResourceV2 {   id   name   externalId   type   cloudAccount {     id     name     cloudProvider     externalId   }   cloudPlatform   status   tags {     key     value   }   projects {     id     name   }   createdAt   updatedAt   isOpenToAllInternet   isAccessibleFromInternet   hasAccessToSensitiveData   hasAdminPrivileges   hasHighPrivileges   hasSensitiveData }\",     \"variables\": {       \"first\": 10' + `${endCursor ? ', \"after\": \"' + endCursor + '\",' : \",\"}` + '\"filterBy\": {         \"updatedAt\": {\"after\": \"' + `${earliest ? C.Time.strftime(earliest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000 - 86400,'%Y-%m-%dT%H:%M:%SZ')}` + '\",\"before\": \"' + `${latest ? C.Time.strftime(latest,'%Y-%m-%dT%H:%M:%SZ') : C.Time.strftime(Date.now()/1000,'%Y-%m-%dT%H:%M:%SZ')}` + '\"}}}}'",
       "collectRequestHeaders": [
         {
           "name": "accept",
@@ -122,5 +121,5 @@
     ]
   },
   "savedState": {},
-  "id": "collector-wiz-detections"
+  "id": "collector-wiz-cloudResourcesV2"
 }
