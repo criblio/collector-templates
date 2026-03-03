@@ -87,7 +87,7 @@
       "name": "auditLogEntries"
     },
     {
-      "condition": "_raw.startsWith('{\"data\":{\"cloudEvents\":{\"nodes\":')",
+      "condition": "_raw.startsWith('{\"data\":{\"cloudResourcesV2\":')",
       "type": "json_array",
       "timestampAnchorRegex": "/^/",
       "timestamp": {
@@ -103,9 +103,9 @@
       "shouldUseDataRaw": false,
       "jsonExtractAll": true,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
-      "name": "cloudEvents",
-      "jsonArrayField": "data.cloudEvents.nodes",
-      "jsonTimeField": "timestamp"
+      "name": "CloudResourcesV2",
+      "jsonArrayField": "data.cloudResourcesV2.nodes",
+      "jsonTimeField": "updatedAt"
     },
     {
       "condition": "_raw.startsWith('{\"data\":{\"detections\":{\"nodes\":')",
