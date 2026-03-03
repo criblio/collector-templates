@@ -128,6 +128,27 @@
       "jsonTimeField": "updatedAt",
       "name": "detections",
       "parentFieldsToCopy": []
+    },
+    {
+      "condition": "_raw.startsWith('{\"data\":{\"applicationEndpoints\":')",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 5000000,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "jsonArrayField": "data.applicationEndpoints.nodes",
+      "jsonTimeField": "updatedAt",
+      "name": "applicationEndpoints"
     }
   ],
   "description": "Collection of rules for the purpose of event breaking data retrieved from the Wiz API"
