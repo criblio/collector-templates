@@ -1,6 +1,6 @@
 # Wiz REST Collector
 
-This README covers how to configure Cribl Stream REST Collectors and Event Breakers to gather data from the Wiz cloud security platform. To do this, the REST Collectors will communicate with APIs that your organization's Wiz portal exposes. You'll create and configure four REST Collectors, one for each of these Wiz APIs: Audit Logs, Configuration Findings (sometimes called Cloud Configuration), Issues,Vulnerabilities and Detections, and Application Endpoints.
+This README covers how to configure Cribl Stream REST Collectors and Event Breakers to gather data from the Wiz cloud security platform. To do this, the REST Collectors will communicate with APIs that your organization's Wiz portal exposes. You'll create and configure four REST Collectors, one for each of these Wiz APIs: Audit Logs, Configuration Findings (sometimes called Cloud Configuration), Cloud Resources V2, Issues, Vulnerabilities, Threats and Detections, and Application Endpoints.
 
 When creating REST Collectors, you'll replace a few values in the configuration with values from your Wiz portal. The Manage as JSON approach is faster and less error-prone than clicking your way through the relevant UIs, especially since the configurations required to interact with the Wiz APIs are quite complicated.
 
