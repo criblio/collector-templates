@@ -21,7 +21,7 @@
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "jsonArrayField": "data.configurationFindings.nodes",
       "name": "configurationFindings",
-      "jsonTimeField": "createdAt"
+      "jsonTimeField": "firstSeenAt"
     },
     {
       "condition": "_raw.startsWith('{\"data\":{\"issues\":{\"nodes\":')",
