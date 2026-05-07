@@ -1,0 +1,122 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/5 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": false,
+    "resumeMissed": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "60m",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "earliest": "-1d"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "none"
+      },
+      "authentication": "basic",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "stopOnEmptyResults": false,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "'<ServiceNow syslog_transaction URL|Full ServiceNow Table API URL for syslog_transaction, e.g. https://INSTANCE.service-now.com/api/now/table/syslog_transaction>'",
+      "username": "<ServiceNow Username|ServiceNow account used for API access>",
+      "password": "<ServiceNow Password|Password or token for the ServiceNow user>",
+      "collectRequestParams": [
+        {
+          "name": "sysparm_display_value",
+          "value": "'all'"
+        },
+        {
+          "name": "sysparm_limit",
+          "value": "'3000'"
+        },
+        {
+          "name": "sysparm_exclude_reference_link",
+          "value": "'true'"
+        },
+        {
+          "name": "sysparm_query",
+          "value": "`sys_created_on>${C.Time.strftime((state.latestTime || earliest || (Date.now() / 1000 - 1800)), \"%Y-%m-%d %H:%M:%S\")}^ORDERBYsys_created_on,sys_id`"
+        }
+      ],
+      "collectRequestHeaders": [
+        {
+          "name": "Accept",
+          "value": "'application/json'"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "serviceNow"
+    ],
+    "metadata": [
+      {
+        "name": "sourcetype",
+        "value": "'snow:syslog_transaction'"
+      }
+    ]
+  },
+  "savedState": {},
+  "id": "ServiceNow_syslog_transaction"
+}
