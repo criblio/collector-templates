@@ -1,10 +1,5 @@
 # ServiceNow syslog REST Collector
 
-## Author
-- **Name:** Andrew Hong
-- **Email:** andrew.hong@cribl.io
-- **Company:** Cribl
-
 ## Overview
 This template collects records from the ServiceNow `syslog` table using the Table API (`/api/now/table/syslog`).
 
@@ -28,3 +23,7 @@ The collector uses a relative time range with `earliest` set to `-1d` and tracks
 ## Sample Data
 
 Place anonymized NDJSON samples for `syslog` events in the `samples/` directory (one JSON object per line, < 256 KB per file).
+
+## Author
+- **Name:** Andrew Hong
+- **Email:** andrew.hong@cribl.io
