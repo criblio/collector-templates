@@ -1,9 +1,5 @@
 # ServiceNow syslog_transaction REST Collector
 
-## Author
-- **Name:** Andrew Hong
-- **Email:** andrew.hong@cribl.io
-- **Company:** Cribl
 
 ## Overview
 This template collects records from the ServiceNow `syslog_transaction` table using the Table API (`/api/now/table/syslog_transaction`).
@@ -28,3 +24,7 @@ The collector uses a relative time range with `earliest` set to `-1d` and tracks
 ## Sample Data
 
 Place anonymized NDJSON samples for `syslog_transaction` events in the `samples/` directory (one JSON object per line, < 256 KB per file).
+
+## Author
+- **Name:** Andrew Hong
+- **Email:** andrew.hong@cribl.io
