@@ -1,5 +1,5 @@
 {
-  "id": "cribl-cloud-leader-logs-breaker-v1",
+  "id": "cribl-cloud-leader-logs-breaker-v2",
   "minRawLength": 256,
   "rules": [
     {
@@ -17,7 +17,7 @@
       "disabled": false,
       "parserEnabled": false,
       "shouldUseDataRaw": false,
-      "jsonExtractAll": false,
+      "jsonExtractAll": true,
       "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
       "name": "default",
       "jsonArrayField": "items.events"
