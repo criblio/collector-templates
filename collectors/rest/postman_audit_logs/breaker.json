@@ -1,0 +1,28 @@
+{
+  "id": "postman-audit-logs",
+  "minRawLength": 256,
+  "rules": [
+    {
+      "condition": "true",
+      "type": "json_array",
+      "timestampAnchorRegex": "/^/",
+      "timestamp": {
+        "type": "auto",
+        "length": 150
+      },
+      "timestampTimezone": "local",
+      "timestampEarliest": "-420weeks",
+      "timestampLatest": "+1week",
+      "maxEventBytes": 51200,
+      "disabled": false,
+      "parserEnabled": false,
+      "shouldUseDataRaw": false,
+      "jsonExtractAll": true,
+      "eventBreakerRegex": "/[\\n\\r]+(?!\\s)/",
+      "name": "events-from-array",
+      "jsonArrayField": "trails",
+      "jsonTimeField": "timestamp"
+    }
+  ],
+  "description": "Event breaking rules for Postman Audit Logs"
+}
