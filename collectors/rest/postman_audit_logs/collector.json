@@ -1,0 +1,122 @@
+{
+  "type": "collection",
+  "ttl": "4h",
+  "ignoreGroupJobsLimit": false,
+  "removeFields": [],
+  "resumeOnBoot": false,
+  "schedule": {
+    "cronSchedule": "*/15 * * * *",
+    "maxConcurrentRuns": 1,
+    "skippable": true,
+    "run": {
+      "rescheduleDroppedTasks": true,
+      "maxTaskReschedule": 1,
+      "logLevel": "info",
+      "jobTimeout": "0",
+      "mode": "run",
+      "timeRangeType": "relative",
+      "timeWarning": {},
+      "expression": "true",
+      "minTaskSize": "1MB",
+      "maxTaskSize": "10MB",
+      "stateTracking": {
+        "stateUpdateExpression": "__timestampExtracted !== false && {latestTime: (state.latestTime || 0) > _time ? state.latestTime : _time}",
+        "stateMergeExpression": "(prevState.latestTime || 0) > newState.latestTime ? prevState : newState",
+        "enabled": true
+      },
+      "discoverToRoutes": false,
+      "earliest": "-1d",
+      "latest": "now"
+    },
+    "enabled": true
+  },
+  "streamtags": [],
+  "workerAffinity": false,
+  "collector": {
+    "conf": {
+      "discovery": {
+        "discoverType": "none"
+      },
+      "collectMethod": "get",
+      "pagination": {
+        "type": "response_body",
+        "maxPages": 0,
+        "attribute": [
+          "nextCursor"
+        ]
+      },
+      "authentication": "none",
+      "timeout": 0,
+      "useRoundRobinDns": false,
+      "disableTimeFilter": false,
+      "decodeUrl": false,
+      "rejectUnauthorized": true,
+      "captureHeaders": false,
+      "stopOnEmptyResults": true,
+      "safeHeaders": [],
+      "retryRules": {
+        "type": "backoff",
+        "interval": 1000,
+        "limit": 5,
+        "multiplier": 2,
+        "maxIntervalMs": 20000,
+        "codes": [
+          429,
+          500,
+          502,
+          503
+        ],
+        "enableHeader": true,
+        "retryConnectTimeout": false,
+        "retryConnectReset": false,
+        "retryHeaderName": "retry-after"
+      },
+      "microsoftGraphDelta": {},
+      "__scheduling": {
+        "stateTracking": {}
+      },
+      "collectUrl": "`https://api.getpostman.com/audit/logs`",
+      "collectRequestHeaders": [
+        {
+          "name": "X-API-Key",
+          "value": "'<Postman API Key|API key for a Postman Service Account with Team Admin access — create one at https://go.postman.co/settings/me/api-keys>'"
+        }
+      ],
+      "collectRequestParams": [
+        {
+          "name": "limit",
+          "value": "100"
+        },
+        {
+          "name": "since",
+          "value": "`${C.Time.strftime((state.latestTime || earliest), '%Y-%m-%dT%H:%M:%S.000Z')}`"
+        },
+        {
+          "name": "until",
+          "value": "`${C.Time.strftime(latest, '%Y-%m-%dT%H:%M:%S.000Z')}`"
+        },
+        {
+          "name": "cursor",
+          "value": "`${(typeof nextCursor !== 'undefined' && nextCursor) ? nextCursor : ''}`"
+        }
+      ]
+    },
+    "destructive": false,
+    "encoding": "utf8",
+    "type": "rest"
+  },
+  "input": {
+    "type": "collection",
+    "staleChannelFlushMs": 10000,
+    "sendToRoutes": true,
+    "preprocess": {
+      "disabled": true
+    },
+    "throttleRatePerSec": "0",
+    "breakerRulesets": [
+      "postman-audit-logs"
+    ]
+  },
+  "description": "Collect Postman Audit Logs",
+  "id": "postman-audit-logs"
+}
