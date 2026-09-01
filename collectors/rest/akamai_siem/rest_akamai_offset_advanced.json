@@ -109,10 +109,7 @@
   },
   "savedState": {
     "restCollectorState": {
-      "data": {
-        
-        }
-      }
+      "data": {}
     }
   },
   "id": "akamai_siem_integration_offset_advanced"

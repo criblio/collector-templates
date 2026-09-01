@@ -36,7 +36,7 @@
           "maxNumOfIterations": 5000,
           "activeLogSampleRate": 1,
           "useUniqueLogChannel": true,
-          "code": "function decodeAkamaiConfigRule(attackData) {\n\n    let decodedAttackData = {};\n    \n    for (const [key, value] of Object.entries(attackData)) {\n        if (key.startsWith('rule')) {\n            decodedAttackData[key] = Array.from(C.Decode.uri(value).split(';'), (x) => C.Decode.base64(x))\n        }\n    }\n\n    return decodedAttackData\n}\n\nfunction mergeAkamaiConfigData(configData) {\n    let mergedData = [];\n\n    for (const [key, value] of Object.entries(configData)) {\n        for (let i = 0; i < value.length; i++) {\n\n            let formattedKey = key.replace(/^rule(\\w{2,})$/, '$1').replace(/s$/, '');\n            formattedKey = (formattedKey === 'rule' ? 'Rule' : formattedKey);\n\n            try {\n                mergedData[i][formattedKey] = value[i]\n            } catch (e) {\n                mergedData[i] = {[formattedKey]: value[i]}\n            }\n        }\n    }\n\n    return mergedData\n}\n\n__e['attackData']['data'] = mergeAkamaiConfigData(decodeAkamaiConfigRule(__e['attackData']));"
+          "code": "function decodeAkamaiConfigRule(attackData) {\n\n    let decodedAttackData = {};\n\n    for (const [key, value] of Object.entries(attackData)) {\n        if (key.match(/^rules?/i)) {\n\n            // Akamai joins the per-rule values with ';'. A trailing ';' would produce a\n            // spurious empty member, so strip it. base64 uses [A-Za-z0-9+/=] only, so a\n            // semicolon is always a separator and never part of a value.\n            // Leading/interior empties are meaningful placeholders and are preserved,\n            // because the rule* arrays are positionally aligned with each other.\n            const decoded = String(C.Decode.uri(value)).replace(/;+$/, '');\n\n            if (decoded !== '') {\n                decodedAttackData[key] = Array.from(decoded.split(';'), (x) => C.Decode.base64(x));\n            }\n\n            delete attackData[key];\n        }\n    }\n\n    return decodedAttackData;\n}\n\nfunction mergeAkamaiConfigData(configData) {\n    let mergedData = [];\n\n    for (const [key, value] of Object.entries(configData)) {\n\n        let formattedKey = key.replace(/^rule(\\w{2,})$/i, '$1').replace(/s$/i, '');\n        formattedKey = (formattedKey.toLowerCase() === 'rule' ? 'Rule' : formattedKey);\n\n        for (let i = 0; i < value.length; i++) {\n            if (!mergedData[i]) {\n                mergedData[i] = {};\n            }\n            if (value[i] !== undefined && value[i] !== '') {\n                mergedData[i][formattedKey] = value[i];\n            }\n        }\n    }\n\n    // Drop rule slots that carry no values at all, so a trailing or all-empty\n    // member does not surface as an empty object in attackData.rules.\n    return mergedData.filter((rule) => rule && Object.keys(rule).length > 0);\n}\n\n__e['attackData']['data'] = mergeAkamaiConfigData(decodeAkamaiConfigRule(__e['attackData']));"
         },
         "groupId": "oQucZ4"
       },
@@ -63,9 +63,15 @@
               "disabled": false,
               "name": "httpMessage.responseHeaders",
               "value": "C.Decode.uri(httpMessage.responseHeaders).split('\\n').filter(String)"
+            },
+            {
+              "disabled": false,
+              "name": "httpMessage.requestId",
+              "value": "C.Decode.uri(httpMessage.requestId)"
             }
           ],
-          "keep": []
+          "keep": [],
+          "printUndefineds": false
         },
         "groupId": "oQucZ4"
       },
@@ -83,7 +89,8 @@
           ],
           "remove": [
             "attackData.data"
-          ]
+          ],
+          "printUndefineds": false
         },
         "groupId": "oQucZ4"
       },
@@ -94,7 +101,9 @@
         "conf": {
           "depth": 5,
           "format": "none",
-          "ignoreFields": [],
+          "ignoreFields": [
+            "httpMessage.requestId"
+          ],
           "filterExpr": "",
           "digits": 0
         },
@@ -135,6 +144,7 @@
         },
         "description": "Removes additional fields and keeps _raw as string"
       }
-    ]
+    ],
+    "description": "Pre-processing pipeline for the Akamai SIEM REST collectors: drops the offset state-tracking events and decodes the base64/URI-encoded attackData rule fields. Destination-neutral"
   }
 }
