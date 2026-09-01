@@ -30,7 +30,7 @@
       },
       {
         "id": "code",
-        "filter": "true",
+        "filter": "attackData",
         "disabled": false,
         "conf": {
           "maxNumOfIterations": 5000,
@@ -42,7 +42,7 @@
       },
       {
         "id": "eval",
-        "filter": "true",
+        "filter": "httpMessage",
         "disabled": false,
         "conf": {
           "remove": [
@@ -57,12 +57,12 @@
             {
               "disabled": false,
               "name": "httpMessage.requestHeaders",
-              "value": "C.Decode.uri(httpMessage.requestHeaders).split('\\n').filter(String)"
+              "value": "C.Decode.uri(httpMessage.requestHeaders).split(/\\r?\\n/).filter(String)"
             },
             {
               "disabled": false,
               "name": "httpMessage.responseHeaders",
-              "value": "C.Decode.uri(httpMessage.responseHeaders).split('\\n').filter(String)"
+              "value": "C.Decode.uri(httpMessage.responseHeaders).split(/\\r?\\n/).filter(String)"
             },
             {
               "disabled": false,
@@ -77,7 +77,7 @@
       },
       {
         "id": "eval",
-        "filter": "true",
+        "filter": "attackData",
         "disabled": false,
         "conf": {
           "add": [
