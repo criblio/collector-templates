@@ -40,6 +40,31 @@ Credentials must be generated in the Akamai Control Center [Documentation](https
 5. Click **Save** to save the pipeline.
 6. (Optional) - update any parsing settings in the pipeline to fit your use-case.
 
+This pipeline is deliberately **destination-neutral**: it decodes the data and leaves the extracted
+fields on the event, so Routes, *monitor_collector.json* and *pipeline_drop_duplicates.json* can all
+filter on `httpMessage.*` and `attackData.*`. Anything destination-specific (renaming fields for
+Splunk serializing to `_raw`) belongs in a post-processing pipeline — see below.
+
+The decoded rules land in `attackData.rules[]` as an array of objects with the keys `Rule`, `Action`,
+`Message`, `Data`, `Selector`, `Tag` and `Version`. Keys with no value for a given rule are omitted
+rather than emitted as empty strings.
+
+## (Optional) Install the Post-Processing pipeline — Splunk 
+Use this only if you are sending to Splunk. It renames the rule
+fields to the names used by the Cribl **Akamai SIEM Pack** (`Rule`→`id`,
+`Action`→`action`, `Message`→`message`, and so on) and then shapes the output.
+
+1. Obtain the post-processing pipeline (*pipe_akamai_siem_postprocess.json*) and import it as above.
+2. Attach it to the **Route** that carries your Akamai data — not to the collector.
+3. Pick your output in the **Outputs** group:
+   - **Splunk** (enabled by default) — sets `sourcetype = akamaisiem` and
+     `source = cribl-akamai-security-events-rest`.
+   
+4. For the Splunk path, create a Global Variable named `akamai_siem_default_splunk_index`
+   (**Processing** → **Knowledge** → **Global Variables**) holding your target index. Without it the
+   pipeline falls back to `akamai`.
+
+
 ## Install the REST Collector
 1. Obtain the REST Collector.
 2. Navigate to **Data** → **Sources** → **REST Collectors**

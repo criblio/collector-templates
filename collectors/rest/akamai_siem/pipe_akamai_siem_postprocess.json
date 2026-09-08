@@ -1,0 +1,152 @@
+{
+  "id": "akamai_siem_postprocess",
+  "conf": {
+    "output": "default",
+    "streamtags": [],
+    "groups": {
+      "outputs": {
+        "name": "Outputs",
+        "description": "Select the desired output format",
+        "index": 2,
+        "disabled": false
+      }
+    },
+    "asyncFuncTimeout": 1000,
+    "functions": [
+      {
+        "id": "comment",
+        "filter": "true",
+        "conf": {
+          "comment": "Post-processing for Akamai SIEM security events: rename rule fields to the Cribl Akamai SIEM Pack / OCSF / Splunk names, then shape the output. Attach this to a Route, after the parse_akamai_siem pre-processing pipeline."
+        }
+      },
+      {
+        "id": "comment",
+        "filter": "true",
+        "conf": {
+          "comment": "Only needed if the final 'keep _raw only' eval in parse_akamai_siem is enabled. Harmless otherwise - it re-extracts the same fields."
+        }
+      },
+      {
+        "id": "serde",
+        "filter": "true",
+        "conf": {
+          "mode": "extract",
+          "type": "json",
+          "srcField": "_raw"
+        },
+        "disabled": false
+      },
+      {
+        "id": "code",
+        "filter": "attackData",
+        "disabled": false,
+        "conf": {
+          "maxNumOfIterations": 5000,
+          "activeLogSampleRate": 1,
+          "useUniqueLogChannel": true,
+          "code": "// Rename the decoded rule keys to the names expected by the Cribl Akamai SIEM Pack,\n// its OCSF mapping, and Splunk. This is a destination concern, so it lives here rather\n// than in the shared pre-processing pipeline (parse_akamai_siem), which stays\n// destination-neutral so monitor_rest_collection_lag and drop_duplicates keep working.\nconst KEY_MAP = {\n    'rule': 'id',\n    'action': 'action',\n    'data': 'data',\n    'message': 'message',\n    'selector': 'selector',\n    'tag': 'tag',\n    'version': 'version'\n};\n\nconst rules = __e['attackData'] && __e['attackData']['rules'];\n\nif (Array.isArray(rules)) {\n    __e['attackData']['rules'] = rules.map((rule) => {\n        const renamed = {};\n        for (const [key, value] of Object.entries(rule)) {\n            const mapped = KEY_MAP[key.toLowerCase()];\n            renamed[mapped || (key.charAt(0).toLowerCase() + key.slice(1))] = value;\n        }\n        return renamed;\n    });\n}"
+        }
+      },
+      {
+        "id": "comment",
+        "filter": "true",
+        "conf": {
+          "comment": "Enable to emit one event per matched WAF rule instead of one per request. Required for OCSF Detection Finding, since each rule is a separate finding. Note this multiplies event count, and therefore Splunk licence volume."
+        }
+      },
+      {
+        "id": "json_unroll",
+        "filter": "true",
+        "disabled": true,
+        "conf": {
+          "path": "attackData.rules",
+          "name": "ruleData"
+        }
+      },
+      {
+        "id": "comment",
+        "filter": "true",
+        "conf": {
+          "comment": "Enable to output OCSF (Amazon Security Lake). Requires the cribl_akamai_siem_security_events_ocsf pipeline from the Akamai SIEM Pack, which is NOT part of this template."
+        },
+        "disabled": false,
+        "groupId": "outputs"
+      },
+      {
+        "id": "chain",
+        "filter": "true",
+        "disabled": true,
+        "groupId": "outputs",
+        "conf": {
+          "processor": "cribl_akamai_siem_security_events_ocsf"
+        }
+      },
+      {
+        "id": "comment",
+        "filter": "true",
+        "conf": {
+          "comment": "Enable to output to Splunk."
+        },
+        "disabled": false,
+        "groupId": "outputs"
+      },
+      {
+        "id": "serialize",
+        "filter": "true",
+        "disabled": false,
+        "groupId": "outputs",
+        "conf": {
+          "type": "json",
+          "dstField": "_raw",
+          "fields": [
+            "!_*",
+            "!__*",
+            "!cribl*",
+            "!host",
+            "!source",
+            "*"
+          ]
+        }
+      },
+      {
+        "id": "eval",
+        "filter": "true",
+        "disabled": false,
+        "groupId": "outputs",
+        "conf": {
+          "printUndefineds": false,
+          "add": [
+            {
+              "disabled": false,
+              "name": "index",
+              "value": "index ? index : (C.vars.akamai_siem_default_splunk_index || 'akamai')"
+            },
+            {
+              "disabled": false,
+              "name": "sourcetype",
+              "value": "'akamaisiem'"
+            },
+            {
+              "disabled": false,
+              "name": "source",
+              "value": "source ? source : 'cribl-akamai-security-events-rest'"
+            }
+          ],
+          "keep": [
+            "_*",
+            "cribl*",
+            "host",
+            "source",
+            "sourcetype",
+            "index"
+          ],
+          "remove": [
+            "*"
+          ]
+        }
+      }
+    ],
+    "description": "Rename Akamai rule fields to pack/OCSF/Splunk names and shape the output"
+  }
+}
